@@ -5,13 +5,13 @@ from urllib import urlencode
 from urlparse import SplitResult, urlunsplit
 
 import json
+import logging
+import os
 import sys
 
 from influxdb import client as influxdb
 from requests.exceptions import HTTPError, StreamConsumedError, Timeout
-
-import logging
-import os
+from requests.packages.urllib3 import disable_warnings
 
 import requests
 
@@ -129,6 +129,8 @@ def record():
 
 def main():
     """Record Nest API data."""
+    disable_warnings()
+
     while True:
         try:
             record()
