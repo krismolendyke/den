@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+"""Record Nest API data to InfluxDB."""
+
 from contextlib import closing
 from urllib import urlencode
 from urlparse import SplitResult, urlunsplit
 
+import argparse
 import json
 import logging
 import os
@@ -19,8 +22,6 @@ import requests
 NEST_API_PROTOCOL = "https"
 NEST_API_LOCATION = "developer-api.nest.com"
 NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
-
-db = influxdb.InfluxDBClient(database="test")
 
 
 def _get_api_url(path=""):
@@ -113,8 +114,9 @@ def _configure_logging():
     logging.basicConfig(filename="den.log", level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
 
-def record():
+def record(database, port, ssl):
     """Stream results from the API and record them in the database."""
+    db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
     with closing(_get_stream()) as stream:
         logging.debug("[%d] Streaming %s", stream.status_code, stream.url)
         for l in stream.iter_lines():
@@ -127,13 +129,20 @@ def record():
         logging.debug("[%d] Streaming complete %s", stream.status_code, stream.url)
 
 
-def main():
+def main(args):
     """Record Nest API data."""
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("database", help="Database name to record into.")
+    parser.add_argument("--port", default=8086, help="Database port.")
+    parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
+    args = parser.parse_args()
+
+    _configure_logging()
     disable_warnings()
 
     while True:
         try:
-            record()
+            record(args.database, args.port, args.ssl)
         except KeyboardInterrupt as e:
             logging.warn("Keyboard interrupt %s", e)
             sys.exit()
@@ -145,8 +154,11 @@ def main():
             logging.error("Timeout %s", e)
         except Exception as e:
             logging.critical("Unexpected error %s", e)
+            if e.message == "EOF occurred in violation of protocol":
+                logging.info("Re-establishing connection")
+            else:
+                sys.exit("Unexpected error %s" % e)
 
 
 if __name__ == "__main__":
-    _configure_logging()
-    main()
+    main(sys.argv[1:])
