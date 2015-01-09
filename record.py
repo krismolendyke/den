@@ -13,7 +13,7 @@ import os
 import sys
 
 from influxdb import client as influxdb
-from requests.exceptions import HTTPError, StreamConsumedError, Timeout
+from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 from requests.packages.urllib3 import disable_warnings
 
 import requests
@@ -148,6 +148,8 @@ def main(args):
             sys.exit()
         except StreamConsumedError as e:
             logging.warn("Stream consumed %s", e)
+        except ConnectionError as e:
+            logging.error("Connection error %s", e)
         except HTTPError as e:
             logging.error("HTTPError %s", e)
         except Timeout as e:
