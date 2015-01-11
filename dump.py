@@ -15,9 +15,12 @@ import boto
 QUERY = "select * from /.*/"
 
 
-def _upload(dump_file, profile, bucket):
+def _upload(dump_file, bucket, profile=None):
     """Upload the given dump_file to S3."""
-    conn = boto.connect_s3(profile_name=profile)
+    if profile:
+        conn = boto.connect_s3(profile_name=profile)
+    else:
+        conn = boto.connect_s3()
     bucket = conn.get_bucket(bucket)
     key = boto.s3.key.Key(bucket, dump_file)
     key.set_contents_from_filename(dump_file)
@@ -44,13 +47,13 @@ def main(args):
     parser.add_argument("database", help="Database name to dump.")
     parser.add_argument("--port", default=8086, help="Database port.")
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
-    parser.add_argument("--aws-profile", help="AWS profile name to pull credentials from.")
     parser.add_argument("--bucket", help="AWS S3 bucket name")
+    parser.add_argument("--aws-profile", help="AWS profile name to pull credentials from.")
     args = parser.parse_args()
 
     dump_file = _dump(args.database, args.port, args.ssl)
-    if args.aws_profile and args.bucket:
-        _upload(dump_file, args.aws_profile, args.bucket)
+    if args.bucket:
+        _upload(dump_file, args.bucket, args.aws_profile)
 
 
 if __name__ == "__main__":
