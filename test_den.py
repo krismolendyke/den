@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+# pylint: disable=protected-access
+
 import os
 import unittest
 
 
 os.environ["DEN_ACCESS_TOKEN"] = "TEST"
-import record
+from den import record
 
 
 class RecordTestCase(unittest.TestCase):
