@@ -6,6 +6,18 @@ import argparse
 import sys
 
 
+def record(args):
+    """Record Nest thermostat data into the database."""
+    print args
+    return True
+
+
+def dump(args):
+    """Dump Nest thermostat data from the database to an AWS S3 bucket."""
+    print args
+    return True
+
+
 def _get_parser():
     """Get a command line argument parser.
 
@@ -19,13 +31,15 @@ def _get_parser():
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
     subparsers = parser.add_subparsers(title="sub-commands")
 
-    subparsers.add_parser("record", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                          help="Record Nest thermostat data into the database.")
+    parser_record = subparsers.add_parser("record", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                          help=record.__doc__)
+    parser_record.set_defaults(func=record)
 
     parser_dump = subparsers.add_parser("dump", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                        help="Dump Nest thermostat data from the database to an AWS S3 bucket.")
+                                        help=dump.__doc__)
     parser_dump.add_argument("bucket", help="AWS S3 bucket name.")
     parser_dump.add_argument("--aws-profile", help="AWS profile name to use for credentials.")
+    parser_dump.set_defaults(func=dump)
 
     return parser
 
@@ -35,12 +49,11 @@ def _main():
 
     :param list argv: A list of command line arguments.
     :rtype: :py:class:`int`
-    :return: ``0`` when successful.
+    :return: ``0`` if successful, ``1`` if unsuccessful.
 
     """
     args = _get_parser().parse_args()
-    print args
-    return 0
+    return 0 if args.func(args) else 1
 
 
 if __name__ == "__main__":
