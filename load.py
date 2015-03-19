@@ -14,6 +14,10 @@ from requests.exceptions import ConnectionError
 
 def _load(dump_file, database, port, ssl):
     """Load the given dump file into the given InfluxDB database."""
+    if ssl:
+        from requests.packages.urllib3 import disable_warnings
+        disable_warnings()
+
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
     try:
         db.create_database(database)

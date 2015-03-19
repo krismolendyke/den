@@ -34,6 +34,10 @@ def _dump(database, port, ssl, profile=None, bucket=None):
     The name of the dump file is returned.
 
     """
+    if ssl:
+        from requests.packages.urllib3 import disable_warnings
+        disable_warnings()
+
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
     dump_file = "%s.json.gz" % database
     with GzipFile(dump_file, "wb") as f:
