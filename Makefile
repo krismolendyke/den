@@ -1,7 +1,7 @@
 ipython                := ipython
 ipython_notebook       := notebook
 
-pyden := $(ipython) $(ipython_notebook)
+den := $(ipython) $(ipython_notebook)
 
 nohup := nohup
 
@@ -17,7 +17,7 @@ help:
 	pr -2 -t
 
 run:
-	$(nohup) $(pyden) &
+	$(nohup) $(den) &
 
 stop:
-	$(kill) $(kill_flags) $(pyden)
+	$(kill) $(kill_flags) $(den)
