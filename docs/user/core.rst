@@ -4,6 +4,6 @@ Core
 ====
 
 .. argparse::
-   :module: den.den
+   :module: run
    :func: _get_parser
-   :prog: den
+   :prog: run
