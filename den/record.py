@@ -154,7 +154,7 @@ def main(args):
             logging.error("HTTPError %s", e)
         except Timeout as e:
             logging.error("Timeout %s", e)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             logging.critical("Unexpected error %s", e)
             if e.message == "EOF occurred in violation of protocol":
                 logging.info("Re-establishing connection")
