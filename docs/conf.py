@@ -21,6 +21,8 @@ import os
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.append(os.path.abspath('_themes'))
 
+os.environ["DEN_ACCESS_TOKEN"] = ""
+
 from den import __title__, __version__
 
 # -- General configuration ------------------------------------------------

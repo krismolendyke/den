@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-"""Record Nest API data to InfluxDB."""
+"""Record Nest API data to InfluxDB.
+
+The ``record`` API is designed to persist Nest thermostat data in an InfluxDB database.
+
+"""
 
 from contextlib import closing
 from urllib import urlencode
@@ -22,6 +26,15 @@ import requests
 NEST_API_PROTOCOL = "https"
 NEST_API_LOCATION = "developer-api.nest.com"
 NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
+"""The Nest API `access token
+<https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_.
+
+.. note::
+
+   This value is taken from the environment variable ``DEN_ACCESS_TOKEN``.  It is required to authenticate with the
+   Nest API.
+
+"""
 
 
 def _get_api_url(path=""):
