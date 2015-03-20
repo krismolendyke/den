@@ -6,13 +6,13 @@ import argparse
 import sys
 
 
-def record(args):
+def _record(args):
     """Record Nest thermostat data into the database."""
     print args
     return True
 
 
-def dump(args):
+def _dump(args):
     """Dump Nest thermostat data from the database to an AWS S3 bucket."""
     print args
     return True
@@ -32,14 +32,14 @@ def _get_parser():
     subparsers = parser.add_subparsers(title="sub-commands")
 
     parser_record = subparsers.add_parser("record", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                          help=record.__doc__)
-    parser_record.set_defaults(func=record)
+                                          help=_record.__doc__)
+    parser_record.set_defaults(func=_record)
 
     parser_dump = subparsers.add_parser("dump", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                        help=dump.__doc__)
+                                        help=_dump.__doc__)
     parser_dump.add_argument("bucket", help="AWS S3 bucket name.")
     parser_dump.add_argument("--aws-profile", help="AWS profile name to use for credentials.")
-    parser_dump.set_defaults(func=dump)
+    parser_dump.set_defaults(func=_dump)
 
     return parser
 
