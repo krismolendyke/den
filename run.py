@@ -24,7 +24,7 @@ def _record(args):
             den.record.record(args.database, args.port, args.ssl)
         except KeyboardInterrupt as e:
             logging.warn("Keyboard interrupt %s", e)
-            return 1
+            return True
         except StreamConsumedError as e:
             logging.warn("Stream consumed %s", e)
         except ConnectionError as e:
@@ -38,7 +38,7 @@ def _record(args):
             if e.message == "EOF occurred in violation of protocol":
                 logging.info("Re-establishing connection")
             else:
-                sys.exit("Unexpected error %s" % e)
+                return False
 
 
 def _dump(args):
