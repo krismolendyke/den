@@ -13,9 +13,12 @@ import den.record
 
 
 def _record(args):
-    """Record Nest thermostat data into the database."""
-    print args
+    """Record Nest thermostat data into the database.
 
+    This function will attempt to recover from various network errors.  It will run indefinitely until interrupted
+    from the keyboard or an unexpected exception occurs.
+
+    """
     den.record.configure_logging()
     urllib3.disable_warnings()
 
