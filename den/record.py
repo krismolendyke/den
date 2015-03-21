@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Record Nest API data to InfluxDB.
 
 The ``record`` API is designed to persist Nest thermostat data in an InfluxDB database.
@@ -10,15 +8,11 @@ from contextlib import closing
 from urllib import urlencode
 from urlparse import SplitResult, urlunsplit
 
-import argparse
 import json
 import logging
 import os
-import sys
 
 from influxdb import client as influxdb
-from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
-from requests.packages.urllib3 import disable_warnings
 
 import requests
 
@@ -122,7 +116,7 @@ def _get_thermostat_data(data):
     return [{"name": name, "columns": columns, "points": points}]
 
 
-def _configure_logging():
+def configure_logging():
     """Configure basic logging."""
     logging.basicConfig(filename="den.log", level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
@@ -140,40 +134,3 @@ def record(database, port, ssl):
                     db.write_points(_get_structure_data(value))
                     db.write_points(_get_thermostat_data(value))
         logging.debug("[%d] Streaming complete %s", stream.status_code, stream.url)
-
-
-def main(args):
-    """Record Nest API data."""
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("database", help="Database name to record into.")
-    parser.add_argument("--port", default=8086, help="Database port.")
-    parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
-    args = parser.parse_args()
-
-    _configure_logging()
-    disable_warnings()
-
-    while True:
-        try:
-            record(args.database, args.port, args.ssl)
-        except KeyboardInterrupt as e:
-            logging.warn("Keyboard interrupt %s", e)
-            sys.exit()
-        except StreamConsumedError as e:
-            logging.warn("Stream consumed %s", e)
-        except ConnectionError as e:
-            logging.error("Connection error %s", e)
-        except HTTPError as e:
-            logging.error("HTTPError %s", e)
-        except Timeout as e:
-            logging.error("Timeout %s", e)
-        except Exception as e:  # pylint: disable=broad-except
-            logging.critical("Unexpected error %s", e)
-            if e.message == "EOF occurred in violation of protocol":
-                logging.info("Re-establishing connection")
-            else:
-                sys.exit("Unexpected error %s" % e)
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])

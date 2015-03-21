@@ -3,19 +3,53 @@
 """Den is a home for your Nest thermostat data."""
 
 import argparse
+import logging
 import sys
+
+from requests.packages import urllib3
+from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
+
+import den.record
 
 
 def _record(args):
     """Record Nest thermostat data into the database."""
     print args
-    return True
+
+    den.record.configure_logging()
+    urllib3.disable_warnings()
+
+    while True:
+        try:
+            den.record.record(args.database, args.port, args.ssl)
+        except KeyboardInterrupt as e:
+            logging.warn("Keyboard interrupt %s", e)
+            return 1
+        except StreamConsumedError as e:
+            logging.warn("Stream consumed %s", e)
+        except ConnectionError as e:
+            logging.error("Connection error %s", e)
+        except HTTPError as e:
+            logging.error("HTTPError %s", e)
+        except Timeout as e:
+            logging.error("Timeout %s", e)
+        except Exception as e:  # pylint: disable=broad-except
+            logging.critical("Unexpected error %s", e)
+            if e.message == "EOF occurred in violation of protocol":
+                logging.info("Re-establishing connection")
+            else:
+                sys.exit("Unexpected error %s" % e)
 
 
 def _dump(args):
     """Dump Nest thermostat data from the database to an AWS S3 bucket."""
     print args
     return True
+
+
+def _configure_logging():
+    """Configure basic logging."""
+    logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
 
 def _get_parser():
@@ -53,6 +87,7 @@ def _main():
 
     """
     args = _get_parser().parse_args()
+    _configure_logging()
     return 0 if args.func(args) else 1
 
 
