@@ -5,12 +5,20 @@
 import os
 import unittest
 
+from mock import patch
 
 os.environ["DEN_ACCESS_TOKEN"] = "TEST"
 from den import record
 
 
 class RecordTestCase(unittest.TestCase):
+
+    def test_missing_env_variable_raises_key_error(self):
+        with patch.dict("os.environ", {}):
+            del os.environ["DEN_ACCESS_TOKEN"]
+            with self.assertRaises(KeyError):
+                reload(record)
+
     def test_get_api_url(self):
         expected = "https://developer-api.nest.com?auth=%s" % record.NEST_API_ACCESS_TOKEN
         actual = record._get_api_url()
