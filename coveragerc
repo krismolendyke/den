@@ -1,0 +1,7 @@
+;;; -*- mode: conf; -*-
+
+[run]
+include = den/*
+
+[report]
+show_missing = True

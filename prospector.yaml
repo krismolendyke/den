@@ -1,0 +1,26 @@
+---
+strictness: veryhigh
+
+dodgy:
+  run: true
+
+mccabe:
+  run: true
+
+pep8:
+  run: true
+  options:
+    max-line-length: 120
+
+pep257:
+  run: true
+
+pyflakes:
+  run: true
+
+pylint:
+  run: true
+  options:
+    argument-rgx: "[a-z_][a-z0-9_]{0,29}$"
+    max-line-length: 120
+    variable-rgx: "[a-z_][a-z0-9_]{0,29}$"
