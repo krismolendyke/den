@@ -50,12 +50,12 @@ def _get_stream(path=""):
 
 
 def _is_event(line):
-    """Is the given line an event line?"""
+    """Determine if ``line`` represents an event."""
     return line.startswith("event:")
 
 
 def _is_data(line):
-    """Is the given line a data line?"""
+    """Determine if ``line`` represents data."""
     return line.startswith("data:")
 
 
@@ -94,7 +94,7 @@ def _get_structure_data(data):
     for s in structures:
         try:
             del s["thermostats"]
-        except KeyError:
+        except KeyError:  # pylint: disable=pointless-except
             pass
         points.append(s.values())
     columns = structures[0].keys()
