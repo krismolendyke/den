@@ -39,13 +39,13 @@ class RecordTestCase(unittest.TestCase):
         self.assertFalse(record._is_data("event:"))
 
     def test_process_event_returns_none_for_invalid_line(self):
-        bad_lines = [
+        invalid_lines = [
             "",
             ":",
             "event:",
             "event: "
         ]
-        for line in bad_lines:
+        for line in invalid_lines:
             self.assertIsNone(record._process_event(line))
 
     def test_process_event_returns_none_for_keep_alive_line(self):
@@ -58,6 +58,13 @@ class RecordTestCase(unittest.TestCase):
         self.assertEqual(expected, actual)
         actual = record._process_event("event:" + expected)
         self.assertEqual(expected, actual)
+
+    def test_process_data_returns_none_for_invalid_line(self):
+        invalid_lines = [
+            "",
+        ]
+        for line in invalid_lines:
+            self.assertIsNone(record._process_data(line))
 
 
 if __name__ == "__main__":
