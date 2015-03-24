@@ -52,6 +52,13 @@ class RecordTestCase(unittest.TestCase):
         self.assertIsNone(record._process_event("event: keep-alive"))
         self.assertIsNone(record._process_event("event:keep-alive"))
 
+    def test_process_event_returns_event_for_valid_line(self):
+        expected = "Test event"
+        actual = record._process_event("event: " + expected)
+        self.assertEqual(expected, actual)
+        actual = record._process_event("event:" + expected)
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
