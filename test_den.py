@@ -2,6 +2,7 @@
 
 # pylint: disable=protected-access
 
+import json
 import os
 import unittest
 
@@ -69,6 +70,13 @@ class RecordTestCase(unittest.TestCase):
         ]
         for line in invalid_lines:
             self.assertIsNone(record._process_data(line))
+
+    def test_precess_data_returns_a_list_for_valid_line(self):
+        expected = [{"key": "val"}]
+        actual = record._process_data("data: " + json.dumps(expected))
+        self.assertEqual(expected, actual)
+        actual = record._process_data("data:" + json.dumps(expected))
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
