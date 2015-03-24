@@ -71,7 +71,7 @@ class RecordTestCase(unittest.TestCase):
         for line in invalid_lines:
             self.assertIsNone(record._process_data(line))
 
-    def test_process_data_returns_a_list_for_valid_line(self):
+    def test_process_data_returns_list_for_valid_line(self):
         expected = [{"key": "val"}]
         actual = record._process_data("data: " + json.dumps(expected))
         self.assertEqual(expected, actual)
@@ -98,6 +98,13 @@ class RecordTestCase(unittest.TestCase):
         ]
         for line in invalid_lines:
             self.assertIsNone(record._process(line))
+
+    def test_process_returns_list_for_valid_data_line(self):
+        expected = [{"key": "val"}]
+        actual = record._process("data: " + json.dumps(expected))
+        self.assertEqual(expected, actual)
+        actual = record._process("data:" + json.dumps(expected))
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
