@@ -9,6 +9,8 @@ The ``record`` API is designed to persist Nest thermostat data in an `InfluxDB <
    <https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
    documentation for instructions on how to generate this value.
 
+:raises: :py:exc:`~exceptions.KeyError` if the environment variable ``DEN_ACCESS_TOKEN`` is missing.
+
 """
 
 from contextlib import closing
@@ -24,20 +26,20 @@ from influxdb import client as influxdb
 import requests
 
 
-NEST_API_PROTOCOL = "https"
-NEST_API_LOCATION = "developer-api.nest.com"
-
 try:
     NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
     """The Nest API `access token
-<https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
-value.
+    <https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
+    value.
 
-This value is retrieved from the required environment variable ``DEN_ACCESS_TOKEN``.
+    This value is retrieved from the required environment variable ``DEN_ACCESS_TOKEN``.
 
     """
 except KeyError:
     raise KeyError("Please set the environment variable 'DEN_ACCESS_TOKEN'.")
+
+NEST_API_PROTOCOL = "https"
+NEST_API_LOCATION = "developer-api.nest.com"
 
 
 def _get_api_url(path=""):
@@ -138,6 +140,10 @@ def record(database, port, ssl):
     :param bool ssl: Whether or not to use SSL to communicate with the database.
     :rtype: :py:const:`None`
     :return: When the stream opened to the Nest API has been consumed.
+    :raises: :exc:`requests.exceptions.StreamConsumedError`: if the stream has been consumed.
+    :raises: :exc:`requests.exceptions.ConnectionError`: if the Nest API cannot be reached.
+    :raises: :exc:`requests.exceptions.HTTPError`: if an invalid response is returned from the Nest API.
+    :raises: :exc:`requests.exceptions.Timeout`: if the request to the Nest API takes too long to respond.
 
     """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
