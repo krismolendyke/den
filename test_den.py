@@ -48,6 +48,10 @@ class RecordTestCase(unittest.TestCase):
         for line in bad_lines:
             self.assertIsNone(record._process_event(line))
 
+    def test_process_event_returns_none_for_keep_alive_line(self):
+        self.assertIsNone(record._process_event("event: keep-alive"))
+        self.assertIsNone(record._process_event("event:keep-alive"))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
