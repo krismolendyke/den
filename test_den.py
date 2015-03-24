@@ -62,6 +62,7 @@ class RecordTestCase(unittest.TestCase):
     def test_process_data_returns_none_for_invalid_line(self):
         invalid_lines = [
             "",
+            ":"
         ]
         for line in invalid_lines:
             self.assertIsNone(record._process_data(line))
