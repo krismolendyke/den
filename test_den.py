@@ -28,6 +28,11 @@ class RecordTestCase(unittest.TestCase):
         for path in ["structures", "/structures", "/structures/", "structures/"]:
             self.assertEqual(expected, record._get_api_url(path))
 
+    def test_is_event(self):
+        self.assertTrue(record._is_event("event:"))
+        self.assertFalse(record._is_event("event"))
+        self.assertFalse(record._is_event("data:"))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
