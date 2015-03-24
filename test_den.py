@@ -33,6 +33,11 @@ class RecordTestCase(unittest.TestCase):
         self.assertFalse(record._is_event("event"))
         self.assertFalse(record._is_event("data:"))
 
+    def test_is_data(self):
+        self.assertTrue(record._is_data("data:"))
+        self.assertFalse(record._is_data("data"))
+        self.assertFalse(record._is_data("event:"))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
