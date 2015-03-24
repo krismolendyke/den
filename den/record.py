@@ -78,7 +78,8 @@ def _process_event(line):
         event = event.strip()
         if event:
             logging.debug(event)
-            return None if event == "keep-alive" else event
+            if event == "keep-alive":
+                event = None
         else:
             event = None
     return event
