@@ -91,6 +91,7 @@ def _process_data(line):
     data = None
     if STREAM_DELIMITER in line:
         _, data_str = line.split(STREAM_DELIMITER, 1)
+        data_str = data_str.strip()
         if data_str:
             return json.loads(data_str.strip())
     return data
