@@ -38,6 +38,16 @@ class RecordTestCase(unittest.TestCase):
         self.assertFalse(record._is_data("data"))
         self.assertFalse(record._is_data("event:"))
 
+    def test_process_event_returns_none_for_invalid_line(self):
+        bad_lines = [
+            "",
+            ":",
+            "event:",
+            "event: "
+        ]
+        for line in bad_lines:
+            self.assertIsNone(record._process_event(line))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

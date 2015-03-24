@@ -72,10 +72,16 @@ def _is_data(line):
 
 def _process_event(line):
     """Process the given event line."""
-    _, event = line.split(":", 1)
-    event = event.strip()
-    logging.debug(event)
-    return None if event == "keep-alive" else event
+    event = None
+    if ":" in line:
+        _, event = line.split(":", 1)
+        event = event.strip()
+        if event:
+            logging.debug(event)
+            return None if event == "keep-alive" else event
+        else:
+            event = None
+    return event
 
 
 def _process_data(line):
