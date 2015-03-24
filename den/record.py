@@ -41,6 +41,7 @@ except KeyError:
 NEST_API_PROTOCOL = "https"
 NEST_API_LOCATION = "developer-api.nest.com"
 
+STREAM_DELIMITER = ":"
 
 def _get_api_url(path=""):
     """Get a Nest API URL for the given path."""
@@ -62,19 +63,19 @@ def _get_stream(path=""):
 
 def _is_event(line):
     """Determine if ``line`` represents an event."""
-    return line.startswith("event:")
+    return line.startswith("event" + STREAM_DELIMITER)
 
 
 def _is_data(line):
     """Determine if ``line`` represents data."""
-    return line.startswith("data:")
+    return line.startswith("data" + STREAM_DELIMITER)
 
 
 def _process_event(line):
     """Process the given event line."""
     event = None
-    if ":" in line:
-        _, event = line.split(":", 1)
+    if STREAM_DELIMITER in line:
+        _, event = line.split(STREAM_DELIMITER, 1)
         event = event.strip()
         if event:
             logging.debug(event)
