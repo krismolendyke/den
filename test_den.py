@@ -16,7 +16,7 @@ class RecordTestCase(unittest.TestCase):
     def test_missing_env_variable_raises_key_error(self):
         with patch.dict("os.environ", {}):
             del os.environ["DEN_ACCESS_TOKEN"]
-            with self.assertRaises(KeyError):
+            with self.assertRaisesRegexp(KeyError, r"Please set the environment variable 'DEN_ACCESS_TOKEN'."):
                 reload(record)
 
     def test_get_api_url(self):

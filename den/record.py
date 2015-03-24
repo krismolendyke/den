@@ -26,12 +26,18 @@ import requests
 
 NEST_API_PROTOCOL = "https"
 NEST_API_LOCATION = "developer-api.nest.com"
-NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
-"""The Nest API `access token
+
+try:
+    NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
+    """The Nest API `access token
 <https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
 value.
 
-"""
+This value is retrieved from the required environment variable ``DEN_ACCESS_TOKEN``.
+
+    """
+except KeyError:
+    raise KeyError("Please set the environment variable 'DEN_ACCESS_TOKEN'.")
 
 
 def _get_api_url(path=""):
