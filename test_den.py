@@ -64,7 +64,8 @@ class RecordTestCase(unittest.TestCase):
             "",
             ":",
             "data:",
-            "data: "
+            "data: ",
+            "data: not JSON"
         ]
         for line in invalid_lines:
             self.assertIsNone(record._process_data(line))

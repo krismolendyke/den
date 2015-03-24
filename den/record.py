@@ -93,7 +93,11 @@ def _process_data(line):
         _, data_str = line.split(STREAM_DELIMITER, 1)
         data_str = data_str.strip()
         if data_str:
-            return json.loads(data_str.strip())
+            try:
+                data = json.loads(data_str)
+            except ValueError, e:
+                logging.error("Error processing data line: '%s', '%s'", line, e)
+                data = None
     return data
 
 
