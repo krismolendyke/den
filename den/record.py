@@ -122,7 +122,15 @@ def configure_logging():
 
 
 def record(database, port, ssl):
-    """Stream results from the API and record them in the database."""
+    """Stream results from the Nest API and record them in the database.
+
+    :param str database: The name of the database.
+    :param int port: The port number the database is listening on.
+    :param bool ssl: Whether or not to use SSL to communicate with the database.
+    :rtype: :py:const:`None`
+    :return: When the stream opened to the Nest API has been consumed.
+
+    """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
     with closing(_get_stream()) as stream:
         logging.debug("[%d] Streaming %s", stream.status_code, stream.url)
