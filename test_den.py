@@ -88,6 +88,17 @@ class RecordTestCase(unittest.TestCase):
         for line in invalid_lines:
             self.assertIsNone(record._process(line))
 
+    def test_process_returns_none_for_invalid_data_line(self):
+        invalid_lines = [
+            "",
+            ":",
+            "data:",
+            "data: ",
+            "data: not JSON"
+        ]
+        for line in invalid_lines:
+            self.assertIsNone(record._process(line))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
