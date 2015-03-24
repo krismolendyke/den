@@ -1,6 +1,13 @@
-"""Record Nest API data to InfluxDB.
+"""Record `Nest API <https://developer.nest.com/documentation/api-reference>`_ data to InfluxDB.
 
-The ``record`` API is designed to persist Nest thermostat data in an InfluxDB database.
+The ``record`` API is designed to persist Nest thermostat data in an `InfluxDB <http://influxdb.com/>`_ database.
+
+.. note::
+
+   The environment variable ``DEN_ACCESS_TOKEN`` is required to authenticate with the Nest API.  Please refer to the
+   Nest API `access token
+   <https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
+   documentation for instructions on how to generate this value.
 
 """
 
@@ -21,12 +28,8 @@ NEST_API_PROTOCOL = "https"
 NEST_API_LOCATION = "developer-api.nest.com"
 NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
 """The Nest API `access token
-<https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_.
-
-.. note::
-
-   This value is taken from the environment variable ``DEN_ACCESS_TOKEN``.  It is required to authenticate with the
-   Nest API.
+<https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
+value.
 
 """
 
