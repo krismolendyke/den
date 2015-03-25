@@ -110,6 +110,25 @@ class RecordTestCase(unittest.TestCase):
         expected = []
         actual = record._get_structures({})
         self.assertEqual(expected, actual)
+        actual = record._get_structures({"data": {}})
+        self.assertEqual(expected, actual)
+        actual = record._get_structures({"data": {"structures": {}}})
+        self.assertEqual(expected, actual)
+
+    def test_get_structures_returns_list_for_valid_data(self):
+        expected = [{}]
+        actual = record._get_structures({"data": {"structures": {"STRUCTUREID": {}}}})
+        self.assertEqual(expected, actual)
+        structure = {"name": "Home",
+                     "away": "home",
+                     "time_zone": "America/New_York",
+                     "postal_code": "19335",
+                     "thermostats": ["THERMOSTATID0", "THERMOSTATID1"],
+                     "country_code": "US",
+                     "structure_id": "STRUCTUREID"}
+        expected = [structure]
+        actual = record._get_structures({"data": {"structures": {"STRUCTUREID": structure}}})
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
