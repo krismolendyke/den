@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# pylint: disable=protected-access
+# pylint: disable=protected-access,too-many-public-methods,missing-docstring
 
 import logging
 import json
