@@ -106,6 +106,11 @@ class RecordTestCase(unittest.TestCase):
         actual = record._process("data:" + json.dumps(expected))
         self.assertEqual(expected, actual)
 
+    def test_get_structures_returns_empty_list_for_invalid_data(self):
+        expected = []
+        actual = record._get_structures({})
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

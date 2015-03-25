@@ -110,8 +110,12 @@ def _process(line):
 
 def _get_structures(data):
     """Get structure data from the given data dict."""
-    structures = data["data"]["structures"]
-    return [structures[s] for s in structures]
+    structures = []
+    try:
+        structures = data["data"]["structures"].values()
+    except KeyError:
+        logging.error("No structures found in data: '%s'", data)
+    return structures
 
 
 def _get_structure_data(data):
