@@ -2,6 +2,7 @@
 
 # pylint: disable=protected-access
 
+import logging
 import json
 import os
 import unittest
@@ -10,6 +11,9 @@ from mock import patch
 
 os.environ["DEN_ACCESS_TOKEN"] = "TEST"
 from den import record
+
+
+logging.basicConfig(filename=os.devnull)
 
 
 class RecordTestCase(unittest.TestCase):
