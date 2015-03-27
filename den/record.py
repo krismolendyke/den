@@ -137,16 +137,25 @@ def _get_structure_data(data):
 
 def _get_thermostats(data):
     """Get thermostat data from the given data dict."""
-    thermostats = data["data"]["devices"]["thermostats"]
-    return [thermostats[t] for t in thermostats]
+    thermostats = []
+    try:
+        thermostats = data["data"]["devices"]["thermostats"].values()
+    except TypeError:
+        logging.error("Invalid data: '%s'", data)
+    except KeyError:
+        logging.error("No thermostats found in data: '%s'", data)
+    return thermostats
 
 
 def _get_thermostat_data(data):
     """Get thermostat data to write to InfluxDB."""
     name = "thermostats"
     thermostats = _get_thermostats(data)
-    columns = thermostats[0].keys()
-    points = [t.values() for t in thermostats]
+    columns = []
+    points = []
+    if thermostats:
+        columns = thermostats[0].keys()
+        points = [t.values() for t in thermostats]
     return [{"name": name, "columns": columns, "points": points}]
 
 

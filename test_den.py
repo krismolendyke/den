@@ -160,5 +160,19 @@ class RecordTestCase(unittest.TestCase):
             else:
                 self.assertEqual([], actual)
 
+    def test_get_thermostats_returns_empty_list_for_invalid_data(self):
+        expected = []
+        actual = record._get_thermostats(None)
+        self.assertEqual(expected, actual)
+        actual = record._get_thermostats("")
+        self.assertEqual(expected, actual)
+        actual = record._get_thermostats({})
+        self.assertEqual(expected, actual)
+
+    def test_get_structure_data_returns_empty_structure_for_invalid_data(self):
+        expected = [{"name": "thermostats", "columns": [], "points": []}]
+        actual = record._get_thermostat_data(None)
+        self.assertEqual(expected, actual)
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
