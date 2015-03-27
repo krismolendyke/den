@@ -5,6 +5,7 @@
 import logging
 import json
 import os
+import types
 import unittest
 
 from mock import patch
@@ -109,6 +110,14 @@ class RecordTestCase(unittest.TestCase):
         self.assertEqual(expected, actual)
         actual = record._process("data:" + json.dumps(expected))
         self.assertEqual(expected, actual)
+
+        with open("responses.txt", "r") as f:
+            for l in f:
+                actual = record._process(l)
+                if l.startswith("event"):
+                    self.assertIsNone(actual)
+                elif l.startswith("data"):
+                    self.assertIsInstance(actual, types.DictType)
 
     def test_get_structures_returns_empty_list_for_invalid_data(self):
         expected = []
