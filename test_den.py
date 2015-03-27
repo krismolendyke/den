@@ -125,6 +125,8 @@ class RecordTestCase(unittest.TestCase):
 
     def test_get_structures_returns_empty_list_for_invalid_data(self):
         expected = []
+        actual = record._get_structures(None)
+        self.assertEqual(expected, actual)
         actual = record._get_structures({})
         self.assertEqual(expected, actual)
         actual = record._get_structures({"data": {}})
@@ -147,6 +149,16 @@ class RecordTestCase(unittest.TestCase):
         actual = record._get_structures({"data": {"structures": {"STRUCTUREID": structure}}})
         self.assertEqual(expected, actual)
 
+        for r in self.responses:
+            result = record._process(r)
+            actual = record._get_structures(result)
+            self.assertIsInstance(actual, types.ListType)
+            if result:
+                self.assertEqual(1, len(actual))
+                self.assertIn("structure_id", actual[0])
+                self.assertIn("thermostats", actual[0])
+            else:
+                self.assertEqual([], actual)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

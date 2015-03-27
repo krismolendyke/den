@@ -113,6 +113,8 @@ def _get_structures(data):
     structures = []
     try:
         structures = data["data"]["structures"].values()
+    except TypeError:
+        logging.error("Invalid data: '%s'", data)
     except KeyError:
         logging.error("No structures found in data: '%s'", data)
     return structures
