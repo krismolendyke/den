@@ -167,6 +167,16 @@ class RecordTestCase(unittest.TestCase):
         actual = record._get_thermostat_data({})
         self.assertEqual(expected, actual)
 
+    def test_get_structure_data_returns_list_for_valid_data(self):
+        for r in self.responses:
+            result = record._process(r)
+            if result:
+                actual = record._get_structure_data(result)
+                self.assertIsInstance(actual, types.ListType)
+                self.assertEqual("structures", actual[0]["name"])
+                self.assertIsInstance(actual[0]["columns"], types.ListType)
+                self.assertIsInstance(actual[0]["points"], types.ListType)
+
     def test_get_thermostats_returns_empty_list_for_invalid_data(self):
         expected = []
         actual = record._get_thermostats(None)
