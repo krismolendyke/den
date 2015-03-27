@@ -4,6 +4,7 @@
 
 import argparse
 import logging
+import os
 import sys
 
 from requests.packages import urllib3
@@ -50,9 +51,17 @@ def _dump(args):
     return True
 
 
-def _configure_logging():
-    """Configure basic logging."""
-    logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+def _configure_logging(log_to_file):
+    """Configure basic logging.
+
+    :param bool log_to_file: Whether or not output should be logged to a file.
+
+    """
+    log_format = "%(asctime)s %(levelname)s %(message)s"
+    if log_to_file:
+        logging.basicConfig(filename="%s.log" % os.path.splitext(__file__)[0], level=logging.DEBUG, format=log_format)
+    else:
+        logging.basicConfig(level=logging.DEBUG, format=log_format)
 
 
 def _get_parser():
@@ -66,6 +75,7 @@ def _get_parser():
     parser.add_argument("database", help="Database name.")
     parser.add_argument("--port", default=8086, help="Database port.")
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
+    parser.add_argument("--log-to-file", action="store_true", help="Log to a file instead of stdout.")
     subparsers = parser.add_subparsers(title="sub-commands")
 
     parser_record = subparsers.add_parser("record", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -90,7 +100,7 @@ def _main():
 
     """
     args = _get_parser().parse_args()
-    _configure_logging()
+    _configure_logging(args.log_to_file)
     return 0 if args.func(args) else 1
 
 
