@@ -19,6 +19,11 @@ logging.basicConfig(filename=os.devnull)
 
 class RecordTestCase(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        with open("responses.txt", "r") as f:
+            cls.responses = [l for l in f]
+
     def test_missing_env_variable_raises_key_error(self):
         with patch.dict("os.environ", {}):
             del os.environ["DEN_ACCESS_TOKEN"]
@@ -111,13 +116,12 @@ class RecordTestCase(unittest.TestCase):
         actual = record._process("data:" + json.dumps(expected))
         self.assertEqual(expected, actual)
 
-        with open("responses.txt", "r") as f:
-            for l in f:
-                actual = record._process(l)
-                if l.startswith("event"):
-                    self.assertIsNone(actual)
-                elif l.startswith("data"):
-                    self.assertIsInstance(actual, types.DictType)
+        for r in self.responses:
+            actual = record._process(r)
+            if r.startswith("event"):
+                self.assertIsNone(actual)
+            elif r.startswith("data"):
+                self.assertIsInstance(actual, types.DictType)
 
     def test_get_structures_returns_empty_list_for_invalid_data(self):
         expected = []
