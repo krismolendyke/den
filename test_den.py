@@ -2,12 +2,13 @@
 
 # pylint: disable=protected-access,too-many-public-methods,missing-docstring
 
-import logging
 import json
 import os
 import types
 import unittest
 
+import requests
+import responses
 from mock import patch
 
 os.environ["DEN_ACCESS_TOKEN"] = "TEST"
@@ -38,6 +39,15 @@ class RecordTestCase(unittest.TestCase):
         expected = "https://developer-api.nest.com/structures?auth=%s" % record.NEST_API_ACCESS_TOKEN
         for path in ["structures", "/structures", "/structures/", "structures/"]:
             self.assertEqual(expected, record._get_api_url(path))
+
+    @responses.activate
+    def test_get_stream(self):
+        url = record._get_api_url("")
+        responses.add(responses.GET, url, body="".join(self.responses), status=200, content_type="text/event-stream",
+                      stream=True, adding_headers={"Accept": "text/event-stream"}, match_querystring=True)
+        actual = record._get_stream()
+        self.assertIsInstance(actual, requests.Response)
+        self.assertEqual(len(self.responses), len(list(actual.iter_lines())))
 
     def test_is_event(self):
         self.assertTrue(record._is_event("event:"))

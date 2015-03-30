@@ -17,4 +17,5 @@ pylint-django==0.6
 pylint-plugin-utils==0.2.3
 pylint==1.4.3
 requirements-detector==0.3
+responses==0.3.0
 setoptconf==0.2.0

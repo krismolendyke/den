@@ -53,7 +53,8 @@ def _get_api_url(path=""):
 
 def _get_stream(path=""):
     """Make a GET request to the Nest REST stream API and return the response object."""
-    r = requests.get(_get_api_url(path), headers={"Accept": "text/event-stream"}, stream=True)
+    url = _get_api_url(path)
+    r = requests.get(url, headers={"Accept": "text/event-stream"}, stream=True)
     for h in r.history:
         logging.debug("[%d] Redirect: %s", h.status_code, h.url)
     logging.debug("[%d] URL: %s", r.status_code, r.url)
