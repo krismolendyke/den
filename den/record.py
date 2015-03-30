@@ -43,6 +43,7 @@ NEST_API_LOCATION = "developer-api.nest.com"
 
 STREAM_DELIMITER = ":"
 
+
 def _get_api_url(path=""):
     """Get a Nest API URL for the given path."""
     query = urlencode({"auth": NEST_API_ACCESS_TOKEN})
