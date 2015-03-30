@@ -9,7 +9,7 @@ import unittest
 
 import requests
 import responses
-from mock import patch
+from mock import MagicMock, patch
 
 os.environ["DEN_ACCESS_TOKEN"] = "TEST"
 from den import record
@@ -225,6 +225,18 @@ class RecordTestCase(unittest.TestCase):
                 self.assertIsInstance(actual[0]["points"][0], types.ListType)
                 self.assertEqual(len(actual[0]["columns"]), len(actual[0]["points"][0]))
                 self.assertEqual("thermostats", actual[0]["name"])
+
+    @responses.activate
+    def test_record_writes_points_for_valid_responses(self):
+        url = record._get_api_url("")
+        responses.add(responses.GET, url, body="".join(self.responses), status=200, content_type="text/event-stream",
+                      stream=True, adding_headers={"Accept": "text/event-stream"}, match_querystring=True)
+        with patch("den.record.influxdb.InfluxDBClient") as db_patch:
+            db = db_patch.return_value
+            db.write_points = MagicMock()
+            self.assertIsNone(record.record("den_test", port=8087, ssl=True))
+            self.assertTrue(db.write_points.called)
+            self.assertEqual(len(self.responses), db.write_points.call_count)
 
 
 if __name__ == "__main__":
