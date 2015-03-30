@@ -204,5 +204,18 @@ class RecordTestCase(unittest.TestCase):
         actual = record._get_thermostat_data({})
         self.assertEqual(expected, actual)
 
+    def test_get_thermostat_data_returns_list_for_valid_data(self):
+        for r in self.responses:
+            result = record._process(r)
+            if result:
+                actual = record._get_thermostat_data(result)
+                self.assertIsInstance(actual, types.ListType)
+                self.assertIsInstance(actual[0]["columns"], types.ListType)
+                self.assertIsInstance(actual[0]["points"], types.ListType)
+                self.assertIsInstance(actual[0]["points"][0], types.ListType)
+                self.assertEqual(len(actual[0]["columns"]), len(actual[0]["points"][0]))
+                self.assertEqual("thermostats", actual[0]["name"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
