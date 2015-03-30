@@ -166,7 +166,7 @@ def configure_logging(filename="den.log", level=logging.DEBUG):
     :param logging.Logger.debug level: (optional) The level at which to log.
 
     """
-    logging.basicConfig(filename=filename, level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+    logging.basicConfig(filename=filename, level=level, format="%(asctime)s %(levelname)s %(message)s")
 
 
 def record(database, port, ssl):
