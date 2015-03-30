@@ -161,11 +161,13 @@ class RecordTestCase(unittest.TestCase):
                 self.assertEqual([], actual)
 
     def test_get_structure_data_returns_empty_structure_for_invalid_data(self):
-        expected = [{"name": "thermostats", "columns": [], "points": []}]
-        actual = record._get_thermostat_data(None)
+        expected = [{"name": "structures", "columns": [], "points": []}]
+        actual = record._get_structure_data(None)
         self.assertEqual(expected, actual)
-        actual = record._get_thermostat_data({})
+        actual = record._get_structure_data({})
         self.assertEqual(expected, actual)
+        actual = record._get_structure_data({"data": {"structures": {"": {"thermostats_is_missing": "not here"}}}})
+        self.assertNotIn("thermostats", actual)
 
     def test_get_structure_data_returns_list_for_valid_data(self):
         for r in self.responses:
@@ -194,6 +196,13 @@ class RecordTestCase(unittest.TestCase):
             if actual:
                 self.assertIsInstance(actual, types.ListType)
                 self.assertEqual(1, len(actual))
+
+    def test_get_thermostat_data_returns_empty_structure_for_invalid_data(self):
+        expected = [{"name": "thermostats", "columns": [], "points": []}]
+        actual = record._get_thermostat_data(None)
+        self.assertEqual(expected, actual)
+        actual = record._get_thermostat_data({})
+        self.assertEqual(expected, actual)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

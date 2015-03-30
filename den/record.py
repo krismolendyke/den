@@ -131,7 +131,7 @@ def _get_structure_data(data):
         except KeyError:  # pylint: disable=pointless-except
             pass
         points.append(s.values())
-    columns = structures[0].keys()
+    columns = structures[0].keys() if structures else []
     return [{"name": name, "columns": columns, "points": points}]
 
 
