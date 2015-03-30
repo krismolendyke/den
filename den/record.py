@@ -159,9 +159,14 @@ def _get_thermostat_data(data):
     return [{"name": name, "columns": columns, "points": points}]
 
 
-def configure_logging():
-    """Configure basic logging."""
-    logging.basicConfig(filename="den.log", level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+def configure_logging(filename="den.log", level=logging.DEBUG):
+    """Configure basic logging.
+
+    :param str filename: (optional) The filename to write logging statements to.
+    :param logging.Logger.debug level: (optional) The level at which to log.
+
+    """
+    logging.basicConfig(filename=filename, level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
 
 def record(database, port, ssl):

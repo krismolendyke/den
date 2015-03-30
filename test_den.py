@@ -14,7 +14,7 @@ os.environ["DEN_ACCESS_TOKEN"] = "TEST"
 from den import record
 
 
-logging.basicConfig(filename=os.devnull)
+record.configure_logging(filename=os.devnull)
 
 
 class RecordTestCase(unittest.TestCase):
