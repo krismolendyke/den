@@ -1,6 +1,9 @@
-#!/usr/bin/env python
+"""Dump `Nest API <https://developer.nest.com/documentation/api-reference>`_ data from InfluxDB to a file.
 
-"""Dump an InfluxDB database."""
+The ``dump`` API is designed to unload Nest thermostat data stored in an `InfluxDB <http://influxdb.com/>`_ database
+to a file for backup.
+
+"""
 
 from gzip import GzipFile
 
