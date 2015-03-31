@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 
-"""Den is a home for your Nest thermostat data."""
+"""Den is a home for your `Nest thermostat <https://nest.com/thermostat>`_ data.
+
+This script has several subcommands.
+
+- ``record`` stores Nest thermostat data into an `InfluxDB <http://influxdb.com>`_ database table.
+- ``dump`` unloads database data to a file for backup.
+- ``load`` restores previous database data from a dump file into the database.
+
+"""
 
 import argparse
 import logging
