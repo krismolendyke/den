@@ -57,22 +57,3 @@ def dump(database, port, ssl):
     with GzipFile(dump_file, "wb") as f:
         json.dump(db.query(QUERY), f)
     return dump_file
-
-
-def main(args):
-    """Parse arguments and dump database."""
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("database", help="Database name to dump.")
-    parser.add_argument("--port", default=8086, help="Database port.")
-    parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
-    parser.add_argument("--bucket", help="AWS S3 bucket name")
-    parser.add_argument("--aws-profile", help="AWS profile name to pull credentials from.")
-    args = parser.parse_args()
-
-    dump_file = _dump(args.database, args.port, args.ssl)
-    if args.bucket:
-        _upload(dump_file, args.bucket, args.aws_profile)
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
