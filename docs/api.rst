@@ -10,3 +10,6 @@ Record
 
 .. automodule:: den.record
    :members:
+
+.. automodule:: den.dump
+   :members:

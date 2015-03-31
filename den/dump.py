@@ -18,8 +18,14 @@ import boto
 QUERY = "select * from /.*/"
 
 
-def _upload(dump_file, bucket, profile=None):
-    """Upload the given dump_file to S3."""
+def upload(dump_file, bucket, profile=None):
+    """Upload ``dump_file`` to S3.
+
+    :param str dump_file: The database dump file name.
+    :param str bucket: The S3 bucket name to upload ``dump_file`` to.
+    :param str profile: (optional) The AWS IAM profile name to use when authenticating.
+
+    """
     if profile:
         conn = boto.connect_s3(profile_name=profile)
     else:
@@ -29,12 +35,17 @@ def _upload(dump_file, bucket, profile=None):
     key.set_contents_from_filename(dump_file)
 
 
-def _dump(database, port, ssl, profile=None, bucket=None):
-    """Dump the given database to a file.
+def dump(database, port, ssl):
+    """Dump ``database`` to a file.
 
-    The database contents will be dumped as JSON to a GZip file with the same name as the database.
+    The database contents will be dumped with :py:class:`json.dumps` to a GZip file with the same name as
+    ``database``.
 
-    The name of the dump file is returned.
+    :param str database: The name of the database.
+    :param int port: The port number the database is listening on.
+    :param bool ssl: Whether or not to use SSL to communicate with the database.
+    :rtype: :py:class:`str`
+    :returns: The name of the dump file.
 
     """
     if ssl:
