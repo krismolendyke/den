@@ -10,6 +10,7 @@ import sys
 from requests.packages import urllib3
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
+import den.dump
 import den.record
 
 
@@ -48,7 +49,9 @@ def _record(args):
 def _dump(args):
     """Dump Nest thermostat data from the database to an AWS S3 bucket."""
     print args
-    return True
+    dump_file = den.dump.dump(args.database, args.port, args.ssl)
+    if args.bucket:
+        den.dump.upload(dump_file, args.bucket, args.aws_profile)
 
 
 def _configure_logging(log_to_file):
