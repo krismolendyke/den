@@ -5,15 +5,11 @@ to a file for backup.
 
 """
 
+import json
 from gzip import GzipFile
 
-import argparse
-import json
-import sys
-
-from influxdb import client as influxdb
-
 import boto
+from influxdb import client as influxdb
 
 QUERY = "select * from /.*/"
 
