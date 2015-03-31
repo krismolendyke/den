@@ -34,8 +34,7 @@ def upload(dump_file, bucket, profile=None):
 def dump(database, port, ssl):
     """Dump ``database`` to a file.
 
-    The database contents will be dumped with :py:class:`json.dumps` to a GZip file with the same name as
-    ``database``.
+    The database contents will be dumped with :py:class:`json.dump` to a GZip file with the same name as ``database``.
 
     :param str database: The name of the database.
     :param int port: The port number the database is listening on.
