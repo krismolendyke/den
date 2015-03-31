@@ -5,7 +5,7 @@ coverage==3.7.1
 dodgy==0.1.6
 logilab-common==0.63.2
 mccabe==0.3
-mock=1.0.1
+mock==1.0.1
 pep257==0.5.0
 pep8-naming==0.2.2
 pep8==1.6.2
