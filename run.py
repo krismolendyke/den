@@ -11,6 +11,7 @@ from requests.packages import urllib3
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
 import den.dump
+import den.load
 import den.record
 
 
@@ -54,6 +55,12 @@ def _dump(args):
         den.dump.upload(dump_file, args.bucket, args.aws_profile)
 
 
+def _load(args):
+    """Load Nest thermostat data from a dump file into the database."""
+    print args
+    # den.load.load(args.dump_file, args.database, args.port, args.ssl)
+
+
 def _configure_logging(log_to_file):
     """Configure basic logging.
 
@@ -90,6 +97,11 @@ def _get_parser():
     parser_dump.add_argument("bucket", help="AWS S3 bucket name.")
     parser_dump.add_argument("--aws-profile", help="AWS profile name to use for credentials.")
     parser_dump.set_defaults(func=_dump)
+
+    parser_load = subparsers.add_parser("load", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                        help=_load.__doc__)
+    parser_load.add_argument("dump-file", help="Gzip'd JSON dump file.")
+    parser_load.set_defaults(func=_load)
 
     return parser
 
