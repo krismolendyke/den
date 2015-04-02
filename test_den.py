@@ -12,6 +12,7 @@ import responses
 from mock import MagicMock, patch
 
 os.environ["DEN_ACCESS_TOKEN"] = "TEST"
+from den import dump
 from den import record
 
 
@@ -237,6 +238,15 @@ class RecordTestCase(unittest.TestCase):
             self.assertIsNone(record.record("den_test", port=8087, ssl=True))
             self.assertTrue(db.write_points.called)
             self.assertEqual(len(self.responses), db.write_points.call_count)
+
+
+class DumpTestCase(unittest.TestCase):
+
+    def test_get_filename(self):
+        database = "test"
+        expected = database + ".json.gz"
+        actual = dump._get_filename(database)
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":

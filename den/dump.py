@@ -6,6 +6,7 @@ to a file for backup.
 """
 
 import json
+import os
 from gzip import GzipFile
 
 import boto
@@ -31,6 +32,16 @@ def upload(dump_file, bucket, profile=None):
     key.set_contents_from_filename(dump_file)
 
 
+def _get_filename(database):
+    """Get a filename to use for dumping ``database`` to.
+
+    :param str database: The name of the database.
+    :rtype: :py:class:`str`
+
+    """
+    return os.path.extsep.join([database, "json", "gz"])
+
+
 def dump(database, port, ssl):
     """Dump ``database`` to a file.
 
@@ -49,7 +60,7 @@ def dump(database, port, ssl):
         disable_warnings()
 
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
-    dump_file = "%s.json.gz" % database
+    dump_file = _get_filename(database)
     with GzipFile(dump_file, "wb") as f:
         json.dump(db.query(QUERY), f)
     return dump_file
