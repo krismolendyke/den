@@ -6,6 +6,7 @@ import json
 import os
 import types
 import unittest
+from datetime import datetime
 
 import requests
 import responses
@@ -244,7 +245,8 @@ class DumpTestCase(unittest.TestCase):
 
     def test_get_filename(self):
         database = "test"
-        expected = database + ".json.gz"
+        date = datetime.strftime(datetime.utcnow(), "%Y-%m-%d")
+        expected = "%s_%s.json.gz" % (database, date)
         actual = dump._get_filename(database)
         self.assertEqual(expected, actual)
 

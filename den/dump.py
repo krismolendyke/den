@@ -7,6 +7,7 @@ to a file for backup.
 
 import json
 import os
+from datetime import datetime
 from gzip import GzipFile
 
 import boto
@@ -39,7 +40,10 @@ def _get_filename(database):
     :rtype: :py:class:`str`
 
     """
-    return os.path.extsep.join([database, "json", "gz"])
+    utc_now = datetime.utcnow()
+    date = datetime.strftime(utc_now, "%Y-%m-%d")
+    basename = "_".join([database, date])
+    return os.path.extsep.join([basename, "json", "gz"])
 
 
 def dump(database, port, ssl):
