@@ -251,5 +251,11 @@ class DumpTestCase(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
+    def test_get_one_day_back_query(self):
+        expected = "select * from /.*/ where time > now() - 1d and time < now();"
+        actual = dump._get_one_day_back_from_now_query()
+        self.assertEqual(expected, actual)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
