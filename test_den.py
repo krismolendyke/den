@@ -250,11 +250,18 @@ class DumpTestCase(unittest.TestCase):
         actual = dump._get_filename(database)
         self.assertEqual(expected, actual)
 
+    def test_get_time_clauses(self):
+        actual = dump._get_time_clauses()
+        self.assertIsInstance(actual, types.GeneratorType)
+        expected = "time > now() - 1d and time < now() - 0d"
+        expected_len = 1
+        actual_len = 0
+        for c in actual:
+            actual_len += 1
+            self.assertIsInstance(c, types.StringType)
+            self.assertEqual(expected, c)
 
-    def test_get_one_day_back_query(self):
-        expected = "select * from /.*/ where time > now() - 1d and time < now();"
-        actual = dump._get_one_day_back_from_now_query()
-        self.assertEqual(expected, actual)
+        self.assertEqual(expected_len, actual_len)
 
 
 if __name__ == "__main__":

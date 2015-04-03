@@ -33,13 +33,8 @@ def upload(dump_file, bucket, profile=None):
     key.set_contents_from_filename(dump_file)
 
 
-def _get_one_day_back_from_now_query():
-    """Get a query which selects data between now and one day ago.
-
-    :rtype: :py:class:`str`
-
-    """
-    return "select * from /.*/ where time > now() - 1d and time < now();"
+def _get_time_clauses():
+    yield "time > now() - 1d and time < now() - 0d"
 
 
 def _get_filename(database):
