@@ -7,6 +7,8 @@ PYTHON           := python
 RM               := rm
 RM_FLAGS         := -rf
 SETUP            := setup.py
+YAPF             := yapf
+YAPF_FLAGS       := --recursive --verify --in-place
 
 build_dir := build
 dist_dir  := dist
@@ -34,6 +36,9 @@ coverage: test
 analyze:
 	$(PROSPECTOR) $(PROSPECTOR_FLAGS)
 
+format:
+	$(YAPF) $(YAPF_FLAGS) den *.py
+
 register:
 	$(PYTHON) $(SETUP) register
 
@@ -49,4 +54,4 @@ upload:
 clean:
 	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) *.egg-info
 
-.PHONY: help init init-test test analyze register source egg upload clean
+.PHONY: help init init-test test analyze format register source egg upload clean
