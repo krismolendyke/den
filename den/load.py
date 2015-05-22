@@ -30,7 +30,7 @@ def load(dump_file, database, port, ssl):
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
     try:
         db.create_database(database)
-    except influxdb.InfluxDBClientError:
+    except influxdb.InfluxDBClientError:  # pylint: disable=pointless-except
         pass
     except ConnectionError as e:
         sys.exit("Could not connect to database: %s" % e)
