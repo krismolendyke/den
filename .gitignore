@@ -2,6 +2,7 @@
 env-*.sh
 nohup.out
 *.gz
+*.org
 
 ##############################################################################
 # Below from https://raw.githubusercontent.com/github/gitignore/13f15a38f3132ea780ca8c3d237a6c3405a6ca69/Python.gitignore
