@@ -19,4 +19,3 @@ pylint==1.4.3
 requirements-detector==0.3
 responses==0.3.0
 setoptconf==0.2.0
-yapf==0.1.9
