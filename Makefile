@@ -1,5 +1,6 @@
 COVERAGE         := coverage
 COVERAGE_RC      := coveragerc
+FIND             := find
 PIP              := pip
 PROSPECTOR       := prospector
 PROSPECTOR_FLAGS := --profile-path prospector.yaml --no-external-config
@@ -8,10 +9,12 @@ RM               := rm
 RM_FLAGS         := -rf
 SETUP            := setup.py
 YAPF             := yapf
-YAPF_FLAGS       := --recursive --verify --in-place
+YAPF_FLAGS       := --verify --in-place
 
 build_dir := build
 dist_dir  := dist
+
+python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*')
 
 help:
 	@$(MAKE) --print-data-base --question no-such-target | \
@@ -37,7 +40,7 @@ analyze:
 	$(PROSPECTOR) $(PROSPECTOR_FLAGS)
 
 format:
-	$(YAPF) $(YAPF_FLAGS) den *.py
+	$(YAPF) $(YAPF_FLAGS) $(python_src)
 
 register:
 	$(PYTHON) $(SETUP) register
