@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """Den is a home for your `Nest thermostat <https://nest.com/thermostat>`_ data.
 
 This script has several subcommands.
@@ -96,17 +95,20 @@ def _get_parser():
     parser.add_argument("--log-to-file", action="store_true", help="Log to a file instead of stdout.")
     subparsers = parser.add_subparsers(title="sub-commands")
 
-    parser_record = subparsers.add_parser("record", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    parser_record = subparsers.add_parser("record",
+                                          formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                           help=_record.__doc__)
     parser_record.set_defaults(func=_record)
 
-    parser_dump = subparsers.add_parser("dump", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    parser_dump = subparsers.add_parser("dump",
+                                        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                         help=_dump.__doc__)
     parser_dump.add_argument("bucket", help="AWS S3 bucket name.")
     parser_dump.add_argument("--aws-profile", help="AWS profile name to use for credentials.")
     parser_dump.set_defaults(func=_dump)
 
-    parser_load = subparsers.add_parser("load", formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    parser_load = subparsers.add_parser("load",
+                                        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                         help=_load.__doc__)
     parser_load.add_argument("dump-file", help="Gzip'd JSON dump file.")
     parser_load.set_defaults(func=_load)

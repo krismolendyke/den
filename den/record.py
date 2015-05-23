@@ -25,7 +25,6 @@ from influxdb import client as influxdb
 
 import requests
 
-
 try:
     NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
     """The Nest API `access token
@@ -47,7 +46,10 @@ STREAM_DELIMITER = ":"
 def _get_api_url(path=""):
     """Get a Nest API URL for the given path."""
     query = urlencode({"auth": NEST_API_ACCESS_TOKEN})
-    split = SplitResult(scheme=NEST_API_PROTOCOL, netloc=NEST_API_LOCATION, path=path.strip("/"), query=query,
+    split = SplitResult(scheme=NEST_API_PROTOCOL,
+                        netloc=NEST_API_LOCATION,
+                        path=path.strip("/"),
+                        query=query,
                         fragment="")
     return urlunsplit(split)
 

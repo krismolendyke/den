@@ -16,12 +16,10 @@ os.environ["DEN_ACCESS_TOKEN"] = "TEST"
 from den import dump
 from den import record
 
-
 record.configure_logging(filename=os.devnull)
 
 
 class RecordTestCase(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         with open("responses.txt", "r") as f:
@@ -45,8 +43,13 @@ class RecordTestCase(unittest.TestCase):
     @responses.activate
     def test_get_stream(self):
         url = record._get_api_url("")
-        responses.add(responses.GET, url, body="".join(self.responses), status=200, content_type="text/event-stream",
-                      stream=True, adding_headers={"Accept": "text/event-stream"}, match_querystring=True)
+        responses.add(responses.GET, url,
+                      body="".join(self.responses),
+                      status=200,
+                      content_type="text/event-stream",
+                      stream=True,
+                      adding_headers={"Accept": "text/event-stream"},
+                      match_querystring=True)
         actual = record._get_stream()
         self.assertIsInstance(actual, requests.Response)
         self.assertEqual(len(self.responses), len(list(actual.iter_lines())))
@@ -62,12 +65,7 @@ class RecordTestCase(unittest.TestCase):
         self.assertFalse(record._is_data("event:"))
 
     def test_process_event_returns_none_for_invalid_line(self):
-        invalid_lines = [
-            "",
-            ":",
-            "event:",
-            "event: "
-        ]
+        invalid_lines = ["", ":", "event:", "event: "]
         for line in invalid_lines:
             self.assertIsNone(record._process_event(line))
 
@@ -83,13 +81,7 @@ class RecordTestCase(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_process_data_returns_none_for_invalid_line(self):
-        invalid_lines = [
-            "",
-            ":",
-            "data:",
-            "data: ",
-            "data: not JSON"
-        ]
+        invalid_lines = ["", ":", "data:", "data: ", "data: not JSON"]
         for line in invalid_lines:
             self.assertIsNone(record._process_data(line))
 
@@ -101,23 +93,12 @@ class RecordTestCase(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_process_returns_none_for_non_data_line(self):
-        invalid_lines = [
-            "",
-            ":",
-            "event:",
-            "event: "
-        ]
+        invalid_lines = ["", ":", "event:", "event: "]
         for line in invalid_lines:
             self.assertIsNone(record._process(line))
 
     def test_process_returns_none_for_invalid_data_line(self):
-        invalid_lines = [
-            "",
-            ":",
-            "data:",
-            "data: ",
-            "data: not JSON"
-        ]
+        invalid_lines = ["", ":", "data:", "data: ", "data: not JSON"]
         for line in invalid_lines:
             self.assertIsNone(record._process(line))
 
@@ -150,13 +131,15 @@ class RecordTestCase(unittest.TestCase):
         expected = [{}]
         actual = record._get_structures({"data": {"structures": {"STRUCTUREID": {}}}})
         self.assertEqual(expected, actual)
-        structure = {"name": "Home",
-                     "away": "home",
-                     "time_zone": "America/New_York",
-                     "postal_code": "19335",
-                     "thermostats": ["THERMOSTATID0", "THERMOSTATID1"],
-                     "country_code": "US",
-                     "structure_id": "STRUCTUREID"}
+        structure = {
+            "name": "Home",
+            "away": "home",
+            "time_zone": "America/New_York",
+            "postal_code": "19335",
+            "thermostats": ["THERMOSTATID0", "THERMOSTATID1"],
+            "country_code": "US",
+            "structure_id": "STRUCTUREID"
+        }
         expected = [structure]
         actual = record._get_structures({"data": {"structures": {"STRUCTUREID": structure}}})
         self.assertEqual(expected, actual)
@@ -231,8 +214,13 @@ class RecordTestCase(unittest.TestCase):
     @responses.activate
     def test_record_writes_points_for_valid_responses(self):
         url = record._get_api_url("")
-        responses.add(responses.GET, url, body="".join(self.responses), status=200, content_type="text/event-stream",
-                      stream=True, adding_headers={"Accept": "text/event-stream"}, match_querystring=True)
+        responses.add(responses.GET, url,
+                      body="".join(self.responses),
+                      status=200,
+                      content_type="text/event-stream",
+                      stream=True,
+                      adding_headers={"Accept": "text/event-stream"},
+                      match_querystring=True)
         with patch("den.record.influxdb.InfluxDBClient") as db_patch:
             db = db_patch.return_value
             db.write_points = MagicMock()
@@ -242,7 +230,6 @@ class RecordTestCase(unittest.TestCase):
 
 
 class DumpTestCase(unittest.TestCase):
-
     def test_get_filename(self):
         database = "test"
         date = datetime.strftime(datetime.utcnow(), "%Y-%m-%d")
