@@ -132,6 +132,7 @@ def _get_structure_data(data):
     for s in structures:
         try:
             del s["thermostats"]
+            del s["wheres"]
         except KeyError:  # pylint: disable=pointless-except
             pass
         points.append(s.values())
