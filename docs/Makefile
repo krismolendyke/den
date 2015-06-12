@@ -5,6 +5,11 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXAUTOBUILD := sphinx-autobuild
+SPHINXAUTOBUILD_FLAGS := \
+--watch ..               \
+--ignore *.pyc           \
+--ignore *flycheck_*     \
+--ignore Makefile
 PAPER         =
 BUILDDIR      = _build
 
@@ -125,7 +130,7 @@ latexpdfja:
 	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
 
 livehtml:
-	$(SPHINXAUTOBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	$(SPHINXAUTOBUILD) $(SPHINXAUTOBUILD_FLAGS) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 
 text:
 	$(SPHINXBUILD) -b text $(ALLSPHINXOPTS) $(BUILDDIR)/text
