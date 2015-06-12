@@ -1,17 +1,17 @@
 --requirement ../requirements.txt
 argh==0.26.1
 backports.ssl-match-hostname==3.4.0.2
-certifi==14.5.14
+certifi==2015.4.28
 colour==0.0.6
 docutils==0.12
 Jinja2==2.7.3
-livereload==2.3.2
+livereload==2.4.0
 MarkupSafe==0.23
 pathtools==0.1.2
 Pygments==2.0.1
 PyYAML==3.11
 Sphinx==1.2.3
 sphinx-argparse==0.1.14
-sphinx-autobuild==0.4.0
-tornado==4.0.2
-watchdog==0.8.2
+sphinx-autobuild==0.5.2
+tornado==4.2
+watchdog==0.8.3

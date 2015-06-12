@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Installed to root's crotab with schedule:
-# 20 15 * * * /home/ec2-user/pyden/backup.sh
-
 START=$(/bin/date +%s)
 /sbin/service influxdb stop
 /bin/tar -cjf /tmp/den-shared.tbz /opt/influxdb/shared

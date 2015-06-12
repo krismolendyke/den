@@ -39,8 +39,10 @@ except KeyError:
 
 NEST_API_PROTOCOL = "https"
 NEST_API_LOCATION = "developer-api.nest.com"
+"""The base location of the Nest API."""
 
 STREAM_DELIMITER = ":"
+"""The token which separates line type and line data in the Nest streaming API response."""
 
 
 def _get_api_url(path=""):
