@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Den is a home for your `Nest thermostat <https://nest.com/thermostat>`_ data.
 
-This script has several subcommands.
+This script has a single subcommand:
 
 - ``record`` stores Nest thermostat data into an `InfluxDB <http://influxdb.com>`_ database table.
 

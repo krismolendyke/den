@@ -6,7 +6,8 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXAUTOBUILD := sphinx-autobuild
 SPHINXAUTOBUILD_FLAGS := \
---watch ..               \
+--watch ../bin           \
+--watch ../den           \
 --ignore *.pyc           \
 --ignore *flycheck_*     \
 --ignore Makefile
