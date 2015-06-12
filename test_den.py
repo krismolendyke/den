@@ -13,7 +13,6 @@ import responses
 from mock import MagicMock, patch
 
 os.environ["DEN_ACCESS_TOKEN"] = "TEST"
-from den import dump
 from den import record
 
 record.configure_logging(filename=os.devnull)
@@ -227,28 +226,6 @@ class RecordTestCase(unittest.TestCase):
             self.assertIsNone(record.record("den_test", port=8087, ssl=True))
             self.assertTrue(db.write_points.called)
             self.assertEqual(len(self.responses), db.write_points.call_count)
-
-
-class DumpTestCase(unittest.TestCase):
-    def test_get_filename(self):
-        database = "test"
-        date = datetime.strftime(datetime.utcnow(), "%Y-%m-%d")
-        expected = "%s_%s.json.gz" % (database, date)
-        actual = dump._get_filename(database)
-        self.assertEqual(expected, actual)
-
-    def test_get_time_clauses(self):
-        actual = dump._get_time_clauses()
-        self.assertIsInstance(actual, types.GeneratorType)
-        expected = "time > now() - 1d and time < now() - 0d"
-        expected_len = 1
-        actual_len = 0
-        for c in actual:
-            actual_len += 1
-            self.assertIsInstance(c, types.StringType)
-            self.assertEqual(expected, c)
-
-        self.assertEqual(expected_len, actual_len)
 
 
 if __name__ == "__main__":
