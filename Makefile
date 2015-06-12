@@ -13,6 +13,7 @@ YAPF_FLAGS       := --verify --in-place
 
 build_dir := build
 dist_dir  := dist
+test_dir  := test
 
 python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*')
 
@@ -28,10 +29,10 @@ init:
 	$(PIP) install --requirement requirements.txt
 
 init-test:
-	$(PIP) install --requirement requirements-test.txt
+	$(PIP) install --requirement $(test_dir)/requirements.txt
 
 test:
-	$(COVERAGE) run --source=den test_den.py
+	PYTHONPATH=. $(COVERAGE) run --source=den $(test_dir)/test_den.py
 
 coverage: test
 	$(COVERAGE) report -m
