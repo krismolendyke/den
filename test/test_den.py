@@ -21,7 +21,7 @@ record.configure_logging(filename=os.devnull)
 class RecordTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        with open("test/responses.txt", "r") as f:
+        with open(os.path.join(os.path.dirname(__file__), "responses.txt"), "r") as f:
             cls.responses = [l for l in f]
 
     def test_missing_env_variable_raises_key_error(self):
