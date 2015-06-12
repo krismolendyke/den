@@ -1,7 +1,7 @@
 Den
 ===
 
-Release v\ |version|. (:ref:`Installation <install>`)
+Release v\ |version|.
 
 ``den`` is a home for your `Nest thermostat`_ data.
 
