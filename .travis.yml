@@ -6,6 +6,6 @@ install:
   - pip install -r test/requirements.txt --use-mirrors
   - pip install coveralls
 script:
-  pythonpath=. coverage run --source=den test/test_den.py
+  PYTHONPATH=. coverage run --source=den test/test_den.py
 after_success:
   coveralls
