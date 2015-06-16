@@ -24,6 +24,8 @@ sys.path.append(os.path.abspath('_themes'))
 
 os.environ["DEN_ACCESS_TOKEN"] = ""
 
+import alabaster
+
 from den import __title__, __version__
 
 # -- General configuration ------------------------------------------------
@@ -35,6 +37,7 @@ from den import __title__, __version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'alabaster',
     'sphinxarg.ext',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
@@ -95,7 +98,7 @@ exclude_patterns = ['_build']
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'flask_theme_support.FlaskyStyle'
+pygments_style = 'emacs'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -116,7 +119,7 @@ html_theme = 'alabaster'
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ['_themes']
+html_theme_path = [alabaster.get_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
