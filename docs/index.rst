@@ -16,13 +16,20 @@ data from your thermostat(s) for greater analysis and visualization than the
 
 .. image:: images/dashboard.jpg
 
-User Guide
+``run.py``
 ----------
 
-.. toctree::
-   :maxdepth: 2
+The `run script`_ uses the :ref:`api` :func:`~den.record.record` function to
+record thermostat data to `InfluxDB`_.  It could be invoked:
 
-   user/core
+.. code-block:: sh
+
+    python ./run.py den --port 8087 --ssl --log-to-file record
+
+.. argparse::
+   :module: run
+   :func: _get_parser
+   :prog: run
 
 API Documentation
 -----------------
@@ -73,3 +80,4 @@ Changelog
 .. _REST Streaming API: https://developer.nest.com/documentation/cloud/rest-streaming-guide
 .. _InfluxDB: http://influxdb.com/
 .. _Grafana: http://grafana.org/
+.. _run script: https://github.com/krismolendyke/den/blob/master/bin/run.py
