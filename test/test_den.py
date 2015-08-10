@@ -173,6 +173,7 @@ class RecordTestCase(unittest.TestCase):
                 self.assertIsInstance(actual[0]["columns"], types.ListType)
                 self.assertIsInstance(actual[0]["points"], types.ListType)
                 self.assertNotIn("thermostats", actual[0])
+                self.assertNotIn("wheres", actual[0])
 
     def test_get_thermostats_returns_empty_list_for_invalid_data(self):
         expected = []
