@@ -44,6 +44,8 @@ def _record(args):
             logging.critical("Unexpected error %s", e)
             if e.message == "EOF occurred in violation of protocol":
                 logging.info("Re-establishing connection")
+            elif e.message == "400: invalid payload":
+                logging.critical("Could not write response to database")
             else:
                 return False
 
