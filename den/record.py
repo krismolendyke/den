@@ -154,16 +154,17 @@ def _get_thermostats(data):
     return thermostats
 
 
-def _get_thermostat_data(data):
+def _get_thermostat_data(thermostat):
     """Get thermostat data to write to InfluxDB."""
     name = "thermostats"
-    thermostats = _get_thermostats(data)
     columns = []
-    points = []
-    if thermostats:
-        columns = thermostats[0].keys()
-        points = [t.values() for t in thermostats]
-    return [{"name": name, "columns": columns, "points": points}]
+    values = []
+    try:
+        columns = thermostat.keys()
+        values = [thermostat.values()] if columns else []
+    except AttributeError:
+        logging.error("Invalid thermostat: '%s'", thermostat)
+    return [{"name": name, "columns": columns, "points": values}]
 
 
 def configure_logging(filename="den.log", level=logging.DEBUG):
@@ -199,5 +200,6 @@ def record(database, port, ssl):
                 if value:
                     logging.info(value)
                     db.write_points(_get_structure_data(value))
-                    db.write_points(_get_thermostat_data(value))
+                    for thermostat in _get_thermostats(value):
+                        db.write_points(_get_thermostat_data(thermostat))
         logging.debug("[%d] Streaming complete %s", stream.status_code, stream.url)
