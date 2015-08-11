@@ -190,7 +190,6 @@ class RecordTestCase(unittest.TestCase):
             actual = record._get_thermostats(result)
             if actual:
                 self.assertIsInstance(actual, types.ListType)
-                self.assertEqual(1, len(actual))
 
     def test_get_thermostat_data_returns_empty_structure_for_invalid_data(self):
         expected = [{"name": "thermostats", "columns": [], "points": []}]
@@ -203,13 +202,14 @@ class RecordTestCase(unittest.TestCase):
         for r in self.responses:
             result = record._process(r)
             if result:
-                actual = record._get_thermostat_data(result)
-                self.assertIsInstance(actual, types.ListType)
-                self.assertIsInstance(actual[0]["columns"], types.ListType)
-                self.assertIsInstance(actual[0]["points"], types.ListType)
-                self.assertIsInstance(actual[0]["points"][0], types.ListType)
-                self.assertEqual(len(actual[0]["columns"]), len(actual[0]["points"][0]))
-                self.assertEqual("thermostats", actual[0]["name"])
+                for thermostat in record._get_thermostats(result):
+                    actual = record._get_thermostat_data(thermostat)
+                    self.assertIsInstance(actual, types.ListType)
+                    self.assertIsInstance(actual[0]["columns"], types.ListType)
+                    self.assertIsInstance(actual[0]["points"], types.ListType)
+                    self.assertIsInstance(actual[0]["points"][0], types.ListType)
+                    self.assertEqual(len(actual[0]["columns"]), len(actual[0]["points"][0]))
+                    self.assertEqual("thermostats", actual[0]["name"])
 
     @responses.activate
     def test_record_writes_points_for_valid_responses(self):
@@ -226,7 +226,11 @@ class RecordTestCase(unittest.TestCase):
             db.write_points = MagicMock()
             self.assertIsNone(record.record("den_test", port=8087, ssl=True))
             self.assertTrue(db.write_points.called)
-            self.assertEqual(len(self.responses), db.write_points.call_count)
+            expected = 0
+            for r in self.responses:
+                result = record._process(r)
+                expected += len(record._get_structures(result)) + len(record._get_thermostats(result))
+            self.assertEqual(expected, db.write_points.call_count)
 
 
 if __name__ == "__main__":
