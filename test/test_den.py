@@ -12,8 +12,17 @@ import requests
 import responses
 from mock import MagicMock, patch
 
-os.environ["DEN_ACCESS_TOKEN"] = "TEST"
-from den import record
+
+def _reset_environ():
+    """Reset the environment with test values."""
+    os.environ["DEN_ACCESS_TOKEN"] = "TEST"
+    os.environ["DEN_FORECAST_IO_API_KEY"] = "TEST"
+    os.environ["DEN_LAT"] = "39.952447"
+    os.environ["DEN_LON"] = "-75.1635083"
+
+
+_reset_environ()
+from den import record, weather
 
 record.configure_logging(filename=os.devnull)
 
@@ -231,6 +240,28 @@ class RecordTestCase(unittest.TestCase):
                 result = record._process(r)
                 expected += len(record._get_structures(result)) + len(record._get_thermostats(result))
             self.assertEqual(expected, db.write_points.call_count)
+
+
+class WeatherTestCase(unittest.TestCase):
+    def test_missing_env_variable_raises_key_error(self):
+        with patch.dict("os.environ", {}):
+            del os.environ["DEN_FORECAST_IO_API_KEY"]
+            with self.assertRaisesRegexp(KeyError, r"Please set the environment variable 'DEN_FORECAST_IO_API_KEY'."):
+                reload(weather)
+
+            _reset_environ()
+            del os.environ["DEN_LAT"]
+            with self.assertRaisesRegexp(KeyError, r"Please set the environment variable 'DEN_LAT'."):
+                reload(weather)
+
+            _reset_environ()
+            del os.environ["DEN_LON"]
+            with self.assertRaisesRegexp(KeyError, r"Please set the environment variable 'DEN_LON'."):
+                reload(weather)
+
+    def test_lat_lon_are_floats(self):
+        self.assertIsInstance(weather.LAT, types.FloatType)
+        self.assertIsInstance(weather.LON, types.FloatType)
 
 
 if __name__ == "__main__":
