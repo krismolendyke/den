@@ -18,7 +18,7 @@ except KeyError:
 
 try:
     LON = float(os.environ["DEN_LON"])
-    """Latitude"""
+    """Longitude"""
 except KeyError:
     raise KeyError("Please set the environment variable 'DEN_LON'.")
 
