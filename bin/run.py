@@ -13,6 +13,7 @@ import sys
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
 import den.record
+import den.weather
 
 
 def _record(args):
@@ -48,6 +49,11 @@ def _record(args):
                 return False
 
 
+def _weather(args):
+    """Record weather data into the database."""
+    den.weather.record(args.database, args.port, args.ssl)
+
+
 def _configure_logging(log_to_file):
     """Configure basic logging.
 
@@ -79,6 +85,11 @@ def _get_parser():
                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                           help=_record.__doc__)
     parser_record.set_defaults(func=_record)
+
+    parser_weather = subparsers.add_parser("weather",
+                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                           help=_weather.__doc__)
+    parser_weather.set_defaults(func=_weather)
     return parser
 
 
