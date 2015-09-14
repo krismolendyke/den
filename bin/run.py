@@ -10,7 +10,6 @@ import logging
 import os
 import sys
 
-from requests.packages import urllib3
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
 import den.record
@@ -24,7 +23,6 @@ def _record(args):
 
     """
     den.record.configure_logging()
-    urllib3.disable_warnings()
 
     while True:
         try:
