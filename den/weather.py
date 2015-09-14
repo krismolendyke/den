@@ -35,7 +35,7 @@ def get_current_data():
     forecast = forecastio.load_forecast(FORECAST_IO_API_KEY, LAT, LON)
     currently = forecast.currently()
     current_data = currently.d
-    data = [{"name": "weather", "columns": current_data.keys() or [], "points": [current_data.values()]}]
+    data = [{"name": "weather", "columns": current_data.keys(), "points": [current_data.values()]}]
     logging.debug("Weather data: %s", data)
     return data
 
