@@ -278,7 +278,6 @@ class WeatherTestCase(unittest.TestCase):
             actual_values = actual_points[0]
             self.assertIsInstance(actual_values, types.ListType)
 
-
     def test_record_writes_points_for_valid_responses(self):
         with patch("forecastio.api.get_forecast") as get_forecast_patch, \
              patch("den.weather.influxdb.InfluxDBClient") as db_patch:
