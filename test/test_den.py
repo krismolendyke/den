@@ -287,6 +287,7 @@ class WeatherTestCase(unittest.TestCase):
             db = db_patch.return_value
             db.write_points = MagicMock()
             self.assertIsNone(weather.record("den_test", port=8087, ssl=True))
+            self.assertTrue(get_forecast.currently.called)
             self.assertTrue(db.write_points.called)
 
 
