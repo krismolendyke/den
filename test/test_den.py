@@ -267,12 +267,7 @@ class WeatherTestCase(unittest.TestCase):
     def test_get_current_data(self):
         with patch("forecastio.api.get_forecast") as get_forecast_mock:
             get_forecast = get_forecast_mock.return_value
-            data = {
-                "k0": "v0",
-                "k2": "v2",
-                "k1": "v1",
-                "k3": "v3"
-            }
+            data = {"k0": "v0", "k2": "v2", "k1": "v1", "k3": "v3"}
             get_forecast.currently.return_value = forecastio.models.ForecastioDataPoint(data)
             actual = weather.get_current_data()
             self.assertIsInstance(actual, types.ListType)
