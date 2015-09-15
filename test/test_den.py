@@ -279,5 +279,17 @@ class WeatherTestCase(unittest.TestCase):
             self.assertIsInstance(actual_values, types.ListType)
 
 
+    def test_record_writes_points_for_valid_responses(self):
+        with patch("forecastio.api.get_forecast") as get_forecast_patch, \
+             patch("den.weather.influxdb.InfluxDBClient") as db_patch:
+            get_forecast = get_forecast_patch.return_value
+            data = {"k0": "v0", "k2": "v2", "k1": "v1", "k3": "v3"}
+            get_forecast.currently.return_value = forecastio.models.ForecastioDataPoint(data)
+            db = db_patch.return_value
+            db.write_points = MagicMock()
+            self.assertIsNone(weather.record("den_test", port=8087, ssl=True))
+            self.assertTrue(db.write_points.called)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
