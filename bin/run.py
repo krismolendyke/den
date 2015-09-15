@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-"""This script has a single subcommand:
+"""This script has more than one subcommand:
 
 - ``record`` stores Nest thermostat data into an `InfluxDB`_ database table.
+- ``weather`` stores `forecast.io <http://forecast.io>`_ weather data into an `InfluxDB`_ database table.
 
 """
 

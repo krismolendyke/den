@@ -1,4 +1,18 @@
-"""Den weather functionality."""
+"""Record `forecast.io <http://forecast.io>`_ weather data to InfluxDB.
+
+:func:`record` will persist current weather data in an `InfluxDB <http://influxdb.com/>`_ database.
+
+.. note::
+
+   Several environment variables are required to retrieve current weather data:
+
+   #. ``DEN_FORECAST_IO_API_KEY``
+   #. ``DEN_LAT``
+   #. ``DEN_LON``
+
+:raises: :py:exc:`~exceptions.KeyError` if any of the required environment variables are missing.
+
+"""
 
 import logging
 import os
@@ -8,19 +22,31 @@ import forecastio
 
 try:
     FORECAST_IO_API_KEY = os.environ["DEN_FORECAST_IO_API_KEY"]
-    """A `forecast.io API <https://developer.forecast.io/>`_ key."""
+    """A `forecast.io API <https://developer.forecast.io/>`_ key.
+
+    This required value is retrieved from the environment variable ``DEN_FORECAST_IO_API_KEY``.
+
+    """
 except KeyError:
     raise KeyError("Please set the environment variable 'DEN_FORECAST_IO_API_KEY'.")
 
 try:
     LAT = float(os.environ["DEN_LAT"])
-    """Latitude"""
+    """A latitude to use when getting the current weather.
+
+    This required value is retrieved from the environment variable ``DEN_LAT``.
+
+    """
 except KeyError:
     raise KeyError("Please set the environment variable 'DEN_LAT'.")
 
 try:
     LON = float(os.environ["DEN_LON"])
-    """Longitude"""
+    """A longitude to use when getting the current weather.
+
+    This required value is retrieved from the environment variable ``DEN_LON``.
+
+    """
 except KeyError:
     raise KeyError("Please set the environment variable 'DEN_LON'.")
 
@@ -28,8 +54,8 @@ except KeyError:
 def get_current_data():
     """Get data prepared for InfluxDB insertion.
 
-    :rtype: :py:class:`dict`
-    :returns: The current weather data.
+    :rtype: :py:class:`list`
+    :returns: The current weather data prepared for insertion into InfluxDB.
 
     """
     forecast = forecastio.load_forecast(FORECAST_IO_API_KEY, LAT, LON)
