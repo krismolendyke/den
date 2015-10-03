@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-"""This script has a single subcommand:
+"""This script has more than one subcommand:
 
 - ``record`` stores Nest thermostat data into an `InfluxDB`_ database table.
+- ``weather`` stores `forecast.io <http://forecast.io>`_ weather data into an `InfluxDB`_ database table.
 
 """
 
@@ -10,10 +11,10 @@ import logging
 import os
 import sys
 
-from requests.packages import urllib3
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
 import den.record
+import den.weather
 
 
 def _record(args):
@@ -24,7 +25,6 @@ def _record(args):
 
     """
     den.record.configure_logging()
-    urllib3.disable_warnings()
 
     while True:
         try:
@@ -48,6 +48,11 @@ def _record(args):
                 logging.critical("Could not write response to database")
             else:
                 return False
+
+
+def _weather(args):
+    """Record weather data into the database."""
+    den.weather.record(args.database, args.port, args.ssl)
 
 
 def _configure_logging(log_to_file):
@@ -81,6 +86,11 @@ def _get_parser():
                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                           help=_record.__doc__)
     parser_record.set_defaults(func=_record)
+
+    parser_weather = subparsers.add_parser("weather",
+                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                           help=_weather.__doc__)
+    parser_weather.set_defaults(func=_weather)
     return parser
 
 

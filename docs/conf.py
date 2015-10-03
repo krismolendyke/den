@@ -23,6 +23,9 @@ sys.path.insert(0, os.path.abspath('../bin'))
 sys.path.append(os.path.abspath('_themes'))
 
 os.environ["DEN_ACCESS_TOKEN"] = ""
+os.environ["DEN_FORECAST_IO_API_KEY"] = ""
+os.environ["DEN_LAT"] = "39.952447"
+os.environ["DEN_LON"] = "-75.1635083"
 
 import alabaster
 

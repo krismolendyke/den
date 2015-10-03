@@ -10,3 +10,10 @@ Record
 
 .. automodule:: den.record
    :members:
+
+
+Weather
+-------
+
+.. automodule:: den.weather
+   :members:
