@@ -22,33 +22,23 @@ setup(
     url="https://git.io/k20e",
     license="MIT",
     classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 2.7",
+        "Development Status :: 3 - Alpha", "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5"
     ],
     keywords="nest thermostat smoke alarm camera",
     packages=find_packages("src"),
     package_dir={"": "src"},
-    install_requires=[
-        "influxdb",
-        "python-forecastio",
-        "requests"
-    ],
+    install_requires=["influxdb", "python-forecastio", "requests"],
     extras_require={
-        "dev": [
-            "yapf",
-        ],
+        "dev": ["yapf", ],
         "doc": [
             "Sphinx",
             "alabaster",
             "sphinx-argparse",
             "sphinx-autobuild",
         ],
-        "notebook": [
-            "jupyter",
-        ],
+        "notebook": ["jupyter", ],
         "test": [
             "coverage",
             "prospector",
@@ -58,5 +48,4 @@ setup(
     },
     package_data={},
     include_package_data=True,
-    data_files=[],
-)
+    data_files=[], )
