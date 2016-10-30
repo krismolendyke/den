@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""This script has more than one subcommand:
+"""This script has more than one subcommand.
 
 - ``record`` stores Nest thermostat data into an `InfluxDB`_ database table.
 - ``weather`` stores `forecast.io <http://forecast.io>`_ weather data into an `InfluxDB`_ database table.
@@ -17,7 +17,7 @@ import den.record
 import den.weather
 
 
-def _record(args):
+def _record(args):  # noqa
     """Record Nest thermostat data into the database.
 
     This function will attempt to recover from various network errors.  It will run indefinitely until interrupted
@@ -82,14 +82,12 @@ def _get_parser():
     parser.add_argument("--log-to-file", action="store_true", help="Log to a file instead of stdout.")
     subparsers = parser.add_subparsers(title="sub-commands")
 
-    parser_record = subparsers.add_parser("record",
-                                          formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                          help=_record.__doc__)
+    parser_record = subparsers.add_parser(
+        "record", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_record.__doc__)
     parser_record.set_defaults(func=_record)
 
-    parser_weather = subparsers.add_parser("weather",
-                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                           help=_weather.__doc__)
+    parser_weather = subparsers.add_parser(
+        "weather", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_weather.__doc__)
     parser_weather.set_defaults(func=_weather)
     return parser
 

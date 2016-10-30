@@ -13,7 +13,7 @@ YAPF_FLAGS       := --verify --in-place
 
 build_dir := build
 dist_dir  := dist
-test_dir  := test
+test_dir  := tests
 
 python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*')
 
@@ -26,10 +26,10 @@ help:
 	pr -2 -t
 
 init:
-	$(PIP) install --requirement requirements.txt
+	$(PIP) install --editable .
 
-init-test:
-	$(PIP) install --requirement $(test_dir)/requirements.txt
+init-dev:
+	$(PIP) install --editable .[dev] --editable .[doc] --editable .[notebook] --editable .[test]
 
 test:
 	PYTHONPATH=. $(COVERAGE) run --source=den $(test_dir)/test_den.py
@@ -52,10 +52,13 @@ source:
 egg:
 	$(PYTHON) $(SETUP) bdist_egg
 
+wheel:
+	$(PYTHON) $(SETUP) bdist_wheel
+
 upload:
 	$(PYTHON) $(SETUP) sdist bdist_egg upload
 
 clean:
 	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) *.egg-info
 
-.PHONY: help init init-test test analyze format register source egg upload clean
+.PHONY: help init init-dev test analyze format register source egg wheel upload clean

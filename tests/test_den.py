@@ -52,7 +52,8 @@ class RecordTestCase(unittest.TestCase):
     @responses.activate
     def test_get_stream(self):
         url = record._get_api_url("")
-        responses.add(responses.GET, url,
+        responses.add(responses.GET,
+                      url,
                       body="".join(self.responses),
                       status=200,
                       content_type="text/event-stream",
@@ -224,7 +225,8 @@ class RecordTestCase(unittest.TestCase):
     @responses.activate
     def test_record_writes_points_for_valid_responses(self):
         url = record._get_api_url("")
-        responses.add(responses.GET, url,
+        responses.add(responses.GET,
+                      url,
                       body="".join(self.responses),
                       status=200,
                       content_type="text/event-stream",
