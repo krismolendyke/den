@@ -1,0 +1,3 @@
+recursive-include src VERSION
+graft src
+global-exclude *.pyc

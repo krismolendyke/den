@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""This script has more than one subcommand:
+"""This script has more than one subcommand.
 
 - ``record`` stores Nest thermostat data into an `InfluxDB`_ database table.
 - ``weather`` stores `forecast.io <http://forecast.io>`_ weather data into an `InfluxDB`_ database table.
@@ -17,7 +17,7 @@ import den.record
 import den.weather
 
 
-def _record(args):
+def _record(args):  # noqa
     """Record Nest thermostat data into the database.
 
     This function will attempt to recover from various network errors.  It will run indefinitely until interrupted

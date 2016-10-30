@@ -1,3 +1,5 @@
+PIP := pip
+
 ipython                := ipython
 ipython_notebook       := notebook
 
@@ -15,6 +17,9 @@ help:
 	     { print substr($$1, 1, length($$1)-1) }'        | \
 	sort					             | \
 	pr -2 -t
+
+init:
+	$(PIP) install --editable ..[notebook]
 
 run:
 	$(nohup) $(den) &

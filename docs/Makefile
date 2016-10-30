@@ -7,11 +7,12 @@ SPHINXBUILD   = sphinx-build
 SPHINXAUTOBUILD := sphinx-autobuild
 SPHINXAUTOBUILD_FLAGS := \
 --watch ../bin           \
---watch ../den           \
+--watch ../src/den       \
 --ignore *.pyc           \
 --ignore *flycheck_*     \
 --ignore Makefile
 PAPER         =
+PIP           := pip
 BUILDDIR      = _build
 
 # User-friendly check for sphinx-build
@@ -56,6 +57,9 @@ help:
 
 clean:
 	rm -rf $(BUILDDIR)/*
+
+init:
+	$(PIP) install --editable ..[doc]
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
