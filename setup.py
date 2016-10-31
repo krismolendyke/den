@@ -31,7 +31,10 @@ setup(
     package_dir={"": "src"},
     install_requires=["influxdb", "python-forecastio", "requests"],
     extras_require={
-        "dev": ["yapf", ],
+        "dev": [
+            "tox",
+            "yapf",
+        ],
         "doc": [
             "Sphinx",
             "alabaster",

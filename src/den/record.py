@@ -14,8 +14,11 @@ The ``record`` API is designed to persist Nest thermostat data in an `InfluxDB <
 """
 
 from contextlib import closing
-from urllib import urlencode
-from urlparse import SplitResult, urlunsplit
+try:
+    from urllib.parse import SplitResult, urlencode, urlunsplit
+except ImportError:
+    from urllib import urlencode
+    from urlparse import SplitResult, urlunsplit
 
 import json
 import logging
@@ -98,7 +101,7 @@ def _process_data(line):
         if data_str:
             try:
                 data = json.loads(data_str)
-            except ValueError, e:
+            except ValueError as e:
                 logging.error("Error processing data line: '%s', '%s'", line, e)
                 data = None
     return data
@@ -115,7 +118,7 @@ def _get_structures(data):
     """Get structure data from the given data dict."""
     structures = []
     try:
-        structures = data["data"]["structures"].values()
+        structures = list(data["data"]["structures"].values())
     except TypeError:
         logging.error("Invalid data: '%s'", data)
     except KeyError:
@@ -134,8 +137,8 @@ def _get_structure_data(data):
             del s["wheres"]
         except KeyError:  # pylint: disable=pointless-except
             pass
-        points.append(s.values())
-    columns = structures[0].keys() if structures else []
+        points.append(list(s.values()))
+    columns = list(structures[0].keys()) if structures else []
     return [{"name": name, "columns": columns, "points": points}]
 
 
@@ -143,7 +146,7 @@ def _get_thermostats(data):
     """Get thermostat data from the given data dict."""
     thermostats = []
     try:
-        thermostats = data["data"]["devices"]["thermostats"].values()
+        thermostats = list(data["data"]["devices"]["thermostats"].values())
     except TypeError:
         logging.error("Invalid data: '%s'", data)
     except KeyError:
@@ -157,8 +160,8 @@ def _get_thermostat_data(thermostat):
     columns = []
     values = []
     try:
-        columns = thermostat.keys()
-        values = [thermostat.values()] if columns else []
+        columns = list(thermostat.keys())
+        values = [list(thermostat.values())] if columns else []
     except AttributeError:
         logging.error("Invalid thermostat: '%s'", thermostat)
     return [{"name": name, "columns": columns, "points": values}]
@@ -193,7 +196,7 @@ def record(database, port, ssl):
         logging.debug("[%d] Streaming %s", stream.status_code, stream.url)
         for l in stream.iter_lines():
             if l:
-                value = _process(l)
+                value = _process(l.decode("utf-8"))
                 if value:
                     logging.info(value)
                     db.write_points(_get_structure_data(value))
