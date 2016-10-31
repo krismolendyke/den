@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """Record `forecast.io <http://forecast.io>`_ weather data to InfluxDB.
 
 :func:`record` will persist current weather data in an `InfluxDB <http://influxdb.com/>`_ database.

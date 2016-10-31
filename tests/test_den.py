@@ -41,7 +41,8 @@ class RecordTestCase(unittest.TestCase):
                 try:
                     reload(record)
                 except NameError:
-                    import importlib; importlib.reload(record)
+                    import importlib
+                    importlib.reload(record)
 
     def test_get_api_url(self):
         expected = "https://developer-api.nest.com?auth=%s" % record.NEST_API_ACCESS_TOKEN
@@ -285,7 +286,8 @@ class WeatherTestCase(unittest.TestCase):
                 try:
                     reload(weather)
                 except NameError:
-                    import importlib; importlib.reload(weather)
+                    import importlib
+                    importlib.reload(weather)
 
             _reset_environ()
             del os.environ["DEN_LAT"]
@@ -293,7 +295,8 @@ class WeatherTestCase(unittest.TestCase):
                 try:
                     reload(weather)
                 except NameError:
-                    import importlib; importlib.reload(weather)
+                    import importlib
+                    importlib.reload(weather)
 
             _reset_environ()
             del os.environ["DEN_LON"]
@@ -301,7 +304,8 @@ class WeatherTestCase(unittest.TestCase):
                 try:
                     reload(weather)
                 except NameError:
-                    import importlib; importlib.reload(weather)
+                    import importlib
+                    importlib.reload(weather)
 
     def test_lat_lon_are_floats(self):
         try:
