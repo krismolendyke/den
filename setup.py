@@ -22,8 +22,7 @@ setup(
     url="https://git.io/k20e",
     license="MIT",
     classifiers=[
-        "Development Status :: 3 - Alpha", "Intended Audience :: Developers",
-        "Programming Language :: Python :: 2.7",
+        "Development Status :: 3 - Alpha", "Intended Audience :: Developers", "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5"
     ],
     keywords="nest thermostat smoke alarm camera",
