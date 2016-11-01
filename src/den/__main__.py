@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""This script has more than one subcommand."""
+"""Den is a home for your Nest thermostat data."""
 
 from __future__ import absolute_import
 
