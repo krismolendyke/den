@@ -23,7 +23,7 @@ setup(
     license="MIT",
     classifiers=[
         "Development Status :: 3 - Alpha", "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5"
     ],
     keywords="nest thermostat smoke alarm camera",
@@ -52,4 +52,5 @@ setup(
     package_data={},
     include_package_data=True,
     data_files=[],
-    test_suite="tests", )
+    test_suite="tests",
+    python_requires="==2.7,==3.5", )
