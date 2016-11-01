@@ -55,8 +55,8 @@ egg:
 wheel:
 	$(PYTHON) $(SETUP) bdist_wheel
 
-upload:
-	$(PYTHON) $(SETUP) sdist bdist_egg upload
+upload: source egg wheel
+	$(PYTHON) $(SETUP) upload
 
 clean:
 	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) *.egg-info
