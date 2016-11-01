@@ -1,10 +1,7 @@
 #!/usr/bin/env python
-"""This script has more than one subcommand.
+"""Den is a home for your Nest thermostat data."""
 
-- ``record`` stores Nest thermostat data into an `InfluxDB`_ database table.
-- ``weather`` stores `forecast.io <http://forecast.io>`_ weather data into an `InfluxDB`_ database table.
-
-"""
+from __future__ import absolute_import
 
 import argparse
 import logging
@@ -13,8 +10,9 @@ import sys
 
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
-import den.record
-import den.weather
+from . import __version__
+from . import record
+from . import weather
 
 
 def _record(args):  # noqa
@@ -24,11 +22,11 @@ def _record(args):  # noqa
     from the keyboard or an unexpected exception occurs.
 
     """
-    den.record.configure_logging()
+    record.configure_logging()
 
     while True:
         try:
-            den.record.record(args.database, args.port, args.ssl)
+            record.record(args.database, args.port, args.ssl)
         except KeyboardInterrupt as e:
             logging.warn("Keyboard interrupt %s", e)
             return True
@@ -52,7 +50,7 @@ def _record(args):  # noqa
 
 def _weather(args):
     """Record weather data into the database."""
-    den.weather.record(args.database, args.port, args.ssl)
+    weather.record(args.database, args.port, args.ssl)
 
 
 def _configure_logging(log_to_file):
@@ -76,6 +74,7 @@ def _get_parser():
 
     """
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("--version", "-v", action="version", version=__version__)
     parser.add_argument("database", help="Database name.")
     parser.add_argument("--port", default=8086, help="Database port.")
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
@@ -92,7 +91,7 @@ def _get_parser():
     return parser
 
 
-def _main():
+def main():
     """The main entry point to the den program.
 
     :param list argv: A list of command line arguments.
@@ -106,4 +105,4 @@ def _main():
 
 
 if __name__ == "__main__":
-    sys.exit(_main())
+    sys.exit(main())
