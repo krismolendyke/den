@@ -32,7 +32,7 @@ init-dev:
 	$(PIP) install --editable .[dev] --editable .[doc] --editable .[notebook] --editable .[test]
 
 test:
-	PYTHONPATH=. $(COVERAGE) run --source=den $(test_dir)/test_den.py
+	PYTHONPATH=. $(COVERAGE) run --source=den $(SETUP) test
 
 coverage: test
 	$(COVERAGE) report -m

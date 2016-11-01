@@ -51,4 +51,5 @@ setup(
     },
     package_data={},
     include_package_data=True,
-    data_files=[], )
+    data_files=[],
+    test_suite="tests", )
