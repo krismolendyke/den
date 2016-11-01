@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """This script has more than one subcommand."""
 
+from __future__ import absolute_import
+
 import argparse
 import logging
 import os
@@ -8,8 +10,8 @@ import sys
 
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
-import den.record
-import den.weather
+from . import record
+from . import weather
 
 
 def _record(args):  # noqa
@@ -19,11 +21,11 @@ def _record(args):  # noqa
     from the keyboard or an unexpected exception occurs.
 
     """
-    den.record.configure_logging()
+    record.configure_logging()
 
     while True:
         try:
-            den.record.record(args.database, args.port, args.ssl)
+            record.record(args.database, args.port, args.ssl)
         except KeyboardInterrupt as e:
             logging.warn("Keyboard interrupt %s", e)
             return True
@@ -47,7 +49,7 @@ def _record(args):  # noqa
 
 def _weather(args):
     """Record weather data into the database."""
-    den.weather.record(args.database, args.port, args.ssl)
+    weather.record(args.database, args.port, args.ssl)
 
 
 def _configure_logging(log_to_file):
