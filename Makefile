@@ -1,5 +1,3 @@
-COVERAGE         := coverage
-COVERAGE_RC      := coveragerc
 FIND             := find
 PIP              := pip
 PROSPECTOR       := prospector
@@ -8,6 +6,8 @@ PYTHON           := python
 RM               := rm
 RM_FLAGS         := -rf
 SETUP            := setup.py
+TOX              := tox
+TOX_DIR          := .tox
 YAPF             := yapf
 YAPF_FLAGS       := --verify --in-place
 
@@ -15,7 +15,7 @@ build_dir := build
 dist_dir  := dist
 test_dir  := tests
 
-python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*')
+python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*' -not -path './.tox/*')
 
 help:
 	@$(MAKE) --print-data-base --question no-such-target | \
@@ -32,10 +32,7 @@ init-dev:
 	$(PIP) install --editable .[dev] --editable .[doc] --editable .[notebook] --editable .[test]
 
 test:
-	PYTHONPATH=. $(COVERAGE) run --source=den $(test_dir)/test_den.py
-
-coverage: test
-	$(COVERAGE) report -m
+	@$(TOX)
 
 analyze:
 	$(PROSPECTOR) $(PROSPECTOR_FLAGS)
@@ -55,10 +52,10 @@ egg:
 wheel:
 	$(PYTHON) $(SETUP) bdist_wheel
 
-upload:
-	$(PYTHON) $(SETUP) sdist bdist_egg upload
+upload: source egg wheel
+	$(PYTHON) $(SETUP) upload
 
 clean:
-	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) *.egg-info
+	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) $(TOX_DIR) *.egg-info
 
 .PHONY: help init init-dev test analyze format register source egg wheel upload clean

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Record `forecast.io <http://forecast.io>`_ weather data to InfluxDB.
 
 :func:`record` will persist current weather data in an `InfluxDB <http://influxdb.com/>`_ database.
@@ -62,7 +63,7 @@ def get_current_data():
     currently = forecast.currently()
     current_data = currently.d
     logging.debug("Weather dict: %s", current_data)
-    data = [{"name": "weather", "columns": current_data.keys(), "points": [current_data.values()]}]
+    data = [{"name": "weather", "columns": list(current_data.keys()), "points": [list(current_data.values())]}]
     logging.debug("Weather data: %s", data)
     return data
 
@@ -82,4 +83,4 @@ def record(database, port, ssl):
 
 
 if __name__ == "__main__":
-    print get_current_data()
+    print(get_current_data())
