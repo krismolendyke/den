@@ -1,10 +1,5 @@
 #!/usr/bin/env python
-"""This script has more than one subcommand.
-
-- ``record`` stores Nest thermostat data into an `InfluxDB`_ database table.
-- ``weather`` stores `forecast.io <http://forecast.io>`_ weather data into an `InfluxDB`_ database table.
-
-"""
+"""This script has more than one subcommand."""
 
 import argparse
 import logging
@@ -92,7 +87,7 @@ def _get_parser():
     return parser
 
 
-def _main():
+def main():
     """The main entry point to the den program.
 
     :param list argv: A list of command line arguments.
@@ -106,4 +101,4 @@ def _main():
 
 
 if __name__ == "__main__":
-    sys.exit(_main())
+    sys.exit(main())
