@@ -53,8 +53,4 @@ setup(
     data_files=[],
     test_suite="tests",
     python_requires="==2.7,==3.5",
-    entry_points={
-        "console_scripts": [
-            "den = den.__main__:main",
-        ],
-    }, )
+    entry_points={"console_scripts": ["den = den.__main__:main", ], }, )
