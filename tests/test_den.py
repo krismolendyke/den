@@ -317,7 +317,6 @@ class WeatherTestCase(unittest.TestCase):
         except AttributeError:
             self.assertIsInstance(weather.LON, float)
 
-    @unittest.skip("Failing in py35")
     def test_get_current_data(self):
         with patch("forecastio.api.get_forecast") as get_forecast_patch:
             get_forecast = get_forecast_patch.return_value
