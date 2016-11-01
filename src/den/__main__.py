@@ -10,6 +10,7 @@ import sys
 
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
+from . import __version__
 from . import record
 from . import weather
 
@@ -73,6 +74,7 @@ def _get_parser():
 
     """
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("--version", "-v", action="version", version=__version__)
     parser.add_argument("database", help="Database name.")
     parser.add_argument("--port", default=8086, help="Database port.")
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
