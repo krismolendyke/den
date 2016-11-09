@@ -52,5 +52,5 @@ setup(
     include_package_data=True,
     data_files=[],
     test_suite="tests",
-    python_requires="==2.7,==3.5",
+    python_requires=">=2.7",
     entry_points={"console_scripts": ["den = den.__main__:main", ], }, )
