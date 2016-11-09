@@ -2,15 +2,6 @@
 
 The ``record`` API is designed to persist Nest thermostat data in an `InfluxDB <http://influxdb.com/>`_ database.
 
-.. note::
-
-   The environment variable ``DEN_ACCESS_TOKEN`` is required to authenticate with the Nest API.  Please refer to the
-   Nest API `access token
-   <https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
-   documentation for instructions on how to generate this value.
-
-:raises: :py:exc:`~exceptions.KeyError` if the environment variable ``DEN_ACCESS_TOKEN`` is missing.
-
 """
 
 from contextlib import closing
