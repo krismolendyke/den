@@ -4,6 +4,7 @@
 # pylint: disable=too-many-public-methods
 # pylint: disable=missing-docstring
 
+from __future__ import absolute_import
 import json
 import os
 import types
