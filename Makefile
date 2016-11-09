@@ -61,6 +61,6 @@ upload: source egg wheel
 	$(PYTHON) $(SETUP) upload
 
 clean:
-	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) $(TOX_DIR) *.egg-info
+	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) $(TOX_DIR) *.egg-info .eggs
 
 .PHONY: help init init-dev test analyze format register source egg wheel upload clean
