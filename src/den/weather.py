@@ -1,4 +1,4 @@
-"""Record `forecast.io <http://forecast.io>`_ weather data to InfluxDB."""
+"""Record weather data to InfluxDB."""
 
 import logging
 

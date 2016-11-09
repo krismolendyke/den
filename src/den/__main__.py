@@ -49,7 +49,7 @@ def _record(args):  # noqa
 
 
 def _weather(args):
-    """Record weather data into the database."""
+    """Record weather data into the database. Powered by Dark Sky."""
     weather.record(args.database, args.port, args.ssl, args.api_key, args.lat, args.lon)
 
 
@@ -93,8 +93,8 @@ def _add_weather_subparser(subparsers):
         "weather", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_weather.__doc__)
     parser.add_argument(
         "--api-key",
-        help="Weather API key. Defaults to environment DEN_FORECAST_IO_API_KEY value.",
-        default=os.environ.get("DEN_FORECAST_IO_API_KEY", ""))
+        help="Weather API key. Defaults to environment DEN_WEATHER_API_KEY value.",
+        default=os.environ.get("DEN_WEATHER_API_KEY", ""))
     parser.add_argument(
         "--lat",
         help="Latitude. Defaults to environment DEN_LAT value.",
