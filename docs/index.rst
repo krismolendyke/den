@@ -16,6 +16,14 @@ data from your thermostat(s) for greater analysis and visualization than the
 
 .. image:: images/dashboard.jpg
 
+CLI Documentation
+-----------------
+
+.. argparse::
+   :module: den.__main__
+   :func: _get_parser
+   :prog: run
+
 API Documentation
 -----------------
 
