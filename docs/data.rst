@@ -4,7 +4,7 @@ Data
 Thermostats
 -----------
 
-Den store thermostat data in `InfluxDB`_.
+``den`` stores thermostat data in `InfluxDB`_.
 
 .. _thermostat-data-model:
 
@@ -151,7 +151,7 @@ Measurement
 
    -- `InfluxDB`_ `measurement`_ documentation
 
-Den stores thermostat data in a measurement named ``thermostats``.
+``den`` stores thermostat data in a measurement named ``thermostats``.
 
 Tags
 ~~~~
