@@ -16,8 +16,6 @@ from . import _reset_environ
 _reset_environ()
 from den import record, weather
 
-record.configure_logging(filename=os.devnull)
-
 
 class WeatherTestCase(unittest.TestCase):
     def test_missing_env_variable_raises_key_error(self):
