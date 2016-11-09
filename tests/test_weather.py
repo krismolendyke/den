@@ -14,7 +14,7 @@ from mock import MagicMock, patch
 
 from . import _reset_environ
 _reset_environ()
-from den import record, weather
+from den import weather
 
 
 class WeatherTestCase(unittest.TestCase):
