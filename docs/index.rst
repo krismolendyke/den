@@ -32,6 +32,14 @@ API Documentation
 
    api
 
+Data Documentation
+------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   data
+
 Notebooks
 ---------
 
