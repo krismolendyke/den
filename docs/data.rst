@@ -239,7 +239,146 @@ Fields
 Weather
 -------
 
-WIP
+.. _weather-data-model:
+
+Data Model
+~~~~~~~~~~
+
+An example of the weather data model `Powered by Dark Sky`_, a "currently"
+`data point object`_ (as `JSON`_):
+
+.. note::
+
+   ``time`` is the only value guaranteed to be present in a `data point
+   object`_.
+
+.. code-block:: js
+
+   {
+     "apparentTemperature": 46.93,
+     "cloudCover": 0.73,
+     "dewPoint": 47.7,
+     "humidity": 0.96,
+     "icon": "rain",
+     "nearestStormDistance": 0,
+     "ozone": 328.35,
+     "precipIntensity": 0.1685,
+     "precipIntensityError": 0.0067,
+     "precipProbability": 1,
+     "precipType": "rain",
+     "pressure": 1009.7,
+     "summary": "Rain",
+     "temperature": 48.71,
+     "time": 1453402675,
+     "visibility": 4.3,
+     "windBearing": 186,
+     "windSpeed": 4.64
+   }
+
+`InfluxDB`_ Point
+~~~~~~~~~~~~~~~~~
+
+The :ref:`weather-data-model` example transformed into a list containing a
+single `InfluxDB`_ `point`_ (as `Python`_):
+
+.. note::
+
+   The ``summary`` property "has millions of possible values" according to the
+   `data point object`_ documentation.  This would result in a high `series
+   cardinality`_.  It is therefore not included as a `tag`_.  It also has no
+   value as `field`_ so it is not included in the `measurement`_ at all.
+
+.. code-block:: python
+
+   [
+       {
+           "measurement": "weather",
+           "tags": {
+               "icon": "rain",
+               "precipType": "rain"
+           },
+           "fields": {
+               "apparentTemperature": 46.93,
+               "cloudCover": 0.73,
+               "dewPoint": 47.7,
+               "humidity": 0.96,
+               "nearestStormDistance": 0,
+               "ozone": 328.35,
+               "precipIntensity": 0.1685,
+               "precipIntensityError": 0.0067,
+               "precipProbability": 1,
+               "pressure": 1009.7,
+               "temperature": 48.71,
+               "time": 1453402675,
+               "visibility": 4.3,
+               "windBearing": 186,
+               "windSpeed": 4.64
+           }
+       }
+   ]
+
+Measurement
+~~~~~~~~~~~
+
+.. epigraph::
+
+   The part of InfluxDB’s structure that describes the data stored in the
+   associated fields. Measurements are strings.
+
+   -- `InfluxDB`_ `measurement`_ documentation
+
+``den`` stores weather data in a measurement named ``weather``.
+
+Tags
+~~~~
+
+.. epigraph::
+
+   The key-value pair in InfluxDB’s data structure that records metadata. Tags
+   are an optional part of InfluxDB’s data structure but they are useful for
+   storing commonly-queried metadata; tags are indexed so queries on tags are
+   performant. Query tip: Compare tags to fields; fields are not indexed.
+
+   -- `InfluxDB`_ `tag`_ documentation
+
+.. note::
+
+   The `tag`_ values are always interpreted as strings.
+
+Each `tag`_ value should have very few possible values which yields a low
+`series cardinality`_.
+
+#. ``icon``
+#. ``precipType``
+
+Fields
+~~~~~~
+
+.. epigraph::
+
+   The key-value pair in InfluxDB’s data structure that records metadata and
+   the actual data value. Fields are required in InfluxDB’s data structure and
+   they are not indexed - queries on field values scan all points that match
+   the specified time range and, as a result, are not performant relative to
+   tags. Query tip: Compare fields to tags; tags are indexed
+
+   -- `InfluxDB`_ `field`_ documentation
+
+#. ``apparentTemperature``
+#. ``cloudCover``
+#. ``dewPoint``
+#. ``humidity``
+#. ``nearestStormBearing``
+#. ``nearestStormDistance``
+#. ``ozone``
+#. ``precipIntensity``
+#. ``precipProbability``
+#. ``pressure``
+#. ``temperature``
+#. ``time``
+#. ``visibility``
+#. ``windBearing``
+#. ``windSpeed``
 
 .. _Data Model Viewer: https://developers.nest.com/documentation/api-reference
 .. _InfluxDB: https://www.influxdata.com/time-series-platform/influxdb/
@@ -299,3 +438,5 @@ WIP
 .. _JSON: http://json.org/
 .. _Python: https://www.python.org/
 .. _point: https://docs.influxdata.com/influxdb/v1.0/concepts/glossary/#point
+.. _Powered by Dark Sky: https://darksky.net/poweredby/
+.. _data point object: https://darksky.net/dev/docs/response#data-point
