@@ -26,7 +26,7 @@ def _record(args):  # noqa
 
     while True:
         try:
-            record.record(args.database, args.port, args.ssl)
+            record.record(args.database, args.port, args.ssl, args.access_token)
         except KeyboardInterrupt as e:
             logging.warn("Keyboard interrupt %s", e)
             return True
@@ -50,7 +50,7 @@ def _record(args):  # noqa
 
 def _weather(args):
     """Record weather data into the database."""
-    weather.record(args.database, args.port, args.ssl)
+    weather.record(args.database, args.port, args.ssl, args.api_key, args.lat, args.lon)
 
 
 def _configure_logging(log_to_file):
@@ -64,6 +64,46 @@ def _configure_logging(log_to_file):
         logging.basicConfig(filename="%s.log" % os.path.splitext(__file__)[0], level=logging.DEBUG, format=log_format)
     else:
         logging.basicConfig(level=logging.DEBUG, format=log_format)
+
+
+def _add_record_subparser(subparsers):
+    """Add record subparser.
+
+    :param argparse.ArgumentParser subparsers:
+    :rtype: :py:const:`None`
+
+    """
+    parser = subparsers.add_parser(
+        "record", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_record.__doc__)
+    parser.add_argument(
+        "--access-token",
+        help="Nest API access token. Defaults to environment DEN_ACCESS_TOKEN value.",
+        default=os.environ.get("DEN_ACCESS_TOKEN", ""))
+    parser.set_defaults(func=_record)
+
+
+def _add_weather_subparser(subparsers):
+    """Add weather subparser.
+
+    :param argparse.ArgumentParser subparsers:
+    :rtype: :py:const:`None`
+
+    """
+    parser = subparsers.add_parser(
+        "weather", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_weather.__doc__)
+    parser.add_argument(
+        "--api-key",
+        help="Weather API key. Defaults to environment DEN_FORECAST_IO_API_KEY value.",
+        default=os.environ.get("DEN_FORECAST_IO_API_KEY", ""))
+    parser.add_argument(
+        "--lat",
+        help="Latitude. Defaults to environment DEN_LAT value.",
+        default=float(os.environ.get("DEN_LAT", 39.9528)))
+    parser.add_argument(
+        "--lon",
+        help="Longitude. Defaults to environment DEN_LON value.",
+        default=float(os.environ.get("DEN_LON", 75.1638)))
+    parser.set_defaults(func=_weather)
 
 
 def _get_parser():
@@ -80,14 +120,8 @@ def _get_parser():
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
     parser.add_argument("--log-to-file", action="store_true", help="Log to a file instead of stdout.")
     subparsers = parser.add_subparsers(title="sub-commands")
-
-    parser_record = subparsers.add_parser(
-        "record", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_record.__doc__)
-    parser_record.set_defaults(func=_record)
-
-    parser_weather = subparsers.add_parser(
-        "weather", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_weather.__doc__)
-    parser_weather.set_defaults(func=_weather)
+    _add_record_subparser(subparsers)
+    _add_weather_subparser(subparsers)
     return parser
 
 

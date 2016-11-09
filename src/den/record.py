@@ -22,23 +22,10 @@ except ImportError:
 
 import json
 import logging
-import os
 
 from influxdb import client as influxdb
 
 import requests
-
-try:
-    NEST_API_ACCESS_TOKEN = os.environ["DEN_ACCESS_TOKEN"]
-    """The Nest API `access token
-    <https://developer.nest.com/documentation/cloud/how-to-auth#exchange-your-authorization-code-for-an-access-token>`_
-    value.
-
-    This value is retrieved from the required environment variable ``DEN_ACCESS_TOKEN``.
-
-    """
-except KeyError:
-    raise KeyError("Please set the environment variable 'DEN_ACCESS_TOKEN'.")
 
 NEST_API_PROTOCOL = "https"
 NEST_API_LOCATION = "developer-api.nest.com"
@@ -48,17 +35,17 @@ STREAM_DELIMITER = ":"
 """The token which separates line type and line data in the Nest streaming API response."""
 
 
-def _get_api_url(path=""):
+def _get_api_url(nest_api_access_token, path=""):
     """Get a Nest API URL for the given path."""
-    query = urlencode({"auth": NEST_API_ACCESS_TOKEN})
+    query = urlencode({"auth": nest_api_access_token})
     split = SplitResult(
         scheme=NEST_API_PROTOCOL, netloc=NEST_API_LOCATION, path=path.strip("/"), query=query, fragment="")
     return urlunsplit(split)
 
 
-def _get_stream(path=""):
+def _get_stream(nest_api_access_token, path=""):
     """Make a GET request to the Nest REST stream API and return the response object."""
-    url = _get_api_url(path)
+    url = _get_api_url(nest_api_access_token, path)
     r = requests.get(url, headers={"Accept": "text/event-stream"}, stream=True)
     for h in r.history:
         logging.debug("[%d] Redirect: %s", h.status_code, h.url)
@@ -177,12 +164,13 @@ def configure_logging(filename="den.log", level=logging.DEBUG):
     logging.basicConfig(filename=filename, level=level, format="%(asctime)s %(levelname)s %(message)s")
 
 
-def record(database, port, ssl):
+def record(database, port, ssl, nest_api_access_token):
     """Stream results from the Nest API and record them in the database.
 
     :param str database: The name of the database.
     :param int port: The port number the database is listening on.
     :param bool ssl: Whether or not to use SSL to communicate with the database.
+    :param str nest_api_access_token: Nest API access token.
     :rtype: :py:const:`None`
     :return: When the stream opened to the Nest API has been consumed.
     :raises: :exc:`requests.exceptions.StreamConsumedError`: if the stream has been consumed.
@@ -192,7 +180,7 @@ def record(database, port, ssl):
 
     """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
-    with closing(_get_stream()) as stream:
+    with closing(_get_stream(nest_api_access_token)) as stream:
         logging.debug("[%d] Streaming %s", stream.status_code, stream.url)
         for l in stream.iter_lines():
             if l:

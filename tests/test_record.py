@@ -14,8 +14,6 @@ import requests
 import responses
 from mock import MagicMock, patch
 
-from . import _reset_environ
-_reset_environ()
 from den import record
 
 record.configure_logging(filename=os.devnull)
@@ -27,28 +25,18 @@ class RecordTestCase(unittest.TestCase):
         with open(os.path.join(os.path.dirname(__file__), "responses.txt"), "r") as f:
             cls.responses = [l for l in f]
 
-    def test_missing_env_variable_raises_key_error(self):
-        with patch.dict("os.environ", {}):
-            del os.environ["DEN_ACCESS_TOKEN"]
-            with self.assertRaisesRegexp(KeyError, r"Please set the environment variable 'DEN_ACCESS_TOKEN'."):
-                try:
-                    reload(record)
-                except NameError:
-                    import importlib
-                    importlib.reload(record)
-
     def test_get_api_url(self):
-        expected = "https://developer-api.nest.com?auth=%s" % record.NEST_API_ACCESS_TOKEN
-        actual = record._get_api_url()
+        expected = "https://developer-api.nest.com?auth=TEST"
+        actual = record._get_api_url("TEST")
         self.assertEqual(expected, actual)
 
-        expected = "https://developer-api.nest.com/structures?auth=%s" % record.NEST_API_ACCESS_TOKEN
+        expected = "https://developer-api.nest.com/structures?auth=TEST"
         for path in ["structures", "/structures", "/structures/", "structures/"]:
-            self.assertEqual(expected, record._get_api_url(path))
+            self.assertEqual(expected, record._get_api_url("TEST", path))
 
     @responses.activate
     def test_get_stream(self):
-        url = record._get_api_url("")
+        url = record._get_api_url("TEST")
         responses.add(responses.GET,
                       url,
                       body="".join(self.responses),
@@ -57,7 +45,7 @@ class RecordTestCase(unittest.TestCase):
                       stream=True,
                       adding_headers={"Accept": "text/event-stream"},
                       match_querystring=True)
-        actual = record._get_stream()
+        actual = record._get_stream("TEST")
         self.assertIsInstance(actual, requests.Response)
         self.assertEqual(len(self.responses), len(list(actual.iter_lines())))
 
@@ -250,7 +238,7 @@ class RecordTestCase(unittest.TestCase):
 
     @responses.activate
     def test_record_writes_points_for_valid_responses(self):
-        url = record._get_api_url("")
+        url = record._get_api_url("TEST")
         responses.add(responses.GET,
                       url,
                       body="".join(self.responses),
@@ -262,7 +250,7 @@ class RecordTestCase(unittest.TestCase):
         with patch("den.record.influxdb.InfluxDBClient") as db_patch:
             db = db_patch.return_value
             db.write_points = MagicMock()
-            self.assertIsNone(record.record("den_test", port=8087, ssl=True))
+            self.assertIsNone(record.record("den_test", 8087, True, "TEST"))
             self.assertTrue(db.write_points.called)
             expected = 0
             for r in self.responses:
