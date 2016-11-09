@@ -15,7 +15,7 @@ build_dir := build
 dist_dir  := dist
 test_dir  := tests
 
-python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*' -not -path './.tox/*')
+python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*'  -not -path './.eggs/*' -not -path './.tox/*')
 
 help:
 	@$(MAKE) --print-data-base --question no-such-target | \
