@@ -10,9 +10,9 @@ Features
 
 ``den`` is built on the `Nest Developer Program`_ API.  It allows you to store
 data from your thermostat(s) for greater analysis and visualization than the
-`Nest web application`_ currently provides.  It records thermostat data to
-`InfluxDB`_ where it can then be visualized with a dashboard tool like
-`Grafana`_.
+`Nest web application`_ currently provides.  It records :ref:`thermostat data
+<thermostat-data-model>` to `InfluxDB`_ where it can then be visualized with a
+dashboard tool like `Grafana`_.
 
 .. image:: images/dashboard.jpg
 
@@ -79,5 +79,5 @@ Changelog
 .. _Nest API: https://developer.nest.com/documentation/api-reference
 .. _API: https://github.com/krismolendyke/den/blob/master/notebooks/API.ipynb
 .. _REST Streaming API: https://developer.nest.com/documentation/cloud/rest-streaming-guide
-.. _InfluxDB: http://influxdb.com/
+.. _InfluxDB: https://www.influxdata.com/time-series-platform/influxdb/
 .. _Grafana: http://grafana.org/
