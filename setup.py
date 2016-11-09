@@ -28,7 +28,7 @@ setup(
     keywords="nest thermostat smoke alarm camera",
     packages=find_packages("src"),
     package_dir={"": "src"},
-    install_requires=["influxdb", "python-forecastio", "requests"],
+    install_requires=["influxdb>=3.0", "python-forecastio", "requests"],
     extras_require={
         "dev": [
             "tox",
