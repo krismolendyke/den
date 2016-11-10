@@ -22,7 +22,7 @@ CLI Documentation
 .. argparse::
    :module: den.__main__
    :func: _get_parser
-   :prog: run
+   :prog: den
 
 API Documentation
 -----------------

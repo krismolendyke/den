@@ -11,22 +11,22 @@ import sys
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
 from . import __version__
-from . import record
+from . import thermostat
 from . import weather
 
 
-def _record(args):  # noqa
+def _thermostat(args):  # noqa
     """Record Nest thermostat data into the database.
 
     This function will attempt to recover from various network errors.  It will run indefinitely until interrupted
     from the keyboard or an unexpected exception occurs.
 
     """
-    record.configure_logging()
+    thermostat.configure_logging()
 
     while True:
         try:
-            record.record(args.database, args.port, args.ssl, args.access_token)
+            thermostat.record(args.database, args.port, args.ssl, args.access_token)
         except KeyboardInterrupt as e:
             logging.warn("Keyboard interrupt %s", e)
             return True
@@ -66,7 +66,7 @@ def _configure_logging(log_to_file):
         logging.basicConfig(level=logging.DEBUG, format=log_format)
 
 
-def _add_record_subparser(subparsers):
+def _add_thermostat_subparser(subparsers):
     """Add record subparser.
 
     :param argparse.ArgumentParser subparsers:
@@ -74,12 +74,12 @@ def _add_record_subparser(subparsers):
 
     """
     parser = subparsers.add_parser(
-        "record", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_record.__doc__)
+        "thermostat", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_thermostat.__doc__)
     parser.add_argument(
         "--access-token",
         help="Nest API access token. Defaults to environment DEN_ACCESS_TOKEN value.",
         default=os.environ.get("DEN_ACCESS_TOKEN", ""))
-    parser.set_defaults(func=_record)
+    parser.set_defaults(func=_thermostat)
 
 
 def _add_weather_subparser(subparsers):
@@ -120,7 +120,7 @@ def _get_parser():
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
     parser.add_argument("--log-to-file", action="store_true", help="Log to a file instead of stdout.")
     subparsers = parser.add_subparsers(title="sub-commands")
-    _add_record_subparser(subparsers)
+    _add_thermostat_subparser(subparsers)
     _add_weather_subparser(subparsers)
     return parser
 

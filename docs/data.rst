@@ -1,8 +1,8 @@
 Data
 ====
 
-Thermostats
------------
+Thermostat
+----------
 
 ``den`` stores thermostat data in `InfluxDB`_.
 
@@ -84,7 +84,7 @@ single `InfluxDB`_ `point`_ (as `Python`_):
 
    [
        {
-           "measurement": "thermostats",
+           "measurement": "thermostat",
            "tags": {
                "can_cool": True,
                "can_heat": True,
@@ -151,7 +151,7 @@ Measurement
 
    -- `InfluxDB`_ `measurement`_ documentation
 
-``den`` stores thermostat data in a measurement named ``thermostats``.
+``den`` stores thermostat data in a measurement named ``thermostat``.
 
 Tags
 ~~~~

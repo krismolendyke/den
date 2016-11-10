@@ -14,12 +14,12 @@ import requests
 import responses
 from mock import MagicMock, patch
 
-from den import record
+from den import thermostat
 
-record.configure_logging(filename=os.devnull)
+thermostat.configure_logging(filename=os.devnull)
 
 
-class RecordTestCase(unittest.TestCase):
+class ThermostatTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         with open(os.path.join(os.path.dirname(__file__), "responses.txt"), "r") as f:
@@ -27,16 +27,16 @@ class RecordTestCase(unittest.TestCase):
 
     def test_get_api_url(self):
         expected = "https://developer-api.nest.com?auth=TEST"
-        actual = record._get_api_url("TEST")
+        actual = thermostat._get_api_url("TEST")
         self.assertEqual(expected, actual)
 
         expected = "https://developer-api.nest.com/structures?auth=TEST"
         for path in ["structures", "/structures", "/structures/", "structures/"]:
-            self.assertEqual(expected, record._get_api_url("TEST", path))
+            self.assertEqual(expected, thermostat._get_api_url("TEST", path))
 
     @responses.activate
     def test_get_stream(self):
-        url = record._get_api_url("TEST")
+        url = thermostat._get_api_url("TEST")
         responses.add(responses.GET,
                       url,
                       body="".join(self.responses),
@@ -45,67 +45,67 @@ class RecordTestCase(unittest.TestCase):
                       stream=True,
                       adding_headers={"Accept": "text/event-stream"},
                       match_querystring=True)
-        actual = record._get_stream("TEST")
+        actual = thermostat._get_stream("TEST")
         self.assertIsInstance(actual, requests.Response)
         self.assertEqual(len(self.responses), len(list(actual.iter_lines())))
 
     def test_is_event(self):
-        self.assertTrue(record._is_event("event:"))
-        self.assertFalse(record._is_event("event"))
-        self.assertFalse(record._is_event("data:"))
+        self.assertTrue(thermostat._is_event("event:"))
+        self.assertFalse(thermostat._is_event("event"))
+        self.assertFalse(thermostat._is_event("data:"))
 
     def test_is_data(self):
-        self.assertTrue(record._is_data("data:"))
-        self.assertFalse(record._is_data("data"))
-        self.assertFalse(record._is_data("event:"))
+        self.assertTrue(thermostat._is_data("data:"))
+        self.assertFalse(thermostat._is_data("data"))
+        self.assertFalse(thermostat._is_data("event:"))
 
     def test_process_event_returns_none_for_invalid_line(self):
         invalid_lines = ["", ":", "event:", "event: "]
         for line in invalid_lines:
-            self.assertIsNone(record._process_event(line))
+            self.assertIsNone(thermostat._process_event(line))
 
     def test_process_event_returns_none_for_keep_alive_line(self):
-        self.assertIsNone(record._process_event("event: keep-alive"))
-        self.assertIsNone(record._process_event("event:keep-alive"))
+        self.assertIsNone(thermostat._process_event("event: keep-alive"))
+        self.assertIsNone(thermostat._process_event("event:keep-alive"))
 
     def test_process_event_returns_event_for_valid_line(self):
         expected = "Test event"
-        actual = record._process_event("event: " + expected)
+        actual = thermostat._process_event("event: " + expected)
         self.assertEqual(expected, actual)
-        actual = record._process_event("event:" + expected)
+        actual = thermostat._process_event("event:" + expected)
         self.assertEqual(expected, actual)
 
     def test_process_data_returns_none_for_invalid_line(self):
         invalid_lines = ["", ":", "data:", "data: ", "data: not JSON"]
         for line in invalid_lines:
-            self.assertIsNone(record._process_data(line))
+            self.assertIsNone(thermostat._process_data(line))
 
     def test_process_data_returns_list_for_valid_line(self):
         expected = [{"key": "val"}]
-        actual = record._process_data("data: " + json.dumps(expected))
+        actual = thermostat._process_data("data: " + json.dumps(expected))
         self.assertEqual(expected, actual)
-        actual = record._process_data("data:" + json.dumps(expected))
+        actual = thermostat._process_data("data:" + json.dumps(expected))
         self.assertEqual(expected, actual)
 
     def test_process_returns_none_for_non_data_line(self):
         invalid_lines = ["", ":", "event:", "event: "]
         for line in invalid_lines:
-            self.assertIsNone(record._process(line))
+            self.assertIsNone(thermostat._process(line))
 
     def test_process_returns_none_for_invalid_data_line(self):
         invalid_lines = ["", ":", "data:", "data: ", "data: not JSON"]
         for line in invalid_lines:
-            self.assertIsNone(record._process(line))
+            self.assertIsNone(thermostat._process(line))
 
     def test_process_returns_list_for_valid_data_line(self):
         expected = [{"key": "val"}]
-        actual = record._process("data: " + json.dumps(expected))
+        actual = thermostat._process("data: " + json.dumps(expected))
         self.assertEqual(expected, actual)
-        actual = record._process("data:" + json.dumps(expected))
+        actual = thermostat._process("data:" + json.dumps(expected))
         self.assertEqual(expected, actual)
 
         for r in self.responses:
-            actual = record._process(r)
+            actual = thermostat._process(r)
             if r.startswith("event"):
                 self.assertIsNone(actual)
             elif r.startswith("data"):
@@ -116,18 +116,18 @@ class RecordTestCase(unittest.TestCase):
 
     def test_get_structures_returns_empty_list_for_invalid_data(self):
         expected = []
-        actual = record._get_structures(None)
+        actual = thermostat._get_structures(None)
         self.assertEqual(expected, actual)
-        actual = record._get_structures({})
+        actual = thermostat._get_structures({})
         self.assertEqual(expected, actual)
-        actual = record._get_structures({"data": {}})
+        actual = thermostat._get_structures({"data": {}})
         self.assertEqual(expected, actual)
-        actual = record._get_structures({"data": {"structures": {}}})
+        actual = thermostat._get_structures({"data": {"structures": {}}})
         self.assertEqual(expected, actual)
 
     def test_get_structures_returns_list_for_valid_data(self):
         expected = [{}]
-        actual = record._get_structures({"data": {"structures": {"STRUCTUREID": {}}}})
+        actual = thermostat._get_structures({"data": {"structures": {"STRUCTUREID": {}}}})
         self.assertEqual(expected, actual)
         structure = {
             "name": "Home",
@@ -139,12 +139,12 @@ class RecordTestCase(unittest.TestCase):
             "structure_id": "STRUCTUREID"
         }
         expected = [structure]
-        actual = record._get_structures({"data": {"structures": {"STRUCTUREID": structure}}})
+        actual = thermostat._get_structures({"data": {"structures": {"STRUCTUREID": structure}}})
         self.assertEqual(expected, actual)
 
         for r in self.responses:
-            result = record._process(r)
-            actual = record._get_structures(result)
+            result = thermostat._process(r)
+            actual = thermostat._get_structures(result)
             try:
                 self.assertIsInstance(actual, types.ListType)
             except AttributeError:
@@ -158,18 +158,18 @@ class RecordTestCase(unittest.TestCase):
 
     def test_get_structure_data_returns_empty_structure_for_invalid_data(self):
         expected = [{"name": "structures", "columns": [], "points": []}]
-        actual = record._get_structure_data(None)
+        actual = thermostat._get_structure_data(None)
         self.assertEqual(expected, actual)
-        actual = record._get_structure_data({})
+        actual = thermostat._get_structure_data({})
         self.assertEqual(expected, actual)
-        actual = record._get_structure_data({"data": {"structures": {"": {"thermostats_is_missing": "not here"}}}})
+        actual = thermostat._get_structure_data({"data": {"structures": {"": {"thermostats_is_missing": "not here"}}}})
         self.assertNotIn("thermostats", actual)
 
     def test_get_structure_data_returns_list_for_valid_data(self):
         for r in self.responses:
-            result = record._process(r)
+            result = thermostat._process(r)
             if result:
-                actual = record._get_structure_data(result)
+                actual = thermostat._get_structure_data(result)
                 try:
                     self.assertEqual("structures", actual[0]["name"])
                 except AttributeError:
@@ -187,17 +187,17 @@ class RecordTestCase(unittest.TestCase):
 
     def test_get_thermostats_returns_empty_list_for_invalid_data(self):
         expected = []
-        actual = record._get_thermostats(None)
+        actual = thermostat._get_thermostats(None)
         self.assertEqual(expected, actual)
-        actual = record._get_thermostats("")
+        actual = thermostat._get_thermostats("")
         self.assertEqual(expected, actual)
-        actual = record._get_thermostats({})
+        actual = thermostat._get_thermostats({})
         self.assertEqual(expected, actual)
 
     def test_get_thermostats_returns_list_for_valid_data(self):
         for r in self.responses:
-            result = record._process(r)
-            actual = record._get_thermostats(result)
+            result = thermostat._process(r)
+            actual = thermostat._get_thermostats(result)
             if actual:
                 try:
                     self.assertIsInstance(actual, types.ListType)
@@ -206,17 +206,17 @@ class RecordTestCase(unittest.TestCase):
 
     def test_get_thermostat_data_returns_empty_structure_for_invalid_data(self):
         expected = [{"name": "thermostats", "columns": [], "points": []}]
-        actual = record._get_thermostat_data(None)
+        actual = thermostat._get_thermostat_data(None)
         self.assertEqual(expected, actual)
-        actual = record._get_thermostat_data({})
+        actual = thermostat._get_thermostat_data({})
         self.assertEqual(expected, actual)
 
     def test_get_thermostat_data_returns_list_for_valid_data(self):
         for r in self.responses:
-            result = record._process(r)
+            result = thermostat._process(r)
             if result:
-                for thermostat in record._get_thermostats(result):
-                    actual = record._get_thermostat_data(thermostat)
+                for t in thermostat._get_thermostats(result):
+                    actual = thermostat._get_thermostat_data(t)
                     try:
                         self.assertIsInstance(actual, types.ListType)
                     except AttributeError:
@@ -238,7 +238,7 @@ class RecordTestCase(unittest.TestCase):
 
     @responses.activate
     def test_record_writes_points_for_valid_responses(self):
-        url = record._get_api_url("TEST")
+        url = thermostat._get_api_url("TEST")
         responses.add(responses.GET,
                       url,
                       body="".join(self.responses),
@@ -247,15 +247,15 @@ class RecordTestCase(unittest.TestCase):
                       stream=True,
                       adding_headers={"Accept": "text/event-stream"},
                       match_querystring=True)
-        with patch("den.record.influxdb.InfluxDBClient") as db_patch:
+        with patch("den.thermostat.influxdb.InfluxDBClient") as db_patch:
             db = db_patch.return_value
             db.write_points = MagicMock()
-            self.assertIsNone(record.record("den_test", 8087, True, "TEST"))
+            self.assertIsNone(thermostat.record("den_test", 8087, True, "TEST"))
             self.assertTrue(db.write_points.called)
             expected = 0
             for r in self.responses:
-                result = record._process(r)
-                expected += len(record._get_structures(result)) + len(record._get_thermostats(result))
+                result = thermostat._process(r)
+                expected += len(thermostat._get_structures(result)) + len(thermostat._get_thermostats(result))
             self.assertEqual(expected, db.write_points.call_count)
 
 
