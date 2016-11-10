@@ -48,6 +48,10 @@ def get_current_data(api_key, lat, lon):
 def record(database, port, ssl, api_key, lat, lon):
     """Record current weather data into the database.
 
+    .. note::
+
+       Weather data is recorded at second precision.
+
     :param str database: The name of the database.
     :param int port: The port number the database is listening on.
     :param bool ssl: Whether or not to use SSL to communicate with the database.
