@@ -19,7 +19,7 @@ FIELD_KEYS = [
 """InfluxDB field keys."""
 
 
-def get_current_data(api_key, lat, lon):
+def _get_weather_points(api_key, lat, lon):
     """Get data prepared for InfluxDB insertion.
 
     :param str api_key:
@@ -40,7 +40,7 @@ def get_current_data(api_key, lat, lon):
         elif k in FIELD_KEYS:
             point["fields"][k] = v
         else:
-            logging.info("Weather unknown property: '%s': '%s'", k, v)
+            logging.warning("Weather unknown property: '%s': '%s'", k, v)
     logging.debug("Weather point: %s", point)
     return [point]
 
@@ -63,4 +63,4 @@ def record(database, port, ssl, api_key, lat, lon):
 
     """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
-    db.write_points(get_current_data(api_key, lat, lon), time_precision="s")
+    db.write_points(_get_weather_points(api_key, lat, lon), time_precision="s")

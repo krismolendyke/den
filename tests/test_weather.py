@@ -39,12 +39,12 @@ class WeatherTestCase(unittest.TestCase):
             "windSpeed": 4.64
         }
 
-    def test_get_current_data(self):
+    def test_get_weather_points(self):
         with patch("forecastio.api.get_forecast") as get_forecast_patch:
             get_forecast = get_forecast_patch.return_value
             get_forecast.currently.return_value = forecastio.models.ForecastioDataPoint(self.data)
 
-            actual = weather.get_current_data("KEY", 0.0, 0.0)
+            actual = weather._get_weather_points("KEY", 0.0, 0.0)
             try:
                 self.assertIsInstance(actual, types.ListType)
             except AttributeError:
@@ -77,7 +77,7 @@ class WeatherTestCase(unittest.TestCase):
             self.assertIsNone(weather.record("den_test", 8087, True, "KEY", 0.0, 0.0))
             self.assertEqual(1, get_forecast_patch.call_count)
             db_patch.assert_called_once_with(database="den_test", port=8087, ssl=True)
-            db.write_points.assert_called_once_with(weather.get_current_data("KEY", 0.0, 0.0), time_precision="s")
+            db.write_points.assert_called_once_with(weather._get_weather_points("KEY", 0.0, 0.0), time_precision="s")
 
 
 if __name__ == "__main__":

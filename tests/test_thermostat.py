@@ -114,11 +114,11 @@ class ThermostatTestCase(unittest.TestCase):
                 except AttributeError:
                     self.assertIsInstance(actual, dict)
 
-    def test_get_structure_data_returns_list_for_valid_data(self):
+    def test_get_structure_points_returns_list_for_valid_data(self):
         for r in self.responses:
             result = thermostat._process(r)
             if result:
-                actual = thermostat._get_structure_data(result)
+                actual = thermostat._get_structure_points(result)
                 try:
                     self.assertIsInstance(actual, types.ListType)
                 except AttributeError:
@@ -133,11 +133,11 @@ class ThermostatTestCase(unittest.TestCase):
                 except AttributeError:
                     self.assertIsInstance(actual[0]["fields"], dict)
 
-    def test_get_thermostat_data_returns_list_for_valid_data(self):
+    def test_get_thermostat_points_returns_list_for_valid_data(self):
         for r in self.responses:
             result = thermostat._process(r)
             if result:
-                actual = thermostat._get_thermostat_data(result)
+                actual = thermostat._get_thermostat_points(result)
                 try:
                     self.assertIsInstance(actual, types.ListType)
                 except AttributeError:

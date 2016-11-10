@@ -100,8 +100,8 @@ def _process(line):
     return _process_data(line) if _is_data(line) else None
 
 
-def _get_structure_data(data):
-    """Get structure data to write to InfluxDB."""
+def _get_structure_points(data):
+    """Get structure points to write to InfluxDB."""
     measurement = "structure"
     tag_keys = ["away", "country_code", "name", "postal_code", "structure_id", "thermostat_id", "time_zone"]
     field_keys = ["away"]
@@ -121,8 +121,8 @@ def _get_structure_data(data):
     return points
 
 
-def _get_thermostat_data(value):
-    """Get thermostat data to write to InfluxDB."""
+def _get_thermostat_points(value):
+    """Get thermostat points to write to InfluxDB."""
     measurement = "thermostat"
     tag_keys = [
         "can_cool", "can_heat", "device_id", "fan_timer_active", "has_fan", "has_leaf", "hvac_mode", "hvac_state",
@@ -183,14 +183,14 @@ def record(database, port, ssl, nest_api_access_token):
             if l:
                 value = _process(l.decode("utf-8"))
                 if value:
-                    logging.info(value)
+                    logging.debug(value)
 
-                    structure_points = _get_structure_data(value)
-                    logging.info(structure_points)
+                    structure_points = _get_structure_points(value)
+                    logging.debug(structure_points)
                     db.write_points(structure_points, time_precision="s")
 
-                    thermostat_points = _get_thermostat_data(value)
-                    logging.info(thermostat_points)
+                    thermostat_points = _get_thermostat_points(value)
+                    logging.debug(thermostat_points)
                     db.write_points(thermostat_points, time_precision="s")
 
         logging.debug("[%d] Streaming complete %s", stream.status_code, stream.url)
