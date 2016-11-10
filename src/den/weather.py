@@ -5,6 +5,19 @@ import logging
 from influxdb import client as influxdb
 import forecastio
 
+MEASUREMENT = "weather"
+"""InfluxDB measurement value."""
+
+TAG_KEYS = ["icon", "precipType"]
+"""InfluxDB tag keys."""
+
+FIELD_KEYS = [
+    "apparentTemperature", "cloudCover", "dewPoint", "humidity", "nearestStormBearing", "nearestStormDistance",
+    "ozone", "precipIntensity", "precipProbability", "pressure", "temperature", "time", "visibility", "windBearing",
+    "windSpeed"
+]
+"""InfluxDB field keys."""
+
 
 def get_current_data(api_key, lat, lon):
     """Get data prepared for InfluxDB insertion.
@@ -20,9 +33,16 @@ def get_current_data(api_key, lat, lon):
     currently = forecast.currently()
     current_data = currently.d
     logging.debug("Weather dict: %s", current_data)
-    data = [{"name": "weather", "columns": list(current_data.keys()), "points": [list(current_data.values())]}]
-    logging.debug("Weather data: %s", data)
-    return data
+    point = {"measurement": MEASUREMENT, "tags": {}, "fields": {}}
+    for k, v in current_data.items():
+        if k in TAG_KEYS:
+            point["tags"][k] = v
+        elif k in FIELD_KEYS:
+            point["fields"][k] = v
+        else:
+            logging.info("Weather unknown property: '%s': '%s'", k, v)
+    logging.debug("Weather point: %s", point)
+    return [point]
 
 
 def record(database, port, ssl, api_key, lat, lon):
@@ -39,4 +59,4 @@ def record(database, port, ssl, api_key, lat, lon):
 
     """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
-    db.write_points(get_current_data(api_key, lat, lon))
+    db.write_points(get_current_data(api_key, lat, lon), time_precision="s")

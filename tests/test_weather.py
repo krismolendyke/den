@@ -16,11 +16,33 @@ from den import weather
 
 
 class WeatherTestCase(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.data = {
+            "apparentTemperature": 46.93,
+            "cloudCover": 0.73,
+            "dewPoint": 47.7,
+            "humidity": 0.96,
+            "icon": "rain",
+            "nearestStormDistance": 0,
+            "ozone": 328.35,
+            "precipIntensity": 0.1685,
+            "precipIntensityError": 0.0067,
+            "precipProbability": 1,
+            "precipType": "rain",
+            "pressure": 1009.7,
+            "summary": "Rain",
+            "temperature": 48.71,
+            "time": 1453402675,
+            "visibility": 4.3,
+            "windBearing": 186,
+            "windSpeed": 4.64
+        }
+
     def test_get_current_data(self):
         with patch("forecastio.api.get_forecast") as get_forecast_patch:
             get_forecast = get_forecast_patch.return_value
-            data = {"k0": "v0", "k2": "v2", "k1": "v1", "k3": "v3"}
-            get_forecast.currently.return_value = forecastio.models.ForecastioDataPoint(data)
+            get_forecast.currently.return_value = forecastio.models.ForecastioDataPoint(self.data)
 
             actual = weather.get_current_data("KEY", 0.0, 0.0)
             try:
@@ -28,35 +50,34 @@ class WeatherTestCase(unittest.TestCase):
             except AttributeError:
                 self.assertIsInstance(actual, list)
 
-            actual_columns = actual[0]["columns"]
-            try:
-                self.assertIsInstance(actual_columns, types.ListType)
-            except AttributeError:
-                self.assertIsInstance(actual_columns, list)
+            expected_measurement = "weather"
+            actual_measurement = actual[0]["measurement"]
+            self.assertEqual(expected_measurement, actual_measurement)
 
-            actual_points = actual[0]["points"]
+            actual_tags = actual[0]["tags"]
             try:
-                self.assertIsInstance(actual_points, types.ListType)
+                self.assertIsInstance(actual_tags, types.DictType)
             except AttributeError:
-                self.assertIsInstance(actual_points, list)
+                self.assertIsInstance(actual_tags, dict)
+            self.assertNotIn("summary", actual_tags.keys())
 
-            actual_values = actual_points[0]
+            actual_fields = actual[0]["fields"]
             try:
-                self.assertIsInstance(actual_values, types.ListType)
+                self.assertIsInstance(actual_fields, types.DictType)
             except AttributeError:
-                self.assertIsInstance(actual_values, list)
+                self.assertIsInstance(actual_fields, dict)
 
     def test_record_writes_points_for_valid_responses(self):
         with patch("forecastio.api.get_forecast") as get_forecast_patch, \
              patch("den.weather.influxdb.InfluxDBClient") as db_patch:
             get_forecast = get_forecast_patch.return_value
-            data = {"k0": "v0", "k2": "v2", "k1": "v1", "k3": "v3"}
-            get_forecast.currently.return_value = forecastio.models.ForecastioDataPoint(data)
+            get_forecast.currently.return_value = forecastio.models.ForecastioDataPoint(self.data)
             db = db_patch.return_value
             db.write_points = MagicMock()
             self.assertIsNone(weather.record("den_test", 8087, True, "KEY", 0.0, 0.0))
-            self.assertTrue(get_forecast.currently.called)
-            self.assertTrue(db.write_points.called)
+            self.assertEqual(1, get_forecast_patch.call_count)
+            db_patch.assert_called_once_with(database="den_test", port=8087, ssl=True)
+            db.write_points.assert_called_once_with(weather.get_current_data("KEY", 0.0, 0.0), time_precision="s")
 
 
 if __name__ == "__main__":
