@@ -38,7 +38,7 @@ def _get_weather_points(api_key, lat, lon):
         if k in TAG_KEYS:
             point["tags"][k] = v
         elif k in FIELD_KEYS:
-            point["fields"][k] = v
+            point["fields"][k] = float(v)
         else:
             logging.warning("Weather unknown property: '%s': '%s'", k, v)
     logging.debug("Weather point: %s", point)

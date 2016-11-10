@@ -243,9 +243,7 @@ single `InfluxDB`_ `point`_ (as `Python`_):
                "eco_temperature_low_c": 19.5,
                "eco_temperature_low_f": 65,
                "fan_timer_duration": 15,
-               "fan_timer_timeout": "2016-10-31T23:59:59.000Z",
                "humidity": 40,
-               "last_connection": "2016-10-31T23:59:59.000Z",
                "locked_temp_max_c": 24.5,
                "locked_temp_max_f": 80,
                "locked_temp_min_c": 19.5,
@@ -259,6 +257,13 @@ single `InfluxDB`_ `point`_ (as `Python`_):
            }
        },
    ]
+
+.. note::
+
+   The following parameters are not recorded:
+
+   - `last_connection`_
+   - `fan_timer_timeout`_
 
 Measurement
 ~~~~~~~~~~~
@@ -341,9 +346,7 @@ Fields
 #. `eco_temperature_low_c`_
 #. `eco_temperature_low_f`_
 #. `fan_timer_duration`_
-#. `fan_timer_timeout`_
 #. `humidity`_
-#. `last_connection`_
 #. `locked_temp_max_c`_
 #. `locked_temp_max_f`_
 #. `locked_temp_min_c`_

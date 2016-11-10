@@ -134,10 +134,10 @@ def _get_thermostat_points(value):
     field_keys = [
         "ambient_temperature_c", "ambient_temperature_f", "away_temperature_high_c", "away_temperature_high_f",
         "away_temperature_low_c", "away_temperature_low_f", "eco_temperature_high_c", "eco_temperature_high_f",
-        "eco_temperature_low_c", "eco_temperature_low_f", "fan_timer_duration", "fan_timer_timeout", "humidity",
-        "last_connection", "locked_temp_max_c", "locked_temp_max_f", "locked_temp_min_c", "locked_temp_min_f",
-        "target_temperature_c", "target_temperature_f", "target_temperature_high_c", "target_temperature_high_f",
-        "target_temperature_low_c", "target_temperature_low_f"
+        "eco_temperature_low_c", "eco_temperature_low_f", "fan_timer_duration", "humidity", "locked_temp_max_c",
+        "locked_temp_max_f", "locked_temp_min_c", "locked_temp_min_f", "target_temperature_c", "target_temperature_f",
+        "target_temperature_high_c", "target_temperature_high_f", "target_temperature_low_c",
+        "target_temperature_low_f"
     ]
     points = []
     for thermostat_data in value["data"]["devices"]["thermostats"].values():
@@ -146,7 +146,7 @@ def _get_thermostat_points(value):
             if k in tag_keys:
                 point["tags"][k] = v
             elif k in field_keys:
-                point["fields"][k] = v
+                point["fields"][k] = float(v)
         points.append(point)
     return points
 
