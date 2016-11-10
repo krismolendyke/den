@@ -114,135 +114,43 @@ class ThermostatTestCase(unittest.TestCase):
                 except AttributeError:
                     self.assertIsInstance(actual, dict)
 
-    def test_get_structures_returns_empty_list_for_invalid_data(self):
-        expected = []
-        actual = thermostat._get_structures(None)
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_structures({})
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_structures({"data": {}})
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_structures({"data": {"structures": {}}})
-        self.assertEqual(expected, actual)
-
-    def test_get_structures_returns_list_for_valid_data(self):
-        expected = [{}]
-        actual = thermostat._get_structures({"data": {"structures": {"STRUCTUREID": {}}}})
-        self.assertEqual(expected, actual)
-        structure = {
-            "name": "Home",
-            "away": "home",
-            "time_zone": "America/New_York",
-            "postal_code": "19335",
-            "thermostats": ["THERMOSTATID0", "THERMOSTATID1"],
-            "country_code": "US",
-            "structure_id": "STRUCTUREID"
-        }
-        expected = [structure]
-        actual = thermostat._get_structures({"data": {"structures": {"STRUCTUREID": structure}}})
-        self.assertEqual(expected, actual)
-
-        for r in self.responses:
-            result = thermostat._process(r)
-            actual = thermostat._get_structures(result)
-            try:
-                self.assertIsInstance(actual, types.ListType)
-            except AttributeError:
-                self.assertIsInstance(actual, list)
-            if result:
-                self.assertEqual(1, len(actual))
-                self.assertIn("structure_id", actual[0])
-                self.assertIn("thermostats", actual[0])
-            else:
-                self.assertEqual([], actual)
-
-    def test_get_structure_data_returns_empty_structure_for_invalid_data(self):
-        expected = [{"name": "structures", "columns": [], "points": []}]
-        actual = thermostat._get_structure_data(None)
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_structure_data({})
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_structure_data({
-            "data": {
-                "structures": {
-                    "": {
-                        "thermostats_is_missing": "not here"
-                    }
-                }
-            }
-        })
-        self.assertNotIn("thermostats", actual)
-
     def test_get_structure_data_returns_list_for_valid_data(self):
         for r in self.responses:
             result = thermostat._process(r)
             if result:
                 actual = thermostat._get_structure_data(result)
                 try:
-                    self.assertEqual("structures", actual[0]["name"])
-                except AttributeError:
-                    self.assertIsInstance(actual[0]["name"], list)
-                try:
-                    self.assertIsInstance(actual[0]["columns"], types.ListType)
-                except AttributeError:
-                    self.assertIsInstance(actual[0]["columns"], list)
-                try:
-                    self.assertIsInstance(actual[0]["points"], types.ListType)
-                except AttributeError:
-                    self.assertIsInstance(actual[0]["points"], list)
-                self.assertNotIn("thermostats", actual[0])
-                self.assertNotIn("wheres", actual[0])
-
-    def test_get_thermostats_returns_empty_list_for_invalid_data(self):
-        expected = []
-        actual = thermostat._get_thermostats(None)
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_thermostats("")
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_thermostats({})
-        self.assertEqual(expected, actual)
-
-    def test_get_thermostats_returns_list_for_valid_data(self):
-        for r in self.responses:
-            result = thermostat._process(r)
-            actual = thermostat._get_thermostats(result)
-            if actual:
-                try:
                     self.assertIsInstance(actual, types.ListType)
                 except AttributeError:
                     self.assertIsInstance(actual, list)
-
-    def test_get_thermostat_data_returns_empty_structure_for_invalid_data(self):
-        expected = [{"name": "thermostats", "columns": [], "points": []}]
-        actual = thermostat._get_thermostat_data(None)
-        self.assertEqual(expected, actual)
-        actual = thermostat._get_thermostat_data({})
-        self.assertEqual(expected, actual)
+                self.assertEqual("structure", actual[0]["measurement"])
+                try:
+                    self.assertIsInstance(actual[0]["tags"], types.DictType)
+                except AttributeError:
+                    self.assertIsInstance(actual[0]["tags"], dict)
+                try:
+                    self.assertIsInstance(actual[0]["fields"], types.DictType)
+                except AttributeError:
+                    self.assertIsInstance(actual[0]["fields"], dict)
 
     def test_get_thermostat_data_returns_list_for_valid_data(self):
         for r in self.responses:
             result = thermostat._process(r)
             if result:
-                for t in thermostat._get_thermostats(result):
-                    actual = thermostat._get_thermostat_data(t)
-                    try:
-                        self.assertIsInstance(actual, types.ListType)
-                    except AttributeError:
-                        self.assertIsInstance(actual, list)
-                    try:
-                        self.assertIsInstance(actual[0]["columns"], types.ListType)
-                    except AttributeError:
-                        self.assertIsInstance(actual[0]["columns"], list)
-                    try:
-                        self.assertIsInstance(actual[0]["points"], types.ListType)
-                    except AttributeError:
-                        self.assertIsInstance(actual[0]["points"], list)
-                    try:
-                        self.assertIsInstance(actual[0]["points"][0], types.ListType)
-                    except AttributeError:
-                        self.assertIsInstance(actual[0]["points"][0], list)
-                    self.assertEqual(len(actual[0]["columns"]), len(actual[0]["points"][0]))
-                    self.assertEqual("thermostats", actual[0]["name"])
+                actual = thermostat._get_thermostat_data(result)
+                try:
+                    self.assertIsInstance(actual, types.ListType)
+                except AttributeError:
+                    self.assertIsInstance(actual, list)
+                self.assertEqual("thermostat", actual[0]["measurement"])
+                try:
+                    self.assertIsInstance(actual[0]["tags"], types.DictType)
+                except AttributeError:
+                    self.assertIsInstance(actual[0]["tags"], dict)
+                try:
+                    self.assertIsInstance(actual[0]["fields"], types.DictType)
+                except AttributeError:
+                    self.assertIsInstance(actual[0]["fields"], dict)
 
     @responses.activate
     def test_record_writes_points_for_valid_responses(self):
@@ -259,11 +167,7 @@ class ThermostatTestCase(unittest.TestCase):
             db = db_patch.return_value
             db.write_points = MagicMock()
             self.assertIsNone(thermostat.record("den_test", 8087, True, "TEST"))
-            self.assertTrue(db.write_points.called)
-            expected = 0
-            for r in self.responses:
-                result = thermostat._process(r)
-                expected += len(thermostat._get_structures(result)) + len(thermostat._get_thermostats(result))
+            expected = 24
             self.assertEqual(expected, db.write_points.call_count)
 
 

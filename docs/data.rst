@@ -64,7 +64,7 @@ single `InfluxDB`_ `point`_ (as `Python`_):
                "time_zone": "America/Los_Angeles"
            },
            "fields": {
-               "away": 0
+               "is_away": 0
            }
        }
    ]
@@ -117,8 +117,8 @@ Each `tag`_ value should have very few possible values which yields a low
 Fields
 ~~~~~~
 
-#. ``away`` is a numeric representation of the ``away`` tag, i.e., ``home`` as
-   ``0``, ``away`` as ``1``
+#. ``is_away`` is a numeric representation of the ``away`` tag, i.e., ``home``
+   as ``0``, ``away`` as ``1``
 
 Thermostat
 ----------
@@ -226,6 +226,7 @@ single `InfluxDB`_ `point`_ (as `Python`_):
                "sunlight_correction_active": True,
                "sunlight_correction_enabled": True ,
                "temperature_scale": "C",
+               "time_to_target": "~15",
                "time_to_target_training": "training" ,
                "where_id": "UNCBGUnN24...",
                "where_name": "Hallway"
@@ -255,7 +256,6 @@ single `InfluxDB`_ `point`_ (as `Python`_):
                "target_temperature_high_f": 80,
                "target_temperature_low_c": 19.5,
                "target_temperature_low_f": 65,
-               "time_to_target": "~15"
            }
        },
    ]
@@ -304,8 +304,8 @@ Each `tag`_ value should have very few possible values which yields a low
 #. `is_using_emergency_heat`_
 #. `label`_
 #. `locale`_
-#. `name`_
 #. `name_long`_
+#. `name`_
 #. `previous_hvac_mode`_
 #. `software_version`_
 #. `structure_id`_
@@ -313,6 +313,7 @@ Each `tag`_ value should have very few possible values which yields a low
 #. `sunlight_correction_enabled`_
 #. `temperature_scale`_
 #. `time_to_target_training`_
+#. `time_to_target`_
 #. `where_id`_
 #. `where_name`_
 
@@ -353,7 +354,6 @@ Fields
 #. `target_temperature_high_f`_
 #. `target_temperature_low_c`_
 #. `target_temperature_low_f`_
-#. `time_to_target`_
 
 Weather
 -------
