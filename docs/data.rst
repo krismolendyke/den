@@ -1,10 +1,129 @@
 Data
 ====
 
+Structure
+---------
+
+``den`` records structure data in `InfluxDB`_.
+
+.. _structure-data-model:
+
+Data Model
+~~~~~~~~~~
+
+An example of the structures data model, limited to thermostat read/write
+permissions, from the Nest `Data Model Viewer`_ (as `JSON`_):
+
+.. code-block:: js
+
+   {
+       "structures": {
+           "VqFabWH21nwVyd4RWgJgNb292wa7hG_dUwo2i2SG7j3-BOLY0BA4sw": {
+               "structure_id": "VqFabWH21nwVyd4RWgJgNb292wa7hG_dUwo2i2SG7j3-BOLY0BA4sw",
+               "thermostats": [ "peyiJNo0IldT2YlIVtYaGQ", ... ],
+               "smoke_co_alarms": [ "RTMTKxsQTCxzVcsySOHPxKoF4OyCifrs", ... ],
+               "cameras": [ "awJo6rH…", ... ],
+               "devices": {
+               },
+               "away": "home",
+               "name": "Home",
+               "country_code": "US",
+               "postal_code": "94304",
+               "peak_period_start_time": "2016-10-31T23:59:59.000Z",
+               "peak_period_end_time": "2016-10-31T23:59:59.000Z",
+               "time_zone": "America/Los_Angeles",
+               "eta": {
+               },
+               "rhr_enrollment": true,
+               "wheres": {
+                   "Fqp6wJI...": {
+                   }
+               }
+           }
+       }
+   }
+
+`InfluxDB`_ Point
+~~~~~~~~~~~~~~~~~
+
+The :ref:`structure-data-model` example transformed into a list containing a
+single `InfluxDB`_ `point`_ (as `Python`_):
+
+.. code-block:: python
+
+   [
+       {
+           "measure": "structure",
+           "tags": {
+               "away": "home",
+               "country_code": "US",
+               "name": "Home",
+               "postal_code": "94304",
+               "structure_id": "VqFabWH21nwVyd4RWgJgNb292wa7hG_dUwo2i2SG7j3-BOLY0BA4sw",
+               "thermostat_id": "peyiJNo0IldT2YlIVtYaGQ",
+               "time_zone": "America/Los_Angeles"
+           },
+           "fields": {
+               "away": 0
+           }
+       }
+   ]
+
+.. note::
+
+   The :ref:`structure-data-model` ``thermostats`` list is denormalized into a
+   point per thermostat id.
+
+Measurement
+~~~~~~~~~~~
+
+.. epigraph::
+
+   The part of InfluxDB’s structure that describes the data stored in the
+   associated fields. Measurements are strings.
+
+   -- `InfluxDB`_ `measurement`_ documentation
+
+``den`` records structure data in a measurement named ``structure``.
+
+
+Tags
+~~~~
+
+.. epigraph::
+
+   The key-value pair in InfluxDB’s data structure that records metadata. Tags
+   are an optional part of InfluxDB’s data structure but they are useful for
+   storing commonly-queried metadata; tags are indexed so queries on tags are
+   performant. Query tip: Compare tags to fields; fields are not indexed.
+
+   -- `InfluxDB`_ `tag`_ documentation
+
+.. note::
+
+   The `tag`_ values are always interpreted as strings.
+
+Each `tag`_ value should have very few possible values which yields a low
+`series cardinality`_.
+
+#. `away`_
+#. `country_code`_
+#. `name`_
+#. `postal_code`_
+#. `structure_id`_
+#. `thermostat_id`_
+#. `time_zone`_
+
+Fields
+~~~~~~
+
+#. ``away`` is a numeric representation of the ``away`` tag, i.e., ``home`` as
+   ``0``, ``away`` as ``1``
+
 Thermostat
 ----------
 
-``den`` stores thermostat data in `InfluxDB`_.
+``den`` records thermostat data in `InfluxDB`_.
 
 .. _thermostat-data-model:
 
@@ -20,55 +139,55 @@ permissions, from the Nest `Data Model Viewer`_ (as `JSON`_):
        "devices": {
            "thermostats": {
                "peyiJNo0IldT2YlIVtYaGQ": {
-                   "device_id": "peyiJNo0IldT2YlIVtYaGQ",
-                   "locale": "en-US",
-                   "software_version": "4.0",
-                   "structure_id": "VqFabWH21nwVyd4RWgJgNb292wa7hG_dUwo2i2SG7j3-BOLY0BA4sw",
-                   "name": "Hallway (upstairs)",
-                   "name_long": "Hallway Thermostat (upstairs)",
-                   "last_connection": "2016-10-31T23:59:59.000Z",
-                   "is_online": true,
+                   "ambient_temperature_c": 21.5,
+                   "ambient_temperature_f": 72,
+                   "away_temperature_high_c": 24.5,
+                   "away_temperature_high_f": 80,
+                   "away_temperature_low_c": 19.5,
+                   "away_temperature_low_f": 65,
                    "can_cool": true,
                    "can_heat": true,
-                   "is_using_emergency_heat": true,
-                   "has_fan": true,
-                   "fan_timer_active": true,
-                   "fan_timer_timeout": "2016-10-31T23:59:59.000Z",
-                   "has_leaf": true,
-                   "temperature_scale": "C",
-                   "target_temperature_f": 72,
-                   "target_temperature_c": 21.5,
-                   "target_temperature_high_f": 80,
-                   "target_temperature_high_c": 24.5,
-                   "target_temperature_low_f": 65,
-                   "target_temperature_low_c": 19.5,
-                   "eco_temperature_high_f": 80,
+                   "device_id": "peyiJNo0IldT2YlIVtYaGQ",
                    "eco_temperature_high_c": 24.5,
-                   "eco_temperature_low_f": 65,
+                   "eco_temperature_high_f": 80,
                    "eco_temperature_low_c": 19.5,
-                   "away_temperature_high_f": 80,
-                   "away_temperature_high_c": 24.5,
-                   "away_temperature_low_f": 65,
-                   "away_temperature_low_c": 19.5,
-                   "hvac_mode": heat,
-                   "previous_hvac_mode": heat,
-                   "ambient_temperature_f": 72,
-                   "ambient_temperature_c": 21.5,
+                   "eco_temperature_low_f": 65,
+                   "fan_timer_active": true,
+                   "fan_timer_duration": 15,
+                   "fan_timer_timeout": "2016-10-31T23:59:59.000Z",
+                   "has_fan": true,
+                   "has_leaf": true,
                    "humidity": 40,
+                   "hvac_mode": heat,
                    "hvac_state": "heating",
-                   "where_id": "UNCBGUnN24...",
                    "is_locked": true,
-                   "locked_temp_min_f": "65",
+                   "is_online": true,
+                   "is_using_emergency_heat": true,
+                   "label": "Pat's room",
+                   "last_connection": "2016-10-31T23:59:59.000Z",
+                   "locale": "en-US",
+                   "locked_temp_max_c": "24.5",
                    "locked_temp_max_f": "80",
                    "locked_temp_min_c": "19.5",
-                   "locked_temp_max_c": "24.5",
-                   "label": "Pat's room",
-                   "where_name": "Hallway",
-                   "sunlight_correction_enabled": true,
+                   "locked_temp_min_f": "65",
+                   "name": "Hallway (upstairs)",
+                   "name_long": "Hallway Thermostat (upstairs)",
+                   "previous_hvac_mode": heat,
+                   "software_version": "4.0",
+                   "structure_id": "VqFabWH21nwVyd4RWgJgNb292wa7hG_dUwo2i2SG7j3-BOLY0BA4sw",
                    "sunlight_correction_active": true,
-                   "fan_timer_duration": 15,
+                   "sunlight_correction_enabled": true,
+                   "target_temperature_c": 21.5,
+                   "target_temperature_f": 72,
+                   "target_temperature_high_c": 24.5,
+                   "target_temperature_high_f": 80,
+                   "target_temperature_low_c": 19.5,
+                   "target_temperature_low_f": 65,
+                   "temperature_scale": "C",
                    "time_to_target": "~15",
-                   "time_to_target_training": "training"
+                   "time_to_target_training": "training",
+                   "where_id": "UNCBGUnN24...",
+                   "where_name": "Hallway"
                }
            }
        }
@@ -151,7 +270,7 @@ Measurement
 
    -- `InfluxDB`_ `measurement`_ documentation
 
-``den`` stores thermostat data in a measurement named ``thermostat``.
+``den`` records thermostat data in a measurement named ``thermostat``.
 
 Tags
 ~~~~
@@ -327,7 +446,7 @@ Measurement
 
    -- `InfluxDB`_ `measurement`_ documentation
 
-``den`` stores weather data in a measurement named ``weather``.
+``den`` records weather data in a measurement named ``weather``.
 
 Tags
 ~~~~
@@ -440,3 +559,10 @@ Fields
 .. _point: https://docs.influxdata.com/influxdb/v1.0/concepts/glossary/#point
 .. _Powered by Dark Sky: https://darksky.net/poweredby/
 .. _data point object: https://darksky.net/dev/docs/response#data-point
+.. _thermostat_id: https://developers.nest.com/documentation/api-reference/overview#deviceid
+.. _away: https://developers.nest.com/documentation/api-reference/overview#away
+.. _country_code: https://developers.nest.com/documentation/api-reference/overview#countrycode
+.. _name: https://developers.nest.com/documentation/api-reference/overview#name
+.. _postal_code: https://developers.nest.com/documentation/api-reference/overview#postalcode
+.. _structure_id: https://developers.nest.com/documentation/api-reference/overview#structureid
+.. _time_zone: https://developers.nest.com/documentation/api-reference/overview#timezone
