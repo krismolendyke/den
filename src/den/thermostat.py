@@ -103,28 +103,12 @@ def _process(line):
 def _get_structure_data(data):
     """Get structure data to write to InfluxDB."""
     measurement = "structure"
-    tag_keys = [
-        "away",
-        "country_code",
-        "name",
-        "postal_code",
-        "structure_id",
-        "thermostat_id",
-        "time_zone"
-    ]
-    field_keys = [
-        "away"
-    ]
+    tag_keys = ["away", "country_code", "name", "postal_code", "structure_id", "thermostat_id", "time_zone"]
+    field_keys = ["away"]
     points = []
     for structure_data in data["data"]["structures"].values():
         for thermostat_id in structure_data["thermostats"]:
-            point = {
-                "measurement": measurement,
-                "tags": {
-                    "thermostat_id": thermostat_id
-                },
-                "fields": {}
-            }
+            point = {"measurement": measurement, "tags": {"thermostat_id": thermostat_id}, "fields": {}}
             for k, v in structure_data.items():
                 if k in tag_keys:
                     point["tags"][k] = v
@@ -141,57 +125,19 @@ def _get_thermostat_data(value):
     """Get thermostat data to write to InfluxDB."""
     measurement = "thermostat"
     tag_keys = [
-        "can_cool",
-        "can_heat",
-        "device_id",
-        "fan_timer_active",
-        "has_fan",
-        "has_leaf",
-        "hvac_mode",
-        "hvac_state",
-        "is_locked",
-        "is_online",
-        "is_using_emergency_heat",
-        "label",
-        "locale",
-        "name",
-        "name_long",
-        "previous_hvac_mode",
-        "software_version",
-        "structure_id",
-        "sunlight_correction_active",
-        "sunlight_correction_enabled",
-        "temperature_scale",
-        "time_to_target",
-        "time_to_target_training",
-        "where_id",
+        "can_cool", "can_heat", "device_id", "fan_timer_active", "has_fan", "has_leaf", "hvac_mode", "hvac_state",
+        "is_locked", "is_online", "is_using_emergency_heat", "label", "locale", "name", "name_long",
+        "previous_hvac_mode", "software_version", "structure_id", "sunlight_correction_active",
+        "sunlight_correction_enabled", "temperature_scale", "time_to_target", "time_to_target_training", "where_id",
         "where_name"
     ]
     field_keys = [
-        "ambient_temperature_c",
-        "ambient_temperature_f",
-        "away_temperature_high_c",
-        "away_temperature_high_f",
-        "away_temperature_low_c",
-        "away_temperature_low_f",
-        "eco_temperature_high_c",
-        "eco_temperature_high_f",
-        "eco_temperature_low_c",
-        "eco_temperature_low_f",
-        "fan_timer_duration",
-        "fan_timer_timeout",
-        "humidity",
-        "last_connection",
-        "locked_temp_max_c",
-        "locked_temp_max_f",
-        "locked_temp_min_c",
-        "locked_temp_min_f",
-        "target_temperature_c",
-        "target_temperature_f",
-        "target_temperature_high_c",
-        "target_temperature_high_f",
-        "target_temperature_low_c",
-        "target_temperature_low_f"
+        "ambient_temperature_c", "ambient_temperature_f", "away_temperature_high_c", "away_temperature_high_f",
+        "away_temperature_low_c", "away_temperature_low_f", "eco_temperature_high_c", "eco_temperature_high_f",
+        "eco_temperature_low_c", "eco_temperature_low_f", "fan_timer_duration", "fan_timer_timeout", "humidity",
+        "last_connection", "locked_temp_max_c", "locked_temp_max_f", "locked_temp_min_c", "locked_temp_min_f",
+        "target_temperature_c", "target_temperature_f", "target_temperature_high_c", "target_temperature_high_f",
+        "target_temperature_low_c", "target_temperature_low_f"
     ]
     points = []
     for thermostat_data in value["data"]["devices"]["thermostats"].values():
