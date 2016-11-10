@@ -162,7 +162,15 @@ class ThermostatTestCase(unittest.TestCase):
         self.assertEqual(expected, actual)
         actual = thermostat._get_structure_data({})
         self.assertEqual(expected, actual)
-        actual = thermostat._get_structure_data({"data": {"structures": {"": {"thermostats_is_missing": "not here"}}}})
+        actual = thermostat._get_structure_data({
+            "data": {
+                "structures": {
+                    "": {
+                        "thermostats_is_missing": "not here"
+                    }
+                }
+            }
+        })
         self.assertNotIn("thermostats", actual)
 
     def test_get_structure_data_returns_list_for_valid_data(self):
