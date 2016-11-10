@@ -15,7 +15,6 @@ import json
 import logging
 
 from influxdb import client as influxdb
-
 import requests
 
 NEST_API_PROTOCOL = "https"
