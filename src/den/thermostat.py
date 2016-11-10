@@ -1,6 +1,6 @@
 """Record `Nest API <https://developer.nest.com/documentation/api-reference>`_ data to InfluxDB.
 
-The ``record`` API is designed to persist Nest thermostat data in an `InfluxDB <http://influxdb.com/>`_ database.
+The ``thermostat`` API is designed to persist Nest thermostat data in an `InfluxDB <http://influxdb.com/>`_ database.
 
 """
 
