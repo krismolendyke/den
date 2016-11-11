@@ -118,7 +118,7 @@ def _get_parser():
     parser.add_argument("--port", default=8086, help="Database port.")
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
     parser.add_argument(
-        "--log-level", choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"], default="ERROR", help="Logg level.")
+        "--log-level", choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"], default="ERROR", help="Log level.")
     parser.add_argument("--log-to-file", action="store_true", help="Log to a file instead of stdout.")
     subparsers = parser.add_subparsers(title="sub-commands")
     _add_thermostat_subparser(subparsers)
