@@ -22,8 +22,6 @@ def _thermostat(args):  # noqa
     from the keyboard or an unexpected exception occurs.
 
     """
-    thermostat.configure_logging()
-
     while True:
         try:
             thermostat.record(args.database, args.port, args.ssl, args.access_token)
