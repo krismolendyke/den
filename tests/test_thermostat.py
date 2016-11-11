@@ -16,8 +16,6 @@ from mock import MagicMock, patch
 
 from den import thermostat
 
-thermostat.configure_logging(filename=os.devnull)
-
 
 class ThermostatTestCase(unittest.TestCase):
     @classmethod

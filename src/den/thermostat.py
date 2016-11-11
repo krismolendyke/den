@@ -151,16 +151,6 @@ def _get_thermostat_points(value):
     return points
 
 
-def configure_logging(filename="den.log", level=logging.DEBUG):
-    """Configure basic logging.
-
-    :param str filename: (optional) The filename to write logging statements to.
-    :param logging.Logger.debug level: (optional) The level at which to log.
-
-    """
-    logging.basicConfig(filename=filename, level=level, format="%(asctime)s %(levelname)s %(message)s")
-
-
 def record(database, port, ssl, nest_api_access_token):
     """Stream results from the Nest API and record them in the database.
 
