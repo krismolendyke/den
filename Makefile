@@ -51,16 +51,13 @@ register:
 source:
 	$(PYTHON) $(SETUP) sdist
 
-egg:
-	$(PYTHON) $(SETUP) bdist_egg
-
 wheel:
 	$(PYTHON) $(SETUP) bdist_wheel
 
-upload: source egg wheel
+upload: clean analyze test source wheel
 	$(PYTHON) $(SETUP) upload
 
 clean:
 	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) $(TOX_DIR) *.egg-info .eggs
 
-.PHONY: help init init-dev test analyze format register source egg wheel upload clean
+.PHONY: help init init-dev test analyze format register source wheel upload clean
