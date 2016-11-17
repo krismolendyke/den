@@ -15,7 +15,6 @@ from den import __main__
 
 
 class MainTestCase(unittest.TestCase):
-
     def test_weather(self):
         with mock.patch.object(sys, "argv", "prog test weather".split()), \
              mock.patch("den.weather.record", autospec=True) as record_mock:
