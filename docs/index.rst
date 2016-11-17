@@ -16,6 +16,13 @@ dashboard tool like `Grafana`_.
 
 .. image:: images/dashboard.jpg
 
+Requirements
+------------
+
+``den`` requires an `InfluxDB`_ version ``1.0`` or greater installation.  The
+``database`` name positional argument to ``den`` expects that the database
+exists in `InfluxDB`_.
+
 CLI Documentation
 -----------------
 
