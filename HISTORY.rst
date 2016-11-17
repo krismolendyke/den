@@ -1,16 +1,16 @@
 Release History
 ---------------
 
-1.0.0 (2016-11-09)
+1.0.0 (2016-11-17)
 ++++++++++++++++++
 
 .. attention::
 
    This release introduces backwards incompatible breaking changes.
 
-- Support `InfluxDB 1.0 <https://www.influxdata.com/time-series-platform/influxdb/>`_
+- Require `InfluxDB 1.0 <https://www.influxdata.com/time-series-platform/influxdb/>`_
 - Support `Python 3.5.2 <https://www.python.org/downloads/release/python-352/>`_
-- The Forecast.io API has become the Dark Sky API
+- Now `Powered by Dark Sky <https://darksky.net/poweredby/>`_
 
 0.0.2 (2015-09-15)
 ++++++++++++++++++
