@@ -45,19 +45,13 @@ analyze:
 format:
 	$(YAPF) $(YAPF_FLAGS) $(python_src)
 
-register:
-	$(PYTHON) $(SETUP) register
-
 source:
 	$(PYTHON) $(SETUP) sdist
 
 wheel:
 	$(PYTHON) $(SETUP) bdist_wheel
 
-upload: clean analyze test source wheel
-	$(PYTHON) $(SETUP) upload
-
 clean:
 	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) $(TOX_DIR) *.egg-info .eggs
 
-.PHONY: help init init-dev test analyze format register source wheel upload clean
+.PHONY: help init init-dev test analyze format source wheel clean
