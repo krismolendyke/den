@@ -15,7 +15,12 @@ build_dir := build
 dist_dir  := dist
 test_dir  := tests
 
-python_src = $(shell $(FIND) . -type f -name '*.py' -not -path './docs/*' -not -path './.tox/*')
+python_src = $(shell $(FIND) . -type f -name '*.py' \
+                 -not -path './build/*'             \
+                 -not -path './docs/*'              \
+                 -not -path './.eggs/*'             \
+                 -not -path './.tox/*'              \
+              )
 
 help:
 	@$(MAKE) --print-data-base --question no-such-target | \
@@ -40,22 +45,13 @@ analyze:
 format:
 	$(YAPF) $(YAPF_FLAGS) $(python_src)
 
-register:
-	$(PYTHON) $(SETUP) register
-
 source:
 	$(PYTHON) $(SETUP) sdist
-
-egg:
-	$(PYTHON) $(SETUP) bdist_egg
 
 wheel:
 	$(PYTHON) $(SETUP) bdist_wheel
 
-upload: source egg wheel
-	$(PYTHON) $(SETUP) upload
-
 clean:
-	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) $(TOX_DIR) *.egg-info
+	$(RM) $(RM_FLAGS) $(build_dir) $(dist_dir) $(TOX_DIR) *.egg-info .eggs
 
-.PHONY: help init init-dev test analyze format register source egg wheel upload clean
+.PHONY: help init init-dev test analyze format source wheel clean

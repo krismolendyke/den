@@ -5,12 +5,11 @@ API
 
 .. module:: den
 
-Record
-------
+Thermostat
+----------
 
-.. automodule:: den.record
+.. automodule:: den.thermostat
    :members:
-
 
 Weather
 -------
