@@ -107,7 +107,8 @@ def _add_propane_subparser(subparsers):
     :rtype: :py:const:`None`
 
     """
-    parser = subparsers.add_parser("propane", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_propane.__doc__)
+    parser = subparsers.add_parser(
+        "propane", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_propane.__doc__)
     parser.set_defaults(func=_propane)
 
 
