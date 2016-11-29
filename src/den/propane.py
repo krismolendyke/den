@@ -41,7 +41,7 @@ def record(database, port, ssl, api_key):
 
     .. note::
 
-       Propane data is recorded at hour precision.
+       Propane data is recorded at second precision.
 
     :param str database: The name of the database.
     :param int port: The port number the database is listening on.
@@ -52,4 +52,4 @@ def record(database, port, ssl, api_key):
 
     """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
-    db.write_points(_get_points(api_key), time_precision="h")
+    db.write_points(_get_points(api_key), time_precision="s")
