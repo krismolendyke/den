@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+1.0.1 (2016-11-30)
+++++++++++++++++++
+
+- Support new ``auto-away`` value for a Nest structure.
+
 1.0.0 (2016-11-17)
 ++++++++++++++++++
 
