@@ -114,7 +114,7 @@ def _get_structure_points(data):
                     point["tags"][k] = v
                 if k in field_keys:
                     if k == "away":
-                        point["fields"]["is_away"] = 1 if v == "away" else 0
+                        point["fields"]["is_away"] = 1 if "away" in v else 0
                     else:
                         point["fields"][k] = v
             points.append(point)

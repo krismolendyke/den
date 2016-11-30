@@ -131,6 +131,22 @@ class ThermostatTestCase(unittest.TestCase):
                 except AttributeError:
                     self.assertIsInstance(actual[0]["fields"], dict)
 
+    def test_get_structure_points_away(self):
+        data = {"data": {"structures": {"sid0": {"away": "away", "thermostats": ["tid0"]}}}}
+        points = thermostat._get_structure_points(data)
+        actual = points[0]["fields"]["is_away"]
+        self.assertEqual(1, actual)
+
+        data = {"data": {"structures": {"sid0": {"away": "auto-away", "thermostats": ["tid0"]}}}}
+        points = thermostat._get_structure_points(data)
+        actual = points[0]["fields"]["is_away"]
+        self.assertEqual(1, actual)
+
+        data = {"data": {"structures": {"sid0": {"away": "home", "thermostats": ["tid0"]}}}}
+        points = thermostat._get_structure_points(data)
+        actual = points[0]["fields"]["is_away"]
+        self.assertEqual(0, actual)
+
     def test_get_thermostat_points_returns_list_for_valid_data(self):
         for r in self.responses:
             result = thermostat._process(r)
