@@ -464,12 +464,26 @@ Fields
 Propane
 -------
 
-``den`` records propane data in a measurement named ``propane``.
-
 .. _propane-data-model:
 
 Data Model
 ~~~~~~~~~~
+
+.. code-block:: js
+
+   {
+     "device": {
+       "name": "Sample Device",
+       "address": "6 Dane St., Somerville, MA 02143, USA",
+       "capacity": 100,
+       "lastReading": {
+         "tank": 20,
+         "temperature": 72.12,
+         "time": 1444338760345,
+         "time_iso": "2015-10-08T21:12:40.345Z"
+       }
+     }
+   }
 
 InfluxDB Point
 ~~~~~~~~~~~~~~
@@ -477,11 +491,21 @@ InfluxDB Point
 Measurement
 ~~~~~~~~~~~
 
+``den`` records propane data in a measurement named ``propane``.
+
 Tags
 ~~~~
 
+#. ``device``
+#. ``name``
+#. ``address``
+
 Fields
 ~~~~~~
+
+#. ``capacity``
+#. ``tank``
+#. ``temperature``
 
 .. _Data Model Viewer: https://developers.nest.com/documentation/api-reference
 .. _InfluxDB: https://www.influxdata.com/time-series-platform/influxdb/
