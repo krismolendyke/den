@@ -14,6 +14,27 @@ FIELD_KEYS = []
 """InfluxDB field keys."""
 
 
+def _get_devices(api_key):
+    """Get devices currently associated with ``api_key``.
+
+    :param str api_key:
+    :rtype: :py:class:`list`
+
+    """
+    pass
+
+
+def _get_data(api_key, device):
+    """Get current data from ``device``.
+
+    :param str api_key:
+    :param str device: Device id
+    :rtype: :py:class:`dict`
+
+    """
+    pass
+
+
 def _get_points(api_key):
     """Get data prepared for InfluxDB insertion.
 
@@ -22,6 +43,10 @@ def _get_points(api_key):
     :returns: The current data prepared for insertion into InfluxDB.
 
     """
+    devices = _get_devices(api_key)
+    for device in devices:
+        data = _get_data(api_key, device)
+
     reading = {}  # TODO make call for device
     logging.debug("dict: %s", reading)
     point = {"measurement": MEASUREMENT, "tags": {}, "fields": {}}
