@@ -12,10 +12,12 @@ except ImportError:
     from urlparse import SplitResult, urlunsplit
 
 import json
-import logging
 
 from influxdb import client as influxdb
 import requests
+
+from . import LOG
+
 
 MEASUREMENT = "thermostat"
 """InfluxDB measurement value."""
@@ -47,8 +49,8 @@ def _get_stream(nest_api_access_token, path=""):
     url = _get_api_url(nest_api_access_token, path)
     r = requests.get(url, headers={"Accept": "text/event-stream"}, stream=True)
     for h in r.history:
-        logging.debug("[%d] Redirect: %s", h.status_code, h.url)
-    logging.debug("[%d] URL: %s", r.status_code, r.url)
+        LOG.debug("[%d] Redirect: %s", h.status_code, h.url)
+    LOG.debug("[%d] URL: %s", r.status_code, r.url)
     r.raise_for_status()
     return r
 
@@ -70,7 +72,7 @@ def _process_event(line):
         _, event = line.split(STREAM_DELIMITER, 1)
         event = event.strip()
         if event:
-            logging.debug(event)
+            LOG.debug(event)
             if event == "keep-alive":
                 event = None
         else:
@@ -88,7 +90,7 @@ def _process_data(line):
             try:
                 data = json.loads(data_str)
             except ValueError as e:
-                logging.error("Error processing data line: '%s', '%s'", line, e)
+                LOG.error("Error processing data line: '%s', '%s'", line, e)
                 data = None
     return data
 
@@ -168,19 +170,19 @@ def record(database, port, ssl, nest_api_access_token):
     """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
     with closing(_get_stream(nest_api_access_token)) as stream:
-        logging.debug("[%d] Streaming %s", stream.status_code, stream.url)
+        LOG.debug("[%d] Streaming %s", stream.status_code, stream.url)
         for l in stream.iter_lines():
             if l:
                 value = _process(l.decode("utf-8"))
                 if value:
-                    logging.debug(value)
+                    LOG.debug(value)
 
                     structure_points = _get_structure_points(value)
-                    logging.debug(structure_points)
+                    LOG.debug(structure_points)
                     db.write_points(structure_points, time_precision="s")
 
                     thermostat_points = _get_thermostat_points(value)
-                    logging.debug(thermostat_points)
+                    LOG.debug(thermostat_points)
                     db.write_points(thermostat_points, time_precision="s")
 
-        logging.debug("[%d] Streaming complete %s", stream.status_code, stream.url)
+        LOG.debug("[%d] Streaming complete %s", stream.status_code, stream.url)

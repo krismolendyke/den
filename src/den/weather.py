@@ -1,9 +1,10 @@
 """Record weather data to InfluxDB."""
 
-import logging
-
 from influxdb import client as influxdb
 import forecastio
+
+from . import LOG
+
 
 MEASUREMENT = "weather"
 """InfluxDB measurement value."""
@@ -32,7 +33,7 @@ def _get_weather_points(api_key, lat, lon):
     forecast = forecastio.load_forecast(api_key, lat, lon)
     currently = forecast.currently()
     current_data = currently.d
-    logging.debug("Weather dict: %s", current_data)
+    LOG.debug("Weather dict: %s", current_data)
     point = {"measurement": MEASUREMENT, "tags": {}, "fields": {}}
     for k, v in current_data.items():
         if k in TAG_KEYS:
@@ -40,8 +41,8 @@ def _get_weather_points(api_key, lat, lon):
         elif k in FIELD_KEYS:
             point["fields"][k] = float(v)
         else:
-            logging.warning("Weather unknown property: '%s': '%s'", k, v)
-    logging.debug("Weather point: %s", point)
+            LOG.warning("Weather unknown property: '%s': '%s'", k, v)
+    LOG.debug("Weather point: %s", point)
     return [point]
 
 
