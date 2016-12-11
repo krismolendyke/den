@@ -5,7 +5,6 @@ import forecastio
 
 from . import LOG
 
-
 MEASUREMENT = "weather"
 """InfluxDB measurement value."""
 

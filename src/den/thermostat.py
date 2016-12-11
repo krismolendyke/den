@@ -18,7 +18,6 @@ import requests
 
 from . import LOG
 
-
 MEASUREMENT = "thermostat"
 """InfluxDB measurement value."""
 

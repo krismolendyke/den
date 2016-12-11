@@ -6,7 +6,6 @@ import logging
 import logging.handlers
 import os
 
-
 __title__ = "den"
 __version__ = resource_string(__name__, "VERSION")
 
@@ -20,10 +19,10 @@ def _configure_logger(name):
     console_handler.setLevel(logging.INFO)
     logger.addHandler(console_handler)
 
-    file_handler = logging.handlers.RotatingFileHandler(os.path.join(gettempdir(), os.extsep.join([name, "log"])),
-                                                        maxBytes=2**20)
-    fmt = logging.Formatter(fmt="%(asctime)s %(name)s %(levelname)s %(module)s.%(funcName)s %(message)s",
-                            datefmt="%Y-%m-%dT%H:%M:%S%z")
+    file_handler = logging.handlers.RotatingFileHandler(
+        os.path.join(gettempdir(), os.extsep.join([name, "log"])), maxBytes=2**20)
+    fmt = logging.Formatter(
+        fmt="%(asctime)s %(name)s %(levelname)s %(module)s.%(funcName)s %(message)s", datefmt="%Y-%m-%dT%H:%M:%S%z")
     file_handler.setFormatter(fmt)
     file_handler.setLevel(logging.DEBUG)
     logger.addHandler(file_handler)
