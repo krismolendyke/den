@@ -31,11 +31,11 @@ def _thermostat(args):  # noqa
         except StreamConsumedError as e:
             LOG.warn("Stream consumed %s", e)
         except ConnectionError as e:
-            LOG.error("Connection error %s", e)
+            LOG.exception("Connection error %s", e)
         except HTTPError as e:
-            LOG.error("HTTPError %s", e)
+            LOG.exception("HTTPError %s", e)
         except Timeout as e:
-            LOG.error("Timeout %s", e)
+            LOG.exception("Timeout %s", e)
         except Exception as e:  # pylint: disable=broad-except
             LOG.critical("Unexpected error %s", e)
             if e.message == "EOF occurred in violation of protocol":
