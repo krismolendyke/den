@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+1.1.0 (2016-12-10)
+++++++++++++++++++
+
+- Log to rolling file in temporary directory.
+
 1.0.1 (2016-11-30)
 ++++++++++++++++++
 

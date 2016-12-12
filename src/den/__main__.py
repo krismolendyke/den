@@ -4,13 +4,13 @@
 from __future__ import absolute_import
 
 import argparse
-import logging
 import os
 import sys
 
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
 from . import __version__
+from . import LOG
 from . import thermostat
 from . import weather
 
@@ -26,22 +26,22 @@ def _thermostat(args):  # noqa
         try:
             thermostat.record(args.database, args.port, args.ssl, args.access_token)
         except KeyboardInterrupt as e:
-            logging.warn("Keyboard interrupt %s", e)
+            LOG.warn("Keyboard interrupt %s", e)
             return True
         except StreamConsumedError as e:
-            logging.warn("Stream consumed %s", e)
+            LOG.warn("Stream consumed %s", e)
         except ConnectionError as e:
-            logging.error("Connection error %s", e)
+            LOG.exception("Connection error %s", e)
         except HTTPError as e:
-            logging.error("HTTPError %s", e)
+            LOG.exception("HTTPError %s", e)
         except Timeout as e:
-            logging.error("Timeout %s", e)
+            LOG.exception("Timeout %s", e)
         except Exception as e:  # pylint: disable=broad-except
-            logging.critical("Unexpected error %s", e)
+            LOG.critical("Unexpected error %s", e)
             if e.message == "EOF occurred in violation of protocol":
-                logging.info("Re-establishing connection")
+                LOG.info("Re-establishing connection")
             elif e.message == "400: invalid payload":
-                logging.critical("Could not write response to database")
+                LOG.critical("Could not write response to database")
             else:
                 return False
 
@@ -49,20 +49,6 @@ def _thermostat(args):  # noqa
 def _weather(args):
     """Record weather data into the database. Powered by Dark Sky."""
     weather.record(args.database, args.port, args.ssl, args.api_key, args.lat, args.lon)
-
-
-def _configure_logging(log_level, log_to_file):
-    """Configure basic logging.
-
-    :param int log_level:
-    :param bool log_to_file: Whether or not output should be logged to a file.
-
-    """
-    log_format = "%(asctime)s %(levelname)s %(message)s"
-    if log_to_file:
-        logging.basicConfig(filename="%s.log" % os.path.splitext(__file__)[0], level=logging.DEBUG, format=log_format)
-    else:
-        logging.basicConfig(level=log_level, format=log_format)
 
 
 def _add_thermostat_subparser(subparsers):
@@ -117,9 +103,6 @@ def _get_parser():
     parser.add_argument("database", help="Database name.")
     parser.add_argument("--port", default=8086, help="Database port.")
     parser.add_argument("--ssl", action="store_true", help="Use HTTPS.")
-    parser.add_argument(
-        "--log-level", choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"], default="ERROR", help="Log level.")
-    parser.add_argument("--log-to-file", action="store_true", help="Log to a file instead of stdout.")
     subparsers = parser.add_subparsers(title="sub-commands")
     _add_thermostat_subparser(subparsers)
     _add_weather_subparser(subparsers)
@@ -135,7 +118,6 @@ def main():
 
     """
     args = _get_parser().parse_args()
-    _configure_logging(getattr(logging, args.log_level), args.log_to_file)
     return 0 if args.func(args) else 1
 
 

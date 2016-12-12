@@ -1,4 +1,3 @@
 import logging
-import os
 
-logging.basicConfig(filename=os.devnull)
+logging.disable(logging.CRITICAL * 2)
