@@ -169,7 +169,7 @@ def record(database, port, ssl, nest_api_access_token):
     """
     db = influxdb.InfluxDBClient(database=database, port=port, ssl=ssl)
     with closing(_get_stream(nest_api_access_token)) as stream:
-        LOG.debug("[%d] Streaming %s", stream.status_code, stream.url)
+        LOG.info("[%d] Streaming %s", stream.status_code, stream.url)
         for l in stream.iter_lines():
             if l:
                 value = _process(l.decode("utf-8"))
@@ -184,4 +184,4 @@ def record(database, port, ssl, nest_api_access_token):
                     LOG.debug(thermostat_points)
                     db.write_points(thermostat_points, time_precision="s")
 
-        LOG.debug("[%d] Streaming complete %s", stream.status_code, stream.url)
+        LOG.info("[%d] Streaming complete %s", stream.status_code, stream.url)
