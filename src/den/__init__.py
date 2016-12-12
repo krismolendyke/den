@@ -1,4 +1,4 @@
-"""Den is a home for your Nest thermostat data."""
+"""Den is a home for your home's data."""
 
 from pkg_resources import resource_string
 from tempfile import gettempdir

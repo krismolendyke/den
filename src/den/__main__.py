@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Den is a home for your Nest thermostat data."""
+"""Den is a home for your home's data."""
 
 from __future__ import absolute_import
 

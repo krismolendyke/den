@@ -15,7 +15,7 @@ with open(path.join(HERE, "src", "den", "VERSION")) as version_file:
 setup(
     name="den",
     version=VERSION,
-    description="Den is a home for your Nest thermostat data.",
+    description="Den is a home for your home's data.",
     long_description=LONG_DESCRIPTION,
     author="Kris Molendyke",
     author_email="kris@k20e.com",
