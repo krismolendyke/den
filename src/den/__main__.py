@@ -10,11 +10,8 @@ import sys
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
 
 from . import __version__
-<<<<<<< HEAD
 from . import LOG
-=======
 from . import propane
->>>>>>> propane - Hack in stub subcommand.
 from . import thermostat
 from . import weather
 
