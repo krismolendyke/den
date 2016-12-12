@@ -18,13 +18,33 @@ import requests
 
 from . import LOG
 
-MEASUREMENT = "thermostat"
-"""InfluxDB measurement value."""
+STRUCTURE_MEASUREMENT = "structure"
+"""InfluxDB measurement name."""
 
-TAG_KEYS = []
+STRUCTURE_TAG_KEYS = ["away", "country_code", "name", "postal_code", "structure_id", "thermostat_id", "time_zone"]
 """InfluxDB tag keys."""
 
-FIELD_KEYS = []
+STRUCTURE_FIELD_KEYS = ["away"]
+"""InfluxDB field keys."""
+
+THERMOSTAT_MEASUREMENT = "thermostat"
+"""InfluxDB measurement name."""
+
+THERMOSTAT_TAG_KEYS = [
+    "can_cool", "can_heat", "device_id", "fan_timer_active", "has_fan", "has_leaf", "hvac_mode", "hvac_state",
+    "is_locked", "is_online", "is_using_emergency_heat", "label", "locale", "name", "name_long", "previous_hvac_mode",
+    "software_version", "structure_id", "sunlight_correction_active", "sunlight_correction_enabled",
+    "temperature_scale", "time_to_target", "time_to_target_training", "where_id", "where_name"
+]
+"""InfluxDB tag keys."""
+
+THERMOSTAT_FIELD_KEYS = [
+    "ambient_temperature_c", "ambient_temperature_f", "away_temperature_high_c", "away_temperature_high_f",
+    "away_temperature_low_c", "away_temperature_low_f", "eco_temperature_high_c", "eco_temperature_high_f",
+    "eco_temperature_low_c", "eco_temperature_low_f", "fan_timer_duration", "humidity", "locked_temp_max_c",
+    "locked_temp_max_f", "locked_temp_min_c", "locked_temp_min_f", "target_temperature_c", "target_temperature_f",
+    "target_temperature_high_c", "target_temperature_high_f", "target_temperature_low_c", "target_temperature_low_f"
+]
 """InfluxDB field keys."""
 
 NEST_API_PROTOCOL = "https"
@@ -103,17 +123,14 @@ def _process(line):
 
 def _get_structure_points(data):
     """Get structure points to write to InfluxDB."""
-    measurement = "structure"
-    tag_keys = ["away", "country_code", "name", "postal_code", "structure_id", "thermostat_id", "time_zone"]
-    field_keys = ["away"]
     points = []
     for structure_data in data["data"]["structures"].values():
         for thermostat_id in structure_data["thermostats"]:
-            point = {"measurement": measurement, "tags": {"thermostat_id": thermostat_id}, "fields": {}}
+            point = {"measurement": STRUCTURE_MEASUREMENT, "tags": {"thermostat_id": thermostat_id}, "fields": {}}
             for k, v in structure_data.items():
-                if k in tag_keys:
+                if k in STRUCTURE_TAG_KEYS:
                     point["tags"][k] = v
-                if k in field_keys:
+                if k in STRUCTURE_FIELD_KEYS:
                     if k == "away":
                         point["fields"]["is_away"] = 1 if "away" in v else 0
                     else:
@@ -124,29 +141,13 @@ def _get_structure_points(data):
 
 def _get_thermostat_points(value):
     """Get thermostat points to write to InfluxDB."""
-    measurement = "thermostat"
-    tag_keys = [
-        "can_cool", "can_heat", "device_id", "fan_timer_active", "has_fan", "has_leaf", "hvac_mode", "hvac_state",
-        "is_locked", "is_online", "is_using_emergency_heat", "label", "locale", "name", "name_long",
-        "previous_hvac_mode", "software_version", "structure_id", "sunlight_correction_active",
-        "sunlight_correction_enabled", "temperature_scale", "time_to_target", "time_to_target_training", "where_id",
-        "where_name"
-    ]
-    field_keys = [
-        "ambient_temperature_c", "ambient_temperature_f", "away_temperature_high_c", "away_temperature_high_f",
-        "away_temperature_low_c", "away_temperature_low_f", "eco_temperature_high_c", "eco_temperature_high_f",
-        "eco_temperature_low_c", "eco_temperature_low_f", "fan_timer_duration", "humidity", "locked_temp_max_c",
-        "locked_temp_max_f", "locked_temp_min_c", "locked_temp_min_f", "target_temperature_c", "target_temperature_f",
-        "target_temperature_high_c", "target_temperature_high_f", "target_temperature_low_c",
-        "target_temperature_low_f"
-    ]
     points = []
     for thermostat_data in value["data"]["devices"]["thermostats"].values():
-        point = {"measurement": measurement, "tags": {}, "fields": {}}
+        point = {"measurement": THERMOSTAT_MEASUREMENT, "tags": {}, "fields": {}}
         for k, v in thermostat_data.items():
-            if k in tag_keys:
+            if k in THERMOSTAT_TAG_KEYS:
                 point["tags"][k] = v
-            elif k in field_keys:
+            elif k in THERMOSTAT_FIELD_KEYS:
                 point["fields"][k] = float(v)
         points.append(point)
     return points
