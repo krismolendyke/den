@@ -54,7 +54,7 @@ def _weather(args):
 
 def _propane(args):
     """Record propane data into the database."""
-    propane.record(args.database, args.port, args.ssl, args.api_key)
+    propane.record(args.database, args.port, args.ssl, args.username, args.password)
 
 
 def _add_thermostat_subparser(subparsers):
@@ -106,6 +106,8 @@ def _add_propane_subparser(subparsers):
     """
     parser = subparsers.add_parser(
         "propane", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_propane.__doc__)
+    parser.add_argument("--username", help="Propane API username.", default=os.environ.get("DEN_PROPANE_USERNAME"))
+    parser.add_argument("--password", help="Propane API password.", default=os.environ.get("DEN_PROPANE_PASSWORD"))
     parser.set_defaults(func=_propane)
 
 

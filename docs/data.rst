@@ -472,17 +472,20 @@ Data Model
 .. code-block:: js
 
    {
-     "device": {
-       "name": "Sample Device",
-       "address": "6 Dane St., Somerville, MA 02143, USA",
-       "capacity": 100,
-       "lastReading": {
-         "tank": 20,
-         "temperature": 72.12,
-         "time": 1444338760345,
-         "time_iso": "2015-10-08T21:12:40.345Z"
+       "device": {
+           "name": "Sample Device",
+           "address": "6 Dane St., Somerville, MA 02143, USA",
+           "capacity": 100,
+           "status": "deployed",
+           "orientation": "horizontal",
+           "fuelType": "propane",
+           "lastReading": {
+               "tank": 20,
+               "temperature": 72.12,
+               "time": 1444338760345,
+               "time_iso": "2015-10-08T21:12:40.345Z"
+           }
        }
-     }
    }
 
 InfluxDB Point
@@ -499,6 +502,9 @@ Tags
 #. ``device``
 #. ``name``
 #. ``address``
+#. ``status``
+#. ``orientation``
+#. ``fuelType``
 
 Fields
 ~~~~~~
