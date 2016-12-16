@@ -52,8 +52,9 @@ def _get_token(username, password):
     :returns: An API token
 
     """
-    r = requests.get(
-        _get_api_url(path="getToken"), auth=requests.auth.HTTPBasicAuth(username, password), verify=False)
+    r = requests.get(_get_api_url(path="getToken"),
+                     auth=requests.auth.HTTPBasicAuth(username, password),
+                     verify=False)
     LOG.debug("[%d] URL: %s", r.status_code, r.url)
     r.raise_for_status()
     return r.json()["token"]
