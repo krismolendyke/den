@@ -47,6 +47,11 @@ class PropaneTestCase(unittest.TestCase):
             url_mock.assert_called_once_with(token="token", path="devices/device")
             get_mock.assert_called_once_with(url_mock(), verify=False)
 
+    def test_points(self):
+        with mock.patch("den.propane._get_devices", autospec=True) as devices_mock:
+            propane._get_points("token", "device")
+            devices_mock.assert_called_once_with("token")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
