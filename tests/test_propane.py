@@ -10,7 +10,6 @@ from den import propane
 
 
 class PropaneTestCase(unittest.TestCase):
-
     def test_get_api_url(self):
         expected = "https://data.tankutility.com/api"
         actual = propane._get_api_url()
