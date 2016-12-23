@@ -18,9 +18,8 @@ class PropaneTestCase(unittest.TestCase):
         actual = propane._get_api_url()
         self.assertEqual(expected, actual)
 
-        token = "test"
-        expected = "https://data.tankutility.com/api?token=test"
-        actual = propane._get_api_url(token=token)
+        expected = "https://data.tankutility.com/api?token=token"
+        actual = propane._get_api_url(token="token")
         self.assertEqual(expected, actual)
 
     @staticmethod
@@ -36,8 +35,16 @@ class PropaneTestCase(unittest.TestCase):
     def test_get_devices():
         with mock.patch("den.propane._get_api_url", autospec=True) as url_mock, \
              mock.patch("den.propane.requests.get", autospec=True) as get_mock:
-            propane._get_devices("test")
-            url_mock.assert_called_once_with(token="test", path="devices")
+            propane._get_devices("token")
+            url_mock.assert_called_once_with(token="token", path="devices")
+            get_mock.assert_called_once_with(url_mock(), verify=False)
+
+    @staticmethod
+    def test_get_data():
+        with mock.patch("den.propane._get_api_url", autospec=True) as url_mock, \
+             mock.patch("den.propane.requests.get", autospec=True) as get_mock:
+            propane._get_data("token", "device")
+            url_mock.assert_called_once_with(token="token", path="devices/device")
             get_mock.assert_called_once_with(url_mock(), verify=False)
 
 
