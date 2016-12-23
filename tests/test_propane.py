@@ -23,13 +23,22 @@ class PropaneTestCase(unittest.TestCase):
         actual = propane._get_api_url(token=token)
         self.assertEqual(expected, actual)
 
-    def test_get_token(self):
+    @staticmethod
+    def test_get_token():
         with mock.patch("den.propane._get_api_url", autospec=True) as url_mock, \
              mock.patch("den.propane.requests.get", autospec=True) as get_mock:
             propane._get_token("user", "password")
             url_mock.assert_called_once_with(path="getToken")
             get_mock.assert_called_once_with(
                 url_mock(), auth=requests.auth.HTTPBasicAuth("user", "password"), verify=False)
+
+    @staticmethod
+    def test_get_devices():
+        with mock.patch("den.propane._get_api_url", autospec=True) as url_mock, \
+             mock.patch("den.propane.requests.get", autospec=True) as get_mock:
+            propane._get_devices("test")
+            url_mock.assert_called_once_with(token="test", path="devices")
+            get_mock.assert_called_once_with(url_mock(), verify=False)
 
 
 if __name__ == "__main__":
