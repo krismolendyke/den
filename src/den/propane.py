@@ -18,7 +18,7 @@ PROPANE_API_LOCATION = "data.tankutility.com"
 MEASUREMENT = "propane"
 """InfluxDB measurement value."""
 
-TAG_KEYS = ["device", "name", "address", "status", "orientation", "fuelType"]
+TAG_KEYS = ["name", "address", "status", "orientation", "fuelType"]
 """InfluxDB tag keys."""
 
 FIELD_KEYS = ["capacity", "tank", "temperature"]
@@ -102,7 +102,7 @@ def _get_points(token, device):
     for device in devices:
         data = _get_data(token, device)
         LOG.debug("dict: %s", data)
-        point = {"measurement": MEASUREMENT, "tags": {}, "fields": {}}
+        point = {"measurement": MEASUREMENT, "tags": {"device": device}, "fields": {}}
         for k, v in data["device"].items():
             if k in TAG_KEYS:
                 point["tags"][k] = v
