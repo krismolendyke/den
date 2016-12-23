@@ -104,6 +104,19 @@ class PropaneTestCase(unittest.TestCase):
             data_mock.assert_any_call("token", devices_mock.return_value[0])
             data_mock.assert_any_call("token", devices_mock.return_value[1])
 
+    @staticmethod
+    def test_record():
+        with mock.patch("den.propane.influxdb.InfluxDBClient", autospec=True) as influx_mock, \
+             mock.patch("den.propane._get_token", autospec=True), \
+             mock.patch("den.propane._get_devices", autospec=True) as devices_mock, \
+             mock.patch("den.propane._get_points", autospec=True) as points_mock:
+            db = influx_mock.return_value
+            db.write_points = mock.MagicMock()
+            devices_mock.return_value = ["device"]
+            points_mock.return_value = []
+            propane.record("database", 8083, False, "username", "password")
+            db.write_points.assert_called_once_with([], time_precision="s")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
