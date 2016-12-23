@@ -67,40 +67,37 @@ class PropaneTestCase(unittest.TestCase):
                     }
                 }
             }
-            expected = [
-                {
-                    "measurement": "propane",
-                    "tags": {
-                        "device": devices_mock.return_value[0],
-                        "name": "Sample Device",
-                        "fuelType": "propane",
-                        "address": "6 Dane St., Somerville, MA 02143, USA",
-                        "status": "deployed",
-                        "orientation": "horizontal"
-                    },
-                    "fields": {
-                        "capacity": 100.0,
-                        "tank": 20.0,
-                        "temperature": 72.12
-                    }
+            expected = [{
+                "measurement": "propane",
+                "tags": {
+                    "device": devices_mock.return_value[0],
+                    "name": "Sample Device",
+                    "fuelType": "propane",
+                    "address": "6 Dane St., Somerville, MA 02143, USA",
+                    "status": "deployed",
+                    "orientation": "horizontal"
                 },
-                {
-                    "measurement": "propane",
-                    "tags": {
-                        "device": devices_mock.return_value[1],
-                        "name": "Sample Device",
-                        "fuelType": "propane",
-                        "address": "6 Dane St., Somerville, MA 02143, USA",
-                        "status": "deployed",
-                        "orientation": "horizontal"
-                    },
-                    "fields": {
-                        "capacity": 100.0,
-                        "tank": 20.0,
-                        "temperature": 72.12
-                    }
+                "fields": {
+                    "capacity": 100.0,
+                    "tank": 20.0,
+                    "temperature": 72.12
                 }
-            ]
+            }, {
+                "measurement": "propane",
+                "tags": {
+                    "device": devices_mock.return_value[1],
+                    "name": "Sample Device",
+                    "fuelType": "propane",
+                    "address": "6 Dane St., Somerville, MA 02143, USA",
+                    "status": "deployed",
+                    "orientation": "horizontal"
+                },
+                "fields": {
+                    "capacity": 100.0,
+                    "tank": 20.0,
+                    "temperature": 72.12
+                }
+            }]
             actual = propane._get_points("token", "device")
             self.assertEqual(expected, actual)
             devices_mock.assert_called_once_with("token")
