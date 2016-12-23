@@ -26,7 +26,7 @@ FIELD_KEYS = ["capacity", "tank", "temperature"]
 
 
 def _get_api_url(token="", path=""):
-    """Get a Nest API URL for the given path.
+    """Get an API URL for the given path.
 
     :param str token: (optional) API token
     :param str path: (optional) API path
