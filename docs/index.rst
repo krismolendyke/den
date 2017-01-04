@@ -3,16 +3,17 @@ Den
 
 Release v\ |version|.
 
-``den`` is a home for your `Nest thermostat`_ data.
+``den`` is a home for your home's data.
 
 Features
 --------
 
-``den`` is built on the `Nest Developer Program`_ API.  It allows you to store
-data from your thermostat(s) for greater analysis and visualization than the
-`Nest web application`_ currently provides.  It records :ref:`thermostat data
-<thermostat-data-model>` to `InfluxDB`_ where it can then be visualized with a
-dashboard tool like `Grafana`_.
+``den`` is built on several APIs for home telemetry.  The `Nest Developer
+Program`_ API. allows you to store data from your thermostat(s) for greater
+analysis and visualization than the `Nest web application`_ currently
+provides.  It records :ref:`thermostat data <thermostat-data-model>` to
+`InfluxDB`_ where it can then be visualized with a dashboard tool like
+`Grafana`_.  The `Tank Utility`_ API allows you store propane tank data.
 
 .. image:: images/dashboard.jpg
 
@@ -88,3 +89,4 @@ Changelog
 .. _REST Streaming API: https://developer.nest.com/documentation/cloud/rest-streaming-guide
 .. _InfluxDB: https://www.influxdata.com/time-series-platform/influxdb/
 .. _Grafana: http://grafana.org/
+.. _Tank Utility: http://apidocs.tankutility.com/

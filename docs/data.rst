@@ -1,10 +1,56 @@
 Data
 ====
 
+InfluxDB
+--------
+
+All data is stored in `InfluxDB`_.  The following sections describe how the
+data is stored.
+
+Measurement
+~~~~~~~~~~~
+
+.. epigraph::
+
+   The part of InfluxDB’s structure that describes the data stored in the
+   associated fields. Measurements are strings.
+
+   -- `InfluxDB`_ `measurement`_ documentation
+
+Tags
+~~~~
+
+.. epigraph::
+
+   The key-value pair in InfluxDB’s data structure that records metadata. Tags
+   are an optional part of InfluxDB’s data structure but they are useful for
+   storing commonly-queried metadata; tags are indexed so queries on tags are
+   performant. Query tip: Compare tags to fields; fields are not indexed.
+
+   -- `InfluxDB`_ `tag`_ documentation
+
+.. note::
+
+   The `tag`_ values are always interpreted as strings.
+
+Each `tag`_ value should have very few possible values which yields a low
+`series cardinality`_.
+
+Fields
+~~~~~~
+
+.. epigraph::
+
+   The key-value pair in InfluxDB’s data structure that records metadata and
+   the actual data value. Fields are required in InfluxDB’s data structure and
+   they are not indexed - queries on field values scan all points that match
+   the specified time range and, as a result, are not performant relative to
+   tags. Query tip: Compare fields to tags; tags are indexed
+
+   -- `InfluxDB`_ `field`_ documentation
+
 Structure
 ---------
-
-``den`` records structure data in `InfluxDB`_.
 
 .. _structure-data-model:
 
@@ -77,34 +123,11 @@ single `InfluxDB`_ `point`_ (as `Python`_):
 Measurement
 ~~~~~~~~~~~
 
-.. epigraph::
-
-   The part of InfluxDB’s structure that describes the data stored in the
-   associated fields. Measurements are strings.
-
-   -- `InfluxDB`_ `measurement`_ documentation
-
 ``den`` records structure data in a measurement named ``structure``.
 
 
 Tags
 ~~~~
-
-.. epigraph::
-
-   The key-value pair in InfluxDB’s data structure that records metadata. Tags
-   are an optional part of InfluxDB’s data structure but they are useful for
-   storing commonly-queried metadata; tags are indexed so queries on tags are
-   performant. Query tip: Compare tags to fields; fields are not indexed.
-
-   -- `InfluxDB`_ `tag`_ documentation
-
-.. note::
-
-   The `tag`_ values are always interpreted as strings.
-
-Each `tag`_ value should have very few possible values which yields a low
-`series cardinality`_.
 
 #. `away`_
 #. `country_code`_
@@ -122,8 +145,6 @@ Fields
 
 Thermostat
 ----------
-
-``den`` records thermostat data in `InfluxDB`_.
 
 .. _thermostat-data-model:
 
@@ -268,33 +289,10 @@ single `InfluxDB`_ `point`_ (as `Python`_):
 Measurement
 ~~~~~~~~~~~
 
-.. epigraph::
-
-   The part of InfluxDB’s structure that describes the data stored in the
-   associated fields. Measurements are strings.
-
-   -- `InfluxDB`_ `measurement`_ documentation
-
 ``den`` records thermostat data in a measurement named ``thermostat``.
 
 Tags
 ~~~~
-
-.. epigraph::
-
-   The key-value pair in InfluxDB’s data structure that records metadata. Tags
-   are an optional part of InfluxDB’s data structure but they are useful for
-   storing commonly-queried metadata; tags are indexed so queries on tags are
-   performant. Query tip: Compare tags to fields; fields are not indexed.
-
-   -- `InfluxDB`_ `tag`_ documentation
-
-.. note::
-
-   The `tag`_ values are always interpreted as strings.
-
-Each `tag`_ value should have very few possible values which yields a low
-`series cardinality`_.
 
 #. `can_cool`_
 #. `can_heat`_
@@ -324,16 +322,6 @@ Each `tag`_ value should have very few possible values which yields a low
 
 Fields
 ~~~~~~
-
-.. epigraph::
-
-   The key-value pair in InfluxDB’s data structure that records metadata and
-   the actual data value. Fields are required in InfluxDB’s data structure and
-   they are not indexed - queries on field values scan all points that match
-   the specified time range and, as a result, are not performant relative to
-   tags. Query tip: Compare fields to tags; tags are indexed
-
-   -- `InfluxDB`_ `field`_ documentation
 
 #. `ambient_temperature_c`_
 #. `ambient_temperature_f`_
@@ -442,49 +430,16 @@ single `InfluxDB`_ `point`_ (as `Python`_):
 Measurement
 ~~~~~~~~~~~
 
-.. epigraph::
-
-   The part of InfluxDB’s structure that describes the data stored in the
-   associated fields. Measurements are strings.
-
-   -- `InfluxDB`_ `measurement`_ documentation
-
 ``den`` records weather data in a measurement named ``weather``.
 
 Tags
 ~~~~
-
-.. epigraph::
-
-   The key-value pair in InfluxDB’s data structure that records metadata. Tags
-   are an optional part of InfluxDB’s data structure but they are useful for
-   storing commonly-queried metadata; tags are indexed so queries on tags are
-   performant. Query tip: Compare tags to fields; fields are not indexed.
-
-   -- `InfluxDB`_ `tag`_ documentation
-
-.. note::
-
-   The `tag`_ values are always interpreted as strings.
-
-Each `tag`_ value should have very few possible values which yields a low
-`series cardinality`_.
 
 #. ``icon``
 #. ``precipType``
 
 Fields
 ~~~~~~
-
-.. epigraph::
-
-   The key-value pair in InfluxDB’s data structure that records metadata and
-   the actual data value. Fields are required in InfluxDB’s data structure and
-   they are not indexed - queries on field values scan all points that match
-   the specified time range and, as a result, are not performant relative to
-   tags. Query tip: Compare fields to tags; tags are indexed
-
-   -- `InfluxDB`_ `field`_ documentation
 
 #. ``apparentTemperature``
 #. ``cloudCover``
@@ -501,6 +456,58 @@ Fields
 #. ``visibility``
 #. ``windBearing``
 #. ``windSpeed``
+
+Propane
+-------
+
+.. _propane-data-model:
+
+Data Model
+~~~~~~~~~~
+
+.. code-block:: js
+
+   {
+       "device": {
+           "name": "Sample Device",
+           "address": "6 Dane St., Somerville, MA 02143, USA",
+           "capacity": 100,
+           "status": "deployed",
+           "orientation": "horizontal",
+           "fuelType": "propane",
+           "lastReading": {
+               "tank": 20,
+               "temperature": 72.12,
+               "time": 1444338760345,
+               "time_iso": "2015-10-08T21:12:40.345Z"
+           }
+       }
+   }
+
+InfluxDB Point
+~~~~~~~~~~~~~~
+
+Measurement
+~~~~~~~~~~~
+
+``den`` records propane data in a measurement named ``propane``.
+
+Tags
+~~~~
+
+#. ``device``
+#. ``name``
+#. ``address``
+#. ``status``
+#. ``orientation``
+#. ``fuelType``
+
+Fields
+~~~~~~
+
+#. ``capacity``
+#. ``tank``
+#. ``temperature``
 
 .. _Data Model Viewer: https://developers.nest.com/documentation/api-reference
 .. _InfluxDB: https://www.influxdata.com/time-series-platform/influxdb/

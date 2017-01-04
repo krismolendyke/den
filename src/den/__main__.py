@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Den is a home for your Nest thermostat data."""
+"""Den is a home for your home's data."""
 
 from __future__ import absolute_import
 
@@ -11,6 +11,7 @@ from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError,
 
 from . import __version__
 from . import LOG
+from . import propane
 from . import thermostat
 from . import weather
 
@@ -49,6 +50,11 @@ def _thermostat(args):  # noqa
 def _weather(args):
     """Record weather data into the database. Powered by Dark Sky."""
     weather.record(args.database, args.port, args.ssl, args.api_key, args.lat, args.lon)
+
+
+def _propane(args):
+    """Record propane data into the database."""
+    propane.record(args.database, args.port, args.ssl, args.username, args.password)
 
 
 def _add_thermostat_subparser(subparsers):
@@ -91,6 +97,20 @@ def _add_weather_subparser(subparsers):
     parser.set_defaults(func=_weather)
 
 
+def _add_propane_subparser(subparsers):
+    """Add propane subparser.
+
+    :param argparse.ArgumentParser subparsers:
+    :rtype: :py:const:`None`
+
+    """
+    parser = subparsers.add_parser(
+        "propane", formatter_class=argparse.ArgumentDefaultsHelpFormatter, help=_propane.__doc__)
+    parser.add_argument("--username", help="Propane API username.", default=os.environ.get("DEN_PROPANE_USERNAME"))
+    parser.add_argument("--password", help="Propane API password.", default=os.environ.get("DEN_PROPANE_PASSWORD"))
+    parser.set_defaults(func=_propane)
+
+
 def _get_parser():
     """Get a command line argument parser.
 
@@ -106,6 +126,7 @@ def _get_parser():
     subparsers = parser.add_subparsers(title="sub-commands")
     _add_thermostat_subparser(subparsers)
     _add_weather_subparser(subparsers)
+    _add_propane_subparser(subparsers)
     return parser
 
 
