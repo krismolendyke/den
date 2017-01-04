@@ -25,7 +25,7 @@ setup(
         "Development Status :: 3 - Alpha", "Intended Audience :: Developers", "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5", "Programming Language :: Python :: 3.6"
     ],
-    keywords="nest thermostat smoke alarm camera",
+    keywords="nest thermostat smoke alarm camera weather propane monitor",
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=["influxdb>=3.0", "python-forecastio>=1.3.5", "requests>=2.0"],

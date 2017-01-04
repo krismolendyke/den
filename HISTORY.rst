@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+1.2.1 (2017-01-03)
+++++++++++++++++++
+
+- Update setuptools classifiers and keywords.
+
 1.2.0 (2017-01-03)
 ++++++++++++++++++
 
