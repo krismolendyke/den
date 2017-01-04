@@ -6,6 +6,7 @@ Release History
 
 - Support the `Tank Utility API <http://apidocs.tankutility.com/>`_ for
   propane monitoring.
+- Support `Python 3.6.0 <https://www.python.org/downloads/release/python-360/>`_
 
 1.1.0 (2016-12-10)
 ++++++++++++++++++
