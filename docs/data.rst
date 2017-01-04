@@ -52,8 +52,6 @@ Fields
 Structure
 ---------
 
-``den`` records structure data in a measurement named ``structure``.
-
 .. _structure-data-model:
 
 Data Model
@@ -147,8 +145,6 @@ Fields
 
 Thermostat
 ----------
-
-``den`` records thermostat data in `InfluxDB`_.
 
 .. _thermostat-data-model:
 
