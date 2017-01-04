@@ -16,3 +16,9 @@ Weather
 
 .. automodule:: den.weather
    :members:
+
+Propane
+-------
+
+.. automodule:: den.propane
+   :members:
