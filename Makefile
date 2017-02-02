@@ -34,7 +34,7 @@ init:
 	$(PIP) install --editable .
 
 init-dev:
-	$(PIP) install --editable .[dev] --editable .[doc] --editable .[notebook] --editable .[test]
+	$(PIP) install --editable .[dev,doc,notebook,test]
 
 test:
 	@$(TOX)
