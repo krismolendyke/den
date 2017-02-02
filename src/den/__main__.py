@@ -8,6 +8,7 @@ import os
 import sys
 
 from requests.exceptions import ConnectionError, HTTPError, StreamConsumedError, Timeout
+import backoff
 
 from . import __version__
 from . import LOG
@@ -16,6 +17,7 @@ from . import thermostat
 from . import weather
 
 
+@backoff.on_exception(backoff.expo, (ConnectionError, HTTPError, Timeout))
 def _thermostat(args):  # noqa
     """Record Nest thermostat data into the database.
 
@@ -33,10 +35,13 @@ def _thermostat(args):  # noqa
             LOG.warn("Stream consumed %s", e)
         except ConnectionError as e:
             LOG.exception("Connection error %s", e)
+            raise e
         except HTTPError as e:
             LOG.exception("HTTPError %s", e)
+            raise e
         except Timeout as e:
             LOG.exception("Timeout %s", e)
+            raise e
         except Exception as e:  # pylint: disable=broad-except
             LOG.critical("Unexpected error %s", e)
             if e.message == "EOF occurred in violation of protocol":

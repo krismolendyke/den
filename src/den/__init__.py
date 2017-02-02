@@ -19,6 +19,8 @@ def _configure_logger(name):
     console_handler.setLevel(logging.INFO)
     logger.addHandler(console_handler)
 
+    logging.getLogger("backoff").addHandler(console_handler)
+
     file_handler = logging.handlers.RotatingFileHandler(
         os.path.join(gettempdir(), os.extsep.join([name, "log"])), maxBytes=2**20)
     fmt = logging.Formatter(
