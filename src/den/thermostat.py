@@ -27,6 +27,14 @@ STRUCTURE_TAG_KEYS = ["away", "country_code", "name", "postal_code", "structure_
 STRUCTURE_FIELD_KEYS = ["away"]
 """InfluxDB field keys."""
 
+TIMEOUT = (7, 601)
+"""Nest API timeout values in seconds.
+
+The first value is the initial connection timeout.  The second is the read timeout which ensures that the streaming
+connection will not block forever if the network connection has been lost.
+
+"""
+
 THERMOSTAT_MEASUREMENT = "thermostat"
 """InfluxDB measurement name."""
 
@@ -66,7 +74,7 @@ def _get_api_url(nest_api_access_token, path=""):
 def _get_stream(nest_api_access_token, path=""):
     """Make a GET request to the Nest REST stream API and return the response object."""
     url = _get_api_url(nest_api_access_token, path)
-    r = requests.get(url, headers={"Accept": "text/event-stream"}, stream=True)
+    r = requests.get(url, headers={"Accept": "text/event-stream"}, stream=True, timeout=TIMEOUT)
     for h in r.history:
         LOG.debug("[%d] Redirect: %s", h.status_code, h.url)
     LOG.debug("[%d] URL: %s", r.status_code, r.url)
