@@ -19,8 +19,6 @@ def _configure_logger(name):
     console_handler.setLevel(logging.INFO)
     logger.addHandler(console_handler)
 
-    logging.getLogger("backoff").addHandler(console_handler)
-
     file_handler = logging.handlers.RotatingFileHandler(
         os.path.join(gettempdir(), os.extsep.join([name, "log"])), maxBytes=2**20)
     fmt = logging.Formatter(
@@ -28,6 +26,11 @@ def _configure_logger(name):
     file_handler.setFormatter(fmt)
     file_handler.setLevel(logging.DEBUG)
     logger.addHandler(file_handler)
+
+    backoff_logger = logging.getLogger("backoff")
+    backoff_logger.addHandler(console_handler)
+    backoff_logger.addHandler(file_handler)
+    backoff_logger.setLevel(logging.INFO)
 
     return logger
 
