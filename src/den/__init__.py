@@ -7,7 +7,7 @@ import logging.handlers
 import os
 
 __title__ = "den"
-__version__ = resource_string(__name__, "VERSION")
+__version__ = resource_string(__name__, "VERSION").decode()
 
 
 def _configure_logger(name):
