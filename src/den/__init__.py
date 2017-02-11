@@ -7,7 +7,7 @@ import logging.handlers
 import os
 
 __title__ = "den"
-__version__ = resource_string(__name__, "VERSION")
+__version__ = resource_string(__name__, "VERSION").decode()
 
 
 def _configure_logger(name):
@@ -26,6 +26,11 @@ def _configure_logger(name):
     file_handler.setFormatter(fmt)
     file_handler.setLevel(logging.DEBUG)
     logger.addHandler(file_handler)
+
+    backoff_logger = logging.getLogger("backoff")
+    backoff_logger.addHandler(console_handler)
+    backoff_logger.addHandler(file_handler)
+    backoff_logger.setLevel(logging.INFO)
 
     return logger
 
